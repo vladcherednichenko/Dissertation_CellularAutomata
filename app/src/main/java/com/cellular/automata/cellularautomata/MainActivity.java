@@ -8,6 +8,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+
+        PixioSurfaceView surfaceView = new PixioSurfaceView(getApplicationContext());
+        PixioRenderer renderer = new PixioRenderer(getApplicationContext());
+        surfaceView.setRenderer(renderer);
+
+        setContentView(surfaceView);
     }
 }
