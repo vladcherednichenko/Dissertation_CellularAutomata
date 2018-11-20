@@ -2,49 +2,77 @@ package com.cellular.automata.cellularautomata.objects;
 
 import android.support.annotation.NonNull;
 
+import com.cellular.automata.cellularautomata.Constants;
+import com.cellular.automata.cellularautomata.Settings;
 import com.cellular.automata.cellularautomata.data.CubeDataHolder;
-import com.cellular.automata.cellularautomata.utils.PixioColor;
-import com.cellular.automata.cellularautomata.utils.PixioPoint;
+import com.cellular.automata.cellularautomata.utils.CellColor;
+import com.cellular.automata.cellularautomata.utils.CellularPoint;
 
 public class Cube implements Comparable<Cube> {
 
     private static final String TAG = "Cube";
 
     private float cubeSize = 1;
-    private int POSITION_COMPONENT_COUNT = 3;
-    private int COLOR_COORDINATES_COMPONENT_COUNT = 4;
     private int STRIDE = 0;
 
-    public PixioPoint center;
-    public PixioColor color;
+    public CellularPoint center;
+    public CellColor color;
 
-    public float[] cubePositionData;
-    public float[] cubeColorData;
-    public float[] cubeNormalData;
+    private float[] cubePositionData;
+    private float[] cubeColorData;
+    private float[] cubeNormalData;
 
+    public float[] getCubePositionData() {
 
-    public Cube(PixioPoint center, PixioColor color){
+        if(!cubeDataCreated){
 
-        this.center = center;
-        this.color = color;
+            createCubeData();
 
-        createCubeData();
+        }
+
+        return cubePositionData;
 
     }
 
-    public Cube(PixioPoint center, PixioColor color, boolean autoCreateVertexData){
+    public float[] getCubeColorData() {
+
+        if(!cubeDataCreated){
+
+            createCubeData();
+
+        }
+
+        return cubeColorData;
+    }
+
+    public float[] getCubeNormalData() {
+
+        if(!cubeDataCreated){
+
+            createCubeData();
+
+        }
+
+        return cubeNormalData;
+    }
+
+    private boolean cubeDataCreated = false;
+
+    public Cube(CellularPoint center, CellColor color){
 
         this.center = center;
         this.color = color;
 
-        if(autoCreateVertexData){
+        if(Settings.generateCellsDataAfterCreation){
             createCubeData();
         }
 
-
     }
 
-    public void createCubeData(){
+
+    private void createCubeData(){
+
+        if(cubeDataCreated) return;
 
         cubePositionData = CubeDataHolder.getInstance().getVertices().clone();
         cubeNormalData = CubeDataHolder.getInstance().getNormals();
@@ -73,21 +101,27 @@ public class Cube implements Comparable<Cube> {
 
         translateCube(center);
 
+        cubeDataCreated = true;
+
     }
 
     public void releaseCubeData(){
+
+        if(!cubeDataCreated) return;
 
         cubePositionData = null;
         cubeNormalData = null;
         cubeColorData = null;
 
+        cubeDataCreated = false;
+
     }
 
 
-    public void translateCube(PixioPoint vector){
+    public void translateCube(CellularPoint vector){
         for (int i = 0; i< cubePositionData.length; i++){
 
-            switch(i % POSITION_COMPONENT_COUNT) {
+            switch(i % Constants.POSITION_COMPONENT_COUNT) {
                 case 0: {
                     cubePositionData[i] += vector.x;
                     break;

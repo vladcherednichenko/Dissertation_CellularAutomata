@@ -10,7 +10,7 @@ public class Geometry {
     }
 
 
-    public static float distanceBetween(PixioPoint point, Ray ray) {
+    public static float distanceBetween(CellularPoint point, Ray ray) {
         Vector p1ToPoint = vectorBetween(ray.point, point);
         Vector p2ToPoint = vectorBetween(ray.point.translateAndCopy(ray.vector), point);
 
@@ -30,9 +30,9 @@ public class Geometry {
 
 
     public static class Ray {
-        public final PixioPoint point;
+        public final CellularPoint point;
         public final Vector vector;
-        public Ray(PixioPoint point, Vector vector) {
+        public Ray(CellularPoint point, Vector vector) {
             this.point = point;
             this.vector = vector;
         }
@@ -46,7 +46,7 @@ public class Geometry {
             this.z = z;
         }
 
-        public Vector (PixioPoint a, PixioPoint b){
+        public Vector (CellularPoint a, CellularPoint b){
 
             this.x = b.x - a.x;
             this.y = b.y - a.y;
@@ -81,14 +81,14 @@ public class Geometry {
 
 
     public static class Sphere {
-        public final PixioPoint center;
+        public final CellularPoint center;
         public final float radius;
-        public Sphere(PixioPoint center, float radius) {
+        public Sphere(CellularPoint center, float radius) {
             this.center = center;
             this.radius = radius;
         }
     }
-    public static Vector vectorBetween(PixioPoint from, PixioPoint to) {
+    public static Vector vectorBetween(CellularPoint from, CellularPoint to) {
         return new Vector(
                 to.x - from.x,
                 to.y - from.y,
@@ -100,10 +100,10 @@ public class Geometry {
 
 
         public String name;
-        public PixioPoint p, q, r;
+        public CellularPoint p, q, r;
         public Vector normal;
 
-        public Parallelogram(PixioPoint p, PixioPoint q, PixioPoint r, Vector normal, String name) {
+        public Parallelogram(CellularPoint p, CellularPoint q, CellularPoint r, Vector normal, String name) {
             this.p = p;
             this.q = q;
             this.r = r;
@@ -112,7 +112,7 @@ public class Geometry {
         }
 
 
-        public boolean pointInside(PixioPoint a){
+        public boolean pointInside(CellularPoint a){
 
             Vector pq = new Vector (this.p, q);
             Vector pr = new Vector (this.p, r);

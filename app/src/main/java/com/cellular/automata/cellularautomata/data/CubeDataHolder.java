@@ -46,15 +46,15 @@ public class CubeDataHolder {
         switch (quality){
 
             case 0:{
-                setFacetList(CubeDataHolder.getInstance().facetListLow);
+                setFacetList(facetListLow);
                 break;
             }
             case 1:{
-                setFacetList(CubeDataHolder.getInstance().facetListMedium);
+                setFacetList(facetListMedium);
                 break;
             }
             case 2:{
-                setFacetList(CubeDataHolder.getInstance().facetListHigh);
+                setFacetList(facetListHigh);
                 break;
             }
 

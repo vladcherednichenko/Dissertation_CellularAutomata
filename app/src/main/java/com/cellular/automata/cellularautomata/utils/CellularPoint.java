@@ -1,13 +1,13 @@
 package com.cellular.automata.cellularautomata.utils;
 
 
-public class PixioPoint {
+public class CellularPoint {
 
     public float x;
     public float y;
     public float z;
 
-    public PixioPoint(float x, float y, float z) {
+    public CellularPoint(float x, float y, float z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -23,20 +23,20 @@ public class PixioPoint {
         z += vector.z;
     }
 
-    public PixioPoint translateAndCopy(Geometry.Vector vector) {
-        return new PixioPoint(
+    public CellularPoint translateAndCopy(Geometry.Vector vector) {
+        return new CellularPoint(
                 x + vector.x,
                 y + vector.y,
                 z + vector.z);
     }
 
-    public PixioPoint clone(){
+    public CellularPoint clone(){
 
-        return new PixioPoint(x, y, z);
+        return new CellularPoint(x, y, z);
 
     }
 
-    public boolean equals(PixioPoint secondPoint){
+    public boolean equals(CellularPoint secondPoint){
 
         return this.x == secondPoint.x &&
                 this.y == secondPoint.y &&

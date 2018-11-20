@@ -1,18 +1,18 @@
 package com.cellular.automata.cellularautomata.data;
 
 import com.cellular.automata.cellularautomata.utils.Geometry;
-import com.cellular.automata.cellularautomata.utils.PixioPoint;
+import com.cellular.automata.cellularautomata.utils.CellularPoint;
 
 public class Facet {
 
     public Geometry.Vector normal;
-    public PixioPoint A;
-    public PixioPoint B;
-    public PixioPoint C;
+    public CellularPoint A;
+    public CellularPoint B;
+    public CellularPoint C;
 
     public Facet(){};
 
-    public Facet(Geometry.Vector normal, PixioPoint a, PixioPoint b, PixioPoint c) {
+    public Facet(Geometry.Vector normal, CellularPoint a, CellularPoint b, CellularPoint c) {
         this.normal = normal;
         A = a;
         B = b;

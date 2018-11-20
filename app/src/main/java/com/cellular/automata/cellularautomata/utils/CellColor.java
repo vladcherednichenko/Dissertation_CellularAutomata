@@ -1,6 +1,6 @@
 package com.cellular.automata.cellularautomata.utils;
 
-public class PixioColor {
+public class CellColor {
 
 
     public float RED = 0f;
@@ -8,7 +8,7 @@ public class PixioColor {
     public float BLUE = 0f;
     public String hexColor;
 
-    public PixioColor(String hexColor){
+    public CellColor(String hexColor){
 
         this.hexColor = hexColor;
         this.RED = (float) Integer.valueOf( hexColor.substring( 1, 3 ), 16 )/255;
@@ -17,7 +17,7 @@ public class PixioColor {
 
     }
 
-    public PixioColor(int r, int g, int b) {
+    public CellColor(int r, int g, int b) {
 
         this.RED = (float)r / 255f;
         this.GREEN = (float)g /255f;
