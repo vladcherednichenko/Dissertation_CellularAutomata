@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.widget.TextView;
 
+import com.cellular.automata.cellularautomata.interfaces.ActivityListener;
 import com.cellular.automata.cellularautomata.utils.AntialiasingConfigurator;
 
 import static android.view.MotionEvent.ACTION_DOWN;

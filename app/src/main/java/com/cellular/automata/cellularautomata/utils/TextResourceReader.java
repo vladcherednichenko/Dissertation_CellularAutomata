@@ -69,11 +69,11 @@ public class TextResourceReader {
                     float z = Float.parseFloat(coords[3]);
 
                     if (facet.A == null){
-                        facet.A = new CellularPoint(x, y, z);
+                        facet.A = new CellPoint(x, y, z);
                     }else if(facet.B == null){
-                        facet.B = new CellularPoint(x, y, z);
+                        facet.B = new CellPoint(x, y, z);
                     }else if(facet.C == null){
-                        facet.C = new CellularPoint(x, y, z);
+                        facet.C = new CellPoint(x, y, z);
                         facetList.add(facet);
                     }
 
@@ -127,19 +127,19 @@ public class TextResourceReader {
             String[]verticeBList = verticesList.get(verticeBPosition).split(" ");
             String[]verticeCList = verticesList.get(verticeCPosition).split(" ");
 
-            CellularPoint A = new CellularPoint(
+            CellPoint A = new CellPoint(
                     Float.parseFloat(verticeAList[1]),
                     Float.parseFloat(verticeAList[2]),
                     Float.parseFloat(verticeAList[3])
             );
 
-            CellularPoint B = new CellularPoint(
+            CellPoint B = new CellPoint(
                     Float.parseFloat(verticeBList[1]),
                     Float.parseFloat(verticeBList[2]),
                     Float.parseFloat(verticeBList[3])
             );
 
-            CellularPoint C = new CellularPoint(
+            CellPoint C = new CellPoint(
                     Float.parseFloat(verticeCList[1]),
                     Float.parseFloat(verticeCList[2]),
                     Float.parseFloat(verticeCList[3])
@@ -160,7 +160,7 @@ public class TextResourceReader {
 
     }
 
-    static Geometry.Vector calcNormals(CellularPoint a, CellularPoint b, CellularPoint c)
+    static Geometry.Vector calcNormals(CellPoint a, CellPoint b, CellPoint c)
     {
 
         Vector result = new Vector(0, 0, 0);

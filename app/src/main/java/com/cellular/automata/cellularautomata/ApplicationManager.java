@@ -3,10 +3,14 @@ package com.cellular.automata.cellularautomata;
 
 import android.util.Log;
 
+import com.cellular.automata.cellularautomata.activity.MainActivity;
+import com.cellular.automata.cellularautomata.interfaces.ApplicationListener;
+import com.cellular.automata.cellularautomata.interfaces.CellSelectListener;
 import com.cellular.automata.cellularautomata.objects.Model;
 import com.cellular.automata.cellularautomata.objects.AutomataBuilder;
 import com.cellular.automata.cellularautomata.utils.CellColor;
-import com.cellular.automata.cellularautomata.utils.CellularPoint;
+import com.cellular.automata.cellularautomata.utils.CellPoint;
+import com.cellular.automata.cellularautomata.utils.ObjectSelectHelper;
 
 import java.util.Random;
 
@@ -14,6 +18,7 @@ public class ApplicationManager implements ApplicationListener, MainActivity.Act
 
 
     private AutomataBuilder builder;
+    private Environment environment;
 
     private long time;
     private long timePast;
@@ -25,6 +30,7 @@ public class ApplicationManager implements ApplicationListener, MainActivity.Act
     public void create() {
 
         builder = new AutomataBuilder();
+        environment = new Environment();
 
         CellColor colors[] = new CellColor[]{new CellColor("#4286f4")};
         Model testModel = new Model(Settings.testAutomataCoords, colors);
@@ -32,34 +38,33 @@ public class ApplicationManager implements ApplicationListener, MainActivity.Act
         builder.setModel(testModel);
         builder.build();
         builder.bindAttributesData();
+        environment.addBuilder(builder);
 
         random = new Random();
 
     }
 
     @Override
-    public void resize() {
-
-    }
-
-    @Override
     public void render() {
+
+        if(builder.isTouched()){
+
+            builder.addNewCube(builder.getTouchResult().newCubeCenter, new CellColor("#4286f4"));
+
+        }
 
         if(isGenerating){
 
             timePast = System.currentTimeMillis() - time;
             if(timePast > 100){
                 time = System.currentTimeMillis();
-                builder.addNewCube(new CellularPoint(random.nextInt(20)-9,random.nextInt(20)-9, random.nextInt(20)-9),
+                builder.addNewCube(new CellPoint(random.nextInt(20)-9,random.nextInt(20)-9, random.nextInt(20)-9),
 
                         new CellColor(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
                 Log.d("Timer", "half a second");
             }
 
         }
-
-
-
 
         builder.draw();
 
@@ -69,4 +74,12 @@ public class ApplicationManager implements ApplicationListener, MainActivity.Act
     public void goBtnPressed() {
         isGenerating = !isGenerating;
     }
+
+    @Override
+    public void resize() {
+
+        //not needed
+
+    }
+
 }

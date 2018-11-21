@@ -4,19 +4,30 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 
+import com.cellular.automata.cellularautomata.interfaces.ActivityListener;
+import com.cellular.automata.cellularautomata.interfaces.ApplicationListener;
+import com.cellular.automata.cellularautomata.interfaces.EnvironmentListener;
 import com.cellular.automata.cellularautomata.shaders.FigureShader;
 import com.cellular.automata.cellularautomata.utils.CellColor;
+import com.cellular.automata.cellularautomata.utils.CellPoint;
+import com.cellular.automata.cellularautomata.utils.ObjectSelectHelper;
+
+import java.util.ArrayList;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import static android.opengl.Matrix.invertM;
+import static android.opengl.Matrix.multiplyMM;
 import static android.opengl.Matrix.multiplyMV;
 import static android.opengl.Matrix.rotateM;
+import static android.opengl.Matrix.translateM;
 
 public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
     private ActivityListener activityListener;
     private ApplicationListener applicationListener;
+    private EnvironmentListener environmentListener;
 
     //shaders
     private FigureShader figureShader;
@@ -27,12 +38,19 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
     private float strideX = 0f;
     private float strideY = 0f;
 
+    private float width;
+    private float height;
+
     private float scaleFactor = 1f;
 
     //mvp matrices
     private float[] viewMatrix = new float[16];
     private float[] modelMatrix = new float[16];
     private float[] projectionMatrix = new float[16];
+    private float[] viewProjectionMatrix = new float[16];
+    private float[] MVPMatrix = new float[16];
+    //matrix that undo the effects of view and projection matrix
+    private final float[] invertedViewProjectionMatrix = new float[16];
 
     //light matrices
     private final float[] lightPosInModelSpace = new float[]{0.0f, 0.0f, 0.0f, 1.0f};
@@ -77,15 +95,29 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
     public void handleTouch(float x, float y){
 
+        if(environmentListener!=null ){
+            environmentListener.onScreenTouched(x, y);
+        }
+    }
+
+    public void setEnvironmentListener(EnvironmentListener environmentListener) {
+        this.environmentListener = environmentListener;
     }
 
     public void setActicvityListener(ActivityListener activityListener){
         this.activityListener = activityListener;
     }
 
+
     GraphicsRenderer(ApplicationListener applicationListener){
 
         this.applicationListener = applicationListener;
+
+    }
+
+    public ObjectSelectHelper.TouchResult getTouchedResult(float normalizedX, float normalizedY, ArrayList<CellPoint> cellCentersList){
+
+        return ObjectSelectHelper.getTouchResult(cellCentersList, normalizedX, normalizedY, invertedViewProjectionMatrix, modelMatrix, scaleFactor, strideX, strideY, (float)height/width);
 
     }
 
@@ -147,6 +179,9 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
         final float near = 3.0f;
         final float far = 100.0f;
 
+        this.width = width;
+        this.height = height;
+
         Matrix.orthoM(projectionMatrix, 0, left,right, bottom, top, near, far);
 
         if ( applicationListener == null) return;
@@ -164,6 +199,8 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
         calculateModelMatrix();
 
         calculateLightMatrices(xAngle, yAngle);
+
+        calculateInvertedMVPMatrix();
 
         setUniforms();
 
@@ -185,6 +222,9 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
         //set user made rotation
         rotateM(modelMatrix, 0, yAngle, 1f, 0f, 0f);
         rotateM(modelMatrix, 0, xAngle, 0f, 1f, 0f);
+
+        //set user made stride
+        Matrix.translateM(modelMatrix, 0, strideX/scaleFactor, -strideY/scaleFactor, 0.0f);
 
     }
 
@@ -225,6 +265,14 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
         multiplyMV(topLightPosInWorldSpace, 0, topLightModelMatrix, 0, lightPosInModelSpace, 0);
         multiplyMV(topLightPosInEyeSpace, 0, viewMatrix, 0, topLightPosInWorldSpace, 0);
+
+    }
+
+    void calculateInvertedMVPMatrix(){
+
+        multiplyMM(viewProjectionMatrix, 0, viewMatrix, 0, projectionMatrix, 0);
+        invertM(invertedViewProjectionMatrix, 0, viewProjectionMatrix, 0);
+        translateM(invertedViewProjectionMatrix, 0, 0f, 0f, -10f);
 
     }
 

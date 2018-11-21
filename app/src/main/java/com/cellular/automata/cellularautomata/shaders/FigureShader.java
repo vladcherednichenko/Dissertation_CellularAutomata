@@ -1,9 +1,8 @@
 package com.cellular.automata.cellularautomata.shaders;
 
-import android.content.Context;
 import android.opengl.Matrix;
 
-import com.cellular.automata.cellularautomata.ActivityListener;
+import com.cellular.automata.cellularautomata.interfaces.ActivityListener;
 import com.cellular.automata.cellularautomata.R;
 import com.cellular.automata.cellularautomata.utils.ShaderHelper;
 import com.cellular.automata.cellularautomata.utils.TextResourceReader;

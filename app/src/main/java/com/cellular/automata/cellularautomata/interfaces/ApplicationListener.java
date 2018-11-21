@@ -1,4 +1,4 @@
-package com.cellular.automata.cellularautomata;
+package com.cellular.automata.cellularautomata.interfaces;
 
 public interface ApplicationListener {
 

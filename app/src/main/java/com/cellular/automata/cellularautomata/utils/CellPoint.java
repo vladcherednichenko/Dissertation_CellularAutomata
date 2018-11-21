@@ -1,13 +1,13 @@
 package com.cellular.automata.cellularautomata.utils;
 
 
-public class CellularPoint {
+public class CellPoint {
 
     public float x;
     public float y;
     public float z;
 
-    public CellularPoint(float x, float y, float z) {
+    public CellPoint(float x, float y, float z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -23,20 +23,20 @@ public class CellularPoint {
         z += vector.z;
     }
 
-    public CellularPoint translateAndCopy(Geometry.Vector vector) {
-        return new CellularPoint(
+    public CellPoint translateAndCopy(Geometry.Vector vector) {
+        return new CellPoint(
                 x + vector.x,
                 y + vector.y,
                 z + vector.z);
     }
 
-    public CellularPoint clone(){
+    public CellPoint clone(){
 
-        return new CellularPoint(x, y, z);
+        return new CellPoint(x, y, z);
 
     }
 
-    public boolean equals(CellularPoint secondPoint){
+    public boolean equals(CellPoint secondPoint){
 
         return this.x == secondPoint.x &&
                 this.y == secondPoint.y &&

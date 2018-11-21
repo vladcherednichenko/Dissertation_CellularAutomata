@@ -7,8 +7,10 @@ import com.cellular.automata.cellularautomata.GRFX;
 import com.cellular.automata.cellularautomata.GraphicsRenderer;
 import com.cellular.automata.cellularautomata.data.CubeDataHolder;
 import com.cellular.automata.cellularautomata.data.VertexArray;
+import com.cellular.automata.cellularautomata.interfaces.CellSelectListener;
 import com.cellular.automata.cellularautomata.utils.CellColor;
-import com.cellular.automata.cellularautomata.utils.CellularPoint;
+import com.cellular.automata.cellularautomata.utils.CellPoint;
+import com.cellular.automata.cellularautomata.utils.ObjectSelectHelper;
 
 import java.util.ArrayList;
 
@@ -43,14 +45,53 @@ public class AutomataBuilder {
     private int vertexBufferColorIdx = 0;
     private int vertexBufferNormalIdx = 0;
 
-    // Attribute locations
-    private  int aPositionLocation;
-    private  int aColorLocation;
-    private  int aNormalLocation;
+    private CellSelectListener selectListener;
+    private boolean isTouched = false;
+    private ObjectSelectHelper.TouchResult touchResult;
 
     private ArrayList<Cube> cellsList;
 
     public AutomataBuilder(){
+
+    }
+
+    public boolean isTouched(){
+
+        if(isTouched){
+            isTouched = false;
+            return true;
+        }
+        return false;
+    }
+
+    public ObjectSelectHelper.TouchResult getTouchResult() {
+        return touchResult;
+    }
+
+    //this method can be called from the Application Manager
+    public void setSelectListener(CellSelectListener listener){
+
+        if(listener != null) this.selectListener = listener;
+
+    }
+
+    public ArrayList<CellPoint> getCellCentersList(){
+
+        if(cellsList == null || cellsList.size() == 0) return new ArrayList<>();
+
+        ArrayList<CellPoint> centers = new ArrayList<>();
+        for (Cube cell: cellsList){
+            centers.add(cell.center);
+        }
+
+        return centers;
+
+    }
+
+    public void handleTouch(ObjectSelectHelper.TouchResult touchResult){
+
+        this.touchResult = touchResult;
+        isTouched = true;
 
     }
 
@@ -63,13 +104,14 @@ public class AutomataBuilder {
 
         for(int i = 0; i< modelToLoad.getCellsNumber(); i++){
 
-             cellsList.add(new Cube(new CellularPoint(rawCoords[i*3], rawCoords[i*3 + 1], rawCoords[i*3 + 2]), cellColors[i]));
+            CellPoint cellCenter = new CellPoint(rawCoords[i*3], rawCoords[i*3 + 1], rawCoords[i*3 + 2]);
+            cellsList.add(new Cube(cellCenter, cellColors[i]));
 
         }
 
     }
 
-    public void addNewCube(CellularPoint center, CellColor color){
+    public void addNewCube(CellPoint center, CellColor color){
 
         //check if this cube already exists
         if(cubeExists(center)) return;
@@ -189,7 +231,7 @@ public class AutomataBuilder {
 
     }
 
-    private boolean cubeExists(CellularPoint cubeCenter){
+    private boolean cubeExists(CellPoint cubeCenter){
         for (Cube cube: cellsList){
             if (cube.center.equals(cubeCenter)){
                 return true;

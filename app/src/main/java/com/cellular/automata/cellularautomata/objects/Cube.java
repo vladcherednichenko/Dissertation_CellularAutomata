@@ -6,7 +6,7 @@ import com.cellular.automata.cellularautomata.Constants;
 import com.cellular.automata.cellularautomata.Settings;
 import com.cellular.automata.cellularautomata.data.CubeDataHolder;
 import com.cellular.automata.cellularautomata.utils.CellColor;
-import com.cellular.automata.cellularautomata.utils.CellularPoint;
+import com.cellular.automata.cellularautomata.utils.CellPoint;
 
 public class Cube implements Comparable<Cube> {
 
@@ -15,7 +15,7 @@ public class Cube implements Comparable<Cube> {
     private float cubeSize = 1;
     private int STRIDE = 0;
 
-    public CellularPoint center;
+    public CellPoint center;
     public CellColor color;
 
     private float[] cubePositionData;
@@ -58,7 +58,7 @@ public class Cube implements Comparable<Cube> {
 
     private boolean cubeDataCreated = false;
 
-    public Cube(CellularPoint center, CellColor color){
+    public Cube(CellPoint center, CellColor color){
 
         this.center = center;
         this.color = color;
@@ -118,7 +118,7 @@ public class Cube implements Comparable<Cube> {
     }
 
 
-    public void translateCube(CellularPoint vector){
+    public void translateCube(CellPoint vector){
         for (int i = 0; i< cubePositionData.length; i++){
 
             switch(i % Constants.POSITION_COMPONENT_COUNT) {

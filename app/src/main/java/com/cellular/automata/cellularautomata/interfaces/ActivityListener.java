@@ -1,4 +1,4 @@
-package com.cellular.automata.cellularautomata;
+package com.cellular.automata.cellularautomata.interfaces;
 
 import android.content.Context;
 
