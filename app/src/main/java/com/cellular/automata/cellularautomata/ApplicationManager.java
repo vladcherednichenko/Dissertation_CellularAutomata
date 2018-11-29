@@ -32,7 +32,11 @@ public class ApplicationManager implements ApplicationListener, MainActivity.Act
         builder = new AutomataBuilder();
         environment = new Environment();
 
-        CellColor colors[] = new CellColor[]{new CellColor("#4286f4")};
+        CellColor colors[] = new CellColor[Settings.testAutomataCoords.length/3];
+        for(int i = 0; i< colors.length; i++){
+            colors[i] = new CellColor("#4286f4");
+        }
+
         Model testModel = new Model(Settings.testAutomataCoords, colors);
 
         builder.setModel(testModel);
@@ -73,6 +77,11 @@ public class ApplicationManager implements ApplicationListener, MainActivity.Act
     @Override
     public void goBtnPressed() {
         isGenerating = !isGenerating;
+    }
+
+    @Override
+    public void resetBtnPressed() {
+        GRFX.renderer.resetCam();
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.cellular.automata.cellularautomata.interfaces.ActivityListener;
 import com.cellular.automata.cellularautomata.GRFX;
@@ -18,11 +19,12 @@ public class MainActivity extends AppCompatActivity implements ActivityListener 
     private SurfaceViewForAutomata surfaceView;
     private ActivityInterface applicationManager;
 
-    private Button goButton;
+    private ImageView goButton, resetButton;
 
     public interface ActivityInterface{
 
         void goBtnPressed();
+        void resetBtnPressed();
 
     }
 
@@ -50,6 +52,16 @@ public class MainActivity extends AppCompatActivity implements ActivityListener 
             }
         });
 
+
+        resetButton = findViewById(R.id.reset_button);
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(applicationManager!= null){
+                    applicationManager.resetBtnPressed();
+                }
+            }
+        });
 
 
     }

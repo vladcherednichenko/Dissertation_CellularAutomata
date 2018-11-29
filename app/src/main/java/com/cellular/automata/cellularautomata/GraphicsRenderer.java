@@ -121,6 +121,18 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
     }
 
+    public void resetCam(){
+
+        xAngle = -45f;
+        yAngle = 10f;
+
+        strideX = 0f;
+        strideY = 0f;
+
+        scaleFactor = 1;
+
+    }
+
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 
@@ -196,6 +208,17 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
 
+//        calculateModelMatrix();
+//
+//        calculateLightMatrices(xAngle, yAngle);
+//
+//        calculateInvertedMVPMatrix();
+//
+//        setUniforms();
+//
+//        setScaleFactor();
+
+
         calculateModelMatrix();
 
         calculateLightMatrices(xAngle, yAngle);
@@ -205,6 +228,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
         setUniforms();
 
         setScaleFactor();
+
 
         if ( applicationListener == null) return;
 
@@ -219,12 +243,13 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
         Matrix.setIdentityM(modelMatrix, 0);
         Matrix.translateM(modelMatrix, 0, 0f, 0f, -7.0f);
 
+        //set user made stride
+        Matrix.translateM(modelMatrix, 0, strideX/scaleFactor, -strideY/scaleFactor, 0.0f);
+
         //set user made rotation
         rotateM(modelMatrix, 0, yAngle, 1f, 0f, 0f);
         rotateM(modelMatrix, 0, xAngle, 0f, 1f, 0f);
 
-        //set user made stride
-        Matrix.translateM(modelMatrix, 0, strideX/scaleFactor, -strideY/scaleFactor, 0.0f);
 
     }
 
@@ -268,7 +293,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
     }
 
-    void calculateInvertedMVPMatrix(){
+    private void calculateInvertedMVPMatrix(){
 
         multiplyMM(viewProjectionMatrix, 0, viewMatrix, 0, projectionMatrix, 0);
         invertM(invertedViewProjectionMatrix, 0, viewProjectionMatrix, 0);
