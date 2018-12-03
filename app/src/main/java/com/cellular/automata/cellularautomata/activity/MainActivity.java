@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import com.cellular.automata.cellularautomata.interfaces.ActivityListener;
@@ -18,13 +17,15 @@ public class MainActivity extends AppCompatActivity implements ActivityListener 
 
     private SurfaceViewForAutomata surfaceView;
     private ActivityInterface applicationManager;
+    boolean isPlay = false;
 
-    private ImageView goButton, resetButton;
+    private ImageView goButton, resetButton, speedUpButton;
 
     public interface ActivityInterface{
 
-        void goBtnPressed();
+        void goBtnPressed(boolean isPlay);
         void resetBtnPressed();
+        void speedUpBtnPressed();
 
     }
 
@@ -42,23 +43,44 @@ public class MainActivity extends AppCompatActivity implements ActivityListener 
         CubeDataHolder.getInstance().setGraphicsQuality(CubeDataHolder.QUALITY_MEDIUM);
 
 
-        goButton = findViewById(R.id.go_button);
+        goButton = findViewById(R.id.play_icon);
         goButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(applicationManager!= null){
-                    applicationManager.goBtnPressed();
+
+                    isPlay = !isPlay;
+                    if (isPlay){
+
+                        goButton.setImageDrawable(getResources().getDrawable(R.drawable.pause_icon));
+
+
+                    }else{
+                        goButton.setImageDrawable(getResources().getDrawable(R.drawable.play_icon));
+                    }
+
+                    applicationManager.goBtnPressed(isPlay);
                 }
             }
         });
 
 
-        resetButton = findViewById(R.id.reset_button);
+        resetButton = findViewById(R.id.reset_icon);
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(applicationManager!= null){
                     applicationManager.resetBtnPressed();
+                }
+            }
+        });
+
+        speedUpButton = findViewById(R.id.speed_up_icon);
+        speedUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(applicationManager!= null){
+                    applicationManager.speedUpBtnPressed();
                 }
             }
         });

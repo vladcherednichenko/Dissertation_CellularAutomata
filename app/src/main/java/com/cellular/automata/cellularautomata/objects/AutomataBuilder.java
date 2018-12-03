@@ -80,8 +80,8 @@ public class AutomataBuilder {
         if(cellsList == null || cellsList.size() == 0) return new ArrayList<>();
 
         ArrayList<CellPoint> centers = new ArrayList<>();
-        for (Cube cell: cellsList){
-            centers.add(cell.center);
+        for (Cube cube : cellsList){
+            centers.add(cube.center);
         }
 
         return centers;
@@ -140,9 +140,9 @@ public class AutomataBuilder {
         vertexNormalData = new float[CubeDataHolder.getInstance().sizeInVertex * NORMAL_COMPONENT_COUNT * howManyCells()];
         vertexColorData = new float[(vertexPositionData.length / POSITION_COMPONENT_COUNT) * COLOR_COMPONENT_COUNT];
 
-        for (Cube cell: cellsList){
+        for (Cube cube : cellsList){
 
-            appendCell(cell);
+            appendCell(cube);
 
         }
 

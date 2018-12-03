@@ -75,13 +75,18 @@ public class ApplicationManager implements ApplicationListener, MainActivity.Act
     }
 
     @Override
-    public void goBtnPressed() {
+    public void goBtnPressed(boolean b) {
         isGenerating = !isGenerating;
     }
 
     @Override
     public void resetBtnPressed() {
         GRFX.renderer.resetCam();
+    }
+
+    @Override
+    public void speedUpBtnPressed() {
+
     }
 
     @Override
