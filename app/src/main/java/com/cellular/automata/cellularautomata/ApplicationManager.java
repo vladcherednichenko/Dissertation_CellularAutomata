@@ -4,6 +4,7 @@ package com.cellular.automata.cellularautomata;
 import android.util.Log;
 
 import com.cellular.automata.cellularautomata.activity.MainActivity;
+import com.cellular.automata.cellularautomata.core.LifeRule;
 import com.cellular.automata.cellularautomata.interfaces.ApplicationListener;
 import com.cellular.automata.cellularautomata.interfaces.CellSelectListener;
 import com.cellular.automata.cellularautomata.objects.Model;
@@ -42,6 +43,8 @@ public class ApplicationManager implements ApplicationListener, MainActivity.Act
         builder.setModel(testModel);
         builder.build();
         builder.bindAttributesData();
+
+        builder.setRule(new LifeRule());
         environment.addBuilder(builder);
 
         random = new Random();

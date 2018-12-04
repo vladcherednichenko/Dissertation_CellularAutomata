@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.cellular.automata.cellularautomata.GRFX;
 import com.cellular.automata.cellularautomata.GraphicsRenderer;
+import com.cellular.automata.cellularautomata.core.Rule;
 import com.cellular.automata.cellularautomata.data.CubeDataHolder;
 import com.cellular.automata.cellularautomata.data.VertexArray;
 import com.cellular.automata.cellularautomata.interfaces.CellSelectListener;
@@ -50,6 +51,7 @@ public class AutomataBuilder {
     private ObjectSelectHelper.TouchResult touchResult;
 
     private ArrayList<Cube> cellsList;
+    private Rule rule;
 
     public AutomataBuilder(){
 
@@ -92,6 +94,12 @@ public class AutomataBuilder {
 
         this.touchResult = touchResult;
         isTouched = true;
+
+    }
+
+    public void setRule(Rule rule){
+
+        this.rule = rule;
 
     }
 

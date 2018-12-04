@@ -14,7 +14,4 @@ public class Rule {
         return new ArrayList<>();
     }
 
-
-
-
 }
