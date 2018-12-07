@@ -46,6 +46,10 @@ public class AutomataBuilder {
     private int vertexBufferColorIdx = 0;
     private int vertexBufferNormalIdx = 0;
 
+    //the automata radius (from center to the bound)
+    private int automataRadius = 30;
+    private Cube[][][] cubeMap;
+
     private CellSelectListener selectListener;
     private boolean isTouched = false;
     private ObjectSelectHelper.TouchResult touchResult;
@@ -107,6 +111,7 @@ public class AutomataBuilder {
     public void setModel(Model modelToLoad){
 
         this.cellsList = new ArrayList<>();
+        this.cubeMap = new C
         float [] rawCoords = modelToLoad.getAutomataCoords();
         CellColor[] cellColors = modelToLoad.getAutomataColors();
 

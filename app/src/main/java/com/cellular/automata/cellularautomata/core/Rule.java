@@ -6,7 +6,25 @@ import java.util.ArrayList;
 
 public class Rule {
 
+
+    private int minAliveNeighboursValue = 2;
+    private int maxAliveNeighboursValue = 3;
+
+
+    private Cube[][][] cubeMap;
+
+    private Cube[][][] createCubeMap (ArrayList<Cube> cubesList){
+
+        int
+
+
+    }
+
     public ArrayList<Cube> getAllNeighbours(Cube cube, ArrayList<Cube> cubeList){
+
+
+        cubeList.get(0).
+
         return new ArrayList<>();
     }
 
