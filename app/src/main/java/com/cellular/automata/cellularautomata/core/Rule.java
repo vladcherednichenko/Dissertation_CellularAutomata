@@ -13,17 +13,15 @@ public class Rule {
 
     private Cube[][][] cubeMap;
 
-    private Cube[][][] createCubeMap (ArrayList<Cube> cubesList){
-
-        int
-
-
-    }
+//    private Cube[][][] createCubeMap (ArrayList<Cube> cubesList){
+//
+//
+//    }
 
     public ArrayList<Cube> getAllNeighbours(Cube cube, ArrayList<Cube> cubeList){
 
 
-        cubeList.get(0).
+
 
         return new ArrayList<>();
     }

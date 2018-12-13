@@ -111,7 +111,8 @@ public class AutomataBuilder {
     public void setModel(Model modelToLoad){
 
         this.cellsList = new ArrayList<>();
-        this.cubeMap = new C
+        this.cubeMap = new Cube[automataRadius * 2][automataRadius * 2][automataRadius * 2];
+
         float [] rawCoords = modelToLoad.getAutomataCoords();
         CellColor[] cellColors = modelToLoad.getAutomataColors();
 
@@ -124,6 +125,10 @@ public class AutomataBuilder {
 
     }
 
+
+
+
+    //general function, is called first when want to add a cubed
     public void addNewCube(CellPoint center, CellColor color){
 
         //check if this cube already exists

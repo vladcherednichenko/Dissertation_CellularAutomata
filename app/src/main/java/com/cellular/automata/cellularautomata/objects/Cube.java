@@ -69,6 +69,17 @@ public class Cube implements Comparable<Cube> {
 
     }
 
+    public Cube(CellPoint center, CellColor color, boolean shouldGenerateData){
+
+        this.center = center;
+        this.color = color;
+
+        if(shouldGenerateData){
+            createCubeData();
+        }
+
+    }
+
 
     private void createCubeData(){
 
