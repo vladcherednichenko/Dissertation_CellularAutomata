@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.cellular.automata.cellularautomata.interfaces.ActivityListener;
 import com.cellular.automata.cellularautomata.GRFX;
@@ -20,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements ActivityListener 
     boolean isPlay = false;
 
     private ImageView goButton, resetButton, speedUpButton;
+    private TextView txtLog;
 
     public interface ActivityInterface{
 
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements ActivityListener 
         surfaceView = findViewById(R.id.surfaceView);
         surfaceView.setActivityListener(this);
         this.applicationManager = GRFX.appManager;
+        GRFX.activityListener = this;
 
         CubeDataHolder.getInstance().facetListMedium = TextResourceReader.getFacetsFromFileObject(getApplicationContext(), "cube_medium.obj");
         CubeDataHolder.getInstance().setGraphicsQuality(CubeDataHolder.QUALITY_MEDIUM);
@@ -85,6 +88,8 @@ public class MainActivity extends AppCompatActivity implements ActivityListener 
             }
         });
 
+        txtLog = findViewById(R.id.txt_log);
+
 
     }
 
@@ -95,6 +100,13 @@ public class MainActivity extends AppCompatActivity implements ActivityListener 
 
     @Override
     public void logGesture(String text) {
+
+    }
+
+    @Override
+    public void logText(String text) {
+
+        txtLog.setText(text);
 
     }
 }

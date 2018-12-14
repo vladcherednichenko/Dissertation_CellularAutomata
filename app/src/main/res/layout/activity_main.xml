@@ -49,4 +49,19 @@
 
     </android.support.v7.widget.LinearLayoutCompat>
 
+    <TextView
+        android:id="@+id/txt_log"
+        android:layout_width="213dp"
+        android:layout_height="45dp"
+        android:background="@color/tools_back_color"
+        android:gravity="bottom|left"
+        android:text="0 neighbour"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:textStyle="normal"
+        app:fontFamily="@font/Roboto-Light"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/background" />
+
 </android.support.constraint.ConstraintLayout>

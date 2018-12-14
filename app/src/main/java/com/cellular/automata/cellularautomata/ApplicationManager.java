@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.cellular.automata.cellularautomata.activity.MainActivity;
 import com.cellular.automata.cellularautomata.core.LifeRule;
+import com.cellular.automata.cellularautomata.core.Rule;
 import com.cellular.automata.cellularautomata.interfaces.ApplicationListener;
 import com.cellular.automata.cellularautomata.interfaces.CellSelectListener;
 import com.cellular.automata.cellularautomata.objects.Model;
@@ -17,6 +18,7 @@ import java.util.Random;
 
 public class ApplicationManager implements ApplicationListener, MainActivity.ActivityInterface {
 
+    private String TAG = "ApplicationManager";
 
     private AutomataBuilder builder;
     private Environment environment;
@@ -24,6 +26,7 @@ public class ApplicationManager implements ApplicationListener, MainActivity.Act
     private long time;
     private long timePast;
     private boolean isGenerating = false;
+    private Rule rule;
 
     private Random random;
 
@@ -47,6 +50,7 @@ public class ApplicationManager implements ApplicationListener, MainActivity.Act
         builder.setRule(new LifeRule());
         environment.addBuilder(builder);
 
+        rule = new Rule();
         random = new Random();
 
     }
@@ -56,11 +60,14 @@ public class ApplicationManager implements ApplicationListener, MainActivity.Act
 
         if(builder.isTouched()){
 
-            builder.addNewCube(builder.getTouchResult().newCubeCenter, new CellColor("#4286f4"));
+            Log.d(rule.getNeighboursAmount() builder.getTouchResult().t)
+            //builder.addNewCube(builder.getTouchResult().newCubeCenter, new CellColor("#4286f4"));
 
         }
 
         if(isGenerating){
+
+            //generating random stuff
 
             timePast = System.currentTimeMillis() - time;
             if(timePast > 100){
@@ -68,7 +75,7 @@ public class ApplicationManager implements ApplicationListener, MainActivity.Act
                 builder.addNewCube(new CellPoint(random.nextInt(20)-9,random.nextInt(20)-9, random.nextInt(20)-9),
 
                         new CellColor(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
-                Log.d("Timer", "half a second");
+                //Log.d("Timer", "half a second");
             }
 
         }
@@ -76,6 +83,7 @@ public class ApplicationManager implements ApplicationListener, MainActivity.Act
         builder.draw();
 
     }
+
 
     @Override
     public void goBtnPressed(boolean b) {

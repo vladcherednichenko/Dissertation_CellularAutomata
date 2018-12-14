@@ -7,6 +7,7 @@ import com.cellular.automata.cellularautomata.GRFX;
 import com.cellular.automata.cellularautomata.GraphicsRenderer;
 import com.cellular.automata.cellularautomata.core.Rule;
 import com.cellular.automata.cellularautomata.data.CubeDataHolder;
+import com.cellular.automata.cellularautomata.data.CubeMap;
 import com.cellular.automata.cellularautomata.data.VertexArray;
 import com.cellular.automata.cellularautomata.interfaces.CellSelectListener;
 import com.cellular.automata.cellularautomata.utils.CellColor;
@@ -48,56 +49,38 @@ public class AutomataBuilder {
 
     //the automata radius (from center to the bound)
     private int automataRadius = 30;
-    private Cube[][][] cubeMap;
+    private CubeMap map;
 
     private CellSelectListener selectListener;
     private boolean isTouched = false;
     private ObjectSelectHelper.TouchResult touchResult;
 
-    private ArrayList<Cube> cellsList;
     private Rule rule;
 
     public AutomataBuilder(){
 
+        map = new CubeMap(automataRadius);
+
     }
 
-    public boolean isTouched(){
-
-        if(isTouched){
-            isTouched = false;
-            return true;
-        }
-        return false;
-    }
+    //GETTERS
 
     public ObjectSelectHelper.TouchResult getTouchResult() {
         return touchResult;
     }
 
+    public ArrayList<CellPoint> getCellCentersList(){
+
+        return map.getCubeCenters();
+
+    }
+
+    //SETTERS
+
     //this method can be called from the Application Manager
     public void setSelectListener(CellSelectListener listener){
 
         if(listener != null) this.selectListener = listener;
-
-    }
-
-    public ArrayList<CellPoint> getCellCentersList(){
-
-        if(cellsList == null || cellsList.size() == 0) return new ArrayList<>();
-
-        ArrayList<CellPoint> centers = new ArrayList<>();
-        for (Cube cube : cellsList){
-            centers.add(cube.center);
-        }
-
-        return centers;
-
-    }
-
-    public void handleTouch(ObjectSelectHelper.TouchResult touchResult){
-
-        this.touchResult = touchResult;
-        isTouched = true;
 
     }
 
@@ -110,8 +93,7 @@ public class AutomataBuilder {
     //sets the cellList
     public void setModel(Model modelToLoad){
 
-        this.cellsList = new ArrayList<>();
-        this.cubeMap = new Cube[automataRadius * 2][automataRadius * 2][automataRadius * 2];
+        map.clear();
 
         float [] rawCoords = modelToLoad.getAutomataCoords();
         CellColor[] cellColors = modelToLoad.getAutomataColors();
@@ -119,22 +101,34 @@ public class AutomataBuilder {
         for(int i = 0; i< modelToLoad.getCellsNumber(); i++){
 
             CellPoint cellCenter = new CellPoint(rawCoords[i*3], rawCoords[i*3 + 1], rawCoords[i*3 + 2]);
-            cellsList.add(new Cube(cellCenter, cellColors[i]));
+            map.add(new Cube(cellCenter, cellColors[i]));
 
         }
 
     }
 
+    //MAIN METHODS
 
+    public boolean isTouched(){
 
+        if(isTouched){
+            isTouched = false;
+            return true;
+        }
+        return false;
+    }
+
+    public void handleTouch(ObjectSelectHelper.TouchResult touchResult){
+
+        this.touchResult = touchResult;
+        isTouched = true;
+
+    }
 
     //general function, is called first when want to add a cubed
     public void addNewCube(CellPoint center, CellColor color){
 
-        //check if this cube already exists
-        if(cubeExists(center)) return;
-
-        cellsList.add(new Cube(center, color));
+        map.add(new Cube(center, color));
 
         //rebuild figure
         build();
@@ -158,7 +152,7 @@ public class AutomataBuilder {
         vertexNormalData = new float[CubeDataHolder.getInstance().sizeInVertex * NORMAL_COMPONENT_COUNT * howManyCells()];
         vertexColorData = new float[(vertexPositionData.length / POSITION_COMPONENT_COUNT) * COLOR_COMPONENT_COUNT];
 
-        for (Cube cube : cellsList){
+        for (Cube cube : map.getCubeList()){
 
             appendCell(cube);
 
@@ -242,20 +236,18 @@ public class AutomataBuilder {
 
     }
 
+    //additional stuff
+
     private int howManyCells(){
 
-        if(cellsList == null) return -1;
-        return cellsList.size();
+        return map.size();
 
     }
 
     private boolean cubeExists(CellPoint cubeCenter){
-        for (Cube cube: cellsList){
-            if (cube.center.equals(cubeCenter)){
-                return true;
-            }
-        }
-        return false;
+
+        return map.cubeExists(cubeCenter);
+
     }
 
 }

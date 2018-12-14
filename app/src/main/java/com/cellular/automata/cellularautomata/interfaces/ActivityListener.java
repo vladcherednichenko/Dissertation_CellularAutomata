@@ -8,4 +8,6 @@ public interface ActivityListener {
 
     void logGesture(String text);
 
+    void logText(String text);
+
 }
