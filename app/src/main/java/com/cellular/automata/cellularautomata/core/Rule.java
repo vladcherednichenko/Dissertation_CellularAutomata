@@ -45,7 +45,12 @@ public class Rule {
         for (int x = coords[0]-1; x<= coords[0]+1; x++){
             for (int y = coords[1]-1; y<= coords[1]+1; y++){
                 for (int z = coords[2]-1; z<= coords[2]+1; z++){
-                    result.add(map.getCubeAt(new int []{x, y, z}));
+
+                    Cube returnedCube = map.getCubeAt(new int []{x, y, z});
+
+                    if(returnedCube!= null)
+                        result.add(returnedCube);
+
                 }
             }
         }

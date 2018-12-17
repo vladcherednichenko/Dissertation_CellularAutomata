@@ -75,6 +75,18 @@ public class AutomataBuilder {
 
     }
 
+    public int getAutomataRadius(){
+
+        return automataRadius;
+
+    }
+
+    public CubeMap getMap() {
+
+        return map;
+
+    }
+
     //SETTERS
 
     //this method can be called from the Application Manager

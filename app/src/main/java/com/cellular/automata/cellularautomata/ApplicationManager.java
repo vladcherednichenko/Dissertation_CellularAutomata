@@ -6,8 +6,10 @@ import android.util.Log;
 import com.cellular.automata.cellularautomata.activity.MainActivity;
 import com.cellular.automata.cellularautomata.core.LifeRule;
 import com.cellular.automata.cellularautomata.core.Rule;
+import com.cellular.automata.cellularautomata.data.CubeMap;
 import com.cellular.automata.cellularautomata.interfaces.ApplicationListener;
 import com.cellular.automata.cellularautomata.interfaces.CellSelectListener;
+import com.cellular.automata.cellularautomata.objects.Cube;
 import com.cellular.automata.cellularautomata.objects.Model;
 import com.cellular.automata.cellularautomata.objects.AutomataBuilder;
 import com.cellular.automata.cellularautomata.utils.CellColor;
@@ -60,7 +62,7 @@ public class ApplicationManager implements ApplicationListener, MainActivity.Act
 
         if(builder.isTouched()){
 
-            Log.d(rule.getNeighboursAmount() builder.getTouchResult().t)
+            Log.d(TAG, String.valueOf(rule.getNeighboursAmount(new Cube(builder.getTouchResult().touchedCubeCenter, null, false), builder.getMap())));
             //builder.addNewCube(builder.getTouchResult().newCubeCenter, new CellColor("#4286f4"));
 
         }
