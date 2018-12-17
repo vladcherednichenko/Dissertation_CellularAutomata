@@ -52,6 +52,17 @@ public class ApplicationManager implements ApplicationListener, MainActivity.Act
         builder.setRule(new LifeRule());
         environment.addBuilder(builder);
 
+        builder.setOnTouchListener(new AutomataBuilder.OnTouchListener() {
+            @Override
+            public void onTouch() {
+
+                if(GRFX.activityListener!= null){
+                    GRFX.activityListener.logText("nb: " + String.valueOf(rule.getNeighboursAmount(new Cube(builder.getTouchResult().touchedCubeCenter, null, false), builder.getMap())));
+                }
+
+            }
+        });
+
         rule = new Rule();
         random = new Random();
 
@@ -99,6 +110,11 @@ public class ApplicationManager implements ApplicationListener, MainActivity.Act
 
     @Override
     public void speedUpBtnPressed() {
+
+    }
+
+    @Override
+    public void colorPicked(int color) {
 
     }
 

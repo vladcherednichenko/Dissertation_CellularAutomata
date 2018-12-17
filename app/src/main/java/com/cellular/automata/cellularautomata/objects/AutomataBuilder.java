@@ -56,6 +56,13 @@ public class AutomataBuilder {
     private ObjectSelectHelper.TouchResult touchResult;
 
     private Rule rule;
+    private OnTouchListener onTouchListener;
+
+    public interface OnTouchListener{
+
+        void onTouch();
+
+    }
 
     public AutomataBuilder(){
 
@@ -102,6 +109,12 @@ public class AutomataBuilder {
 
     }
 
+    public void setOnTouchListener(OnTouchListener listener){
+
+        this.onTouchListener = listener;
+
+    }
+
     //sets the cellList
     public void setModel(Model modelToLoad){
 
@@ -134,6 +147,7 @@ public class AutomataBuilder {
 
         this.touchResult = touchResult;
         isTouched = true;
+        if(onTouchListener != null) onTouchListener.onTouch();
 
     }
 
