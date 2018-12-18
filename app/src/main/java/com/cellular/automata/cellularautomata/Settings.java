@@ -3,7 +3,7 @@ package com.cellular.automata.cellularautomata;
 public class Settings {
 
     public static boolean validateShaderProgram = true;
-    public static String backgroundColor = "#ffffff";
+    public static String backgroundColor = "#f44274";
     public static boolean generateCellsDataAfterCreation = true;
     public static boolean debugTextViewEnabled = false;
     public static boolean antialiasing = false;

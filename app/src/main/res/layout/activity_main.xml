@@ -13,10 +13,11 @@
         android:layout_height="match_parent" />
 
     <android.support.v7.widget.LinearLayoutCompat
-        android:id="@+id/background"
-        android:layout_width="190dp"
-        android:layout_height="41dp"
-        android:background="@color/tools_back_color"
+        android:id="@+id/controls_bar"
+        android:layout_width="187dp"
+        android:layout_height="34dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/ui_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -50,77 +51,151 @@
     </android.support.v7.widget.LinearLayoutCompat>
 
     <TextView
-        android:id="@+id/txt_log"
+        android:id="@+id/txt_log_bottom"
         android:layout_width="213dp"
-        android:layout_height="45dp"
-        android:background="@color/tools_back_color"
-        android:gravity="bottom|left"
-        android:text="0 neighbour"
+        android:layout_height="34dp"
+        android:layout_margin="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        android:background="@drawable/ui_background"
+
+        android:gravity="center"
         android:textColor="@android:color/black"
         android:textSize="20sp"
         android:textStyle="normal"
         app:fontFamily="@font/roboto_light"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/controls_bar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/background" />
+        app:layout_constraintTop_toTopOf="@+id/controls_bar" />
 
-    <!--<LinearLayout-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="vertical">-->
 
-        <!--<com.flask.colorpicker.ColorPickerView-->
-            <!--android:id="@+id/color_picker_view"-->
-            <!--android:layout_width= "200dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--app:alphaSlider="true"-->
-            <!--app:density="12"-->
-            <!--app:lightnessSlider="true"-->
-            <!--app:wheelType="FLOWER"-->
-            <!--app:lightnessSliderView="@+id/v_lightness_slider"-->
-            <!--app:alphaSliderView="@+id/v_alpha_slider"-->
-            <!--/>-->
 
-        <!--<com.flask.colorpicker.slider.LightnessSlider-->
-            <!--android:id="@+id/v_lightness_slider"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="48dp"-->
-            <!--/>-->
 
-        <!--<com.flask.colorpicker.slider.AlphaSlider-->
-            <!--android:id="@+id/v_alpha_slider"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="48dp"-->
-            <!--/>-->
+    <TextView
+        android:id="@+id/txt_log_top"
+        android:layout_width="213dp"
+        android:layout_height="34dp"
+        android:layout_margin="5dp"
+        android:layout_marginLeft="8dp"
 
-    <!--</LinearLayout>-->
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/ui_background"
+        android:gravity="center"
+        android:padding="5dp"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:textStyle="normal"
+        app:fontFamily="@font/roboto_light"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/color_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="240dp"
+        android:layout_margin="5dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/ui_background"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/txt_log_bottom"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_log_top">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.6"
+            android:orientation="vertical">
+
+            <com.flask.colorpicker.ColorPickerView
+                android:id="@+id/color_picker_view"
+                android:layout_width= "200dp"
+                android:layout_height="wrap_content"
+                app:alphaSlider="true"
+                app:density="12"
+                app:lightnessSlider="true"
+                app:wheelType="CIRCLE"
+                app:lightnessSliderView="@+id/v_lightness_slider"
+                app:alphaSliderView="@+id/v_alpha_slider"/>
+
+        <com.flask.colorpicker.slider.LightnessSlider
+            android:id="@+id/v_lightness_slider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/close_color_bar"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/ui_background"
+            android:onClick="OnCloseColorBarClicked"
+            android:padding="10dp"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/hide_bar"
+            tools:layout_editor_absoluteX="95dp"
+            tools:layout_editor_absoluteY="70dp" />
+
+    </LinearLayout>
 
 
     <LinearLayout
-        android:id="@+id/color_picker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:id="@+id/tool_bar"
+        android:visibility="invisible"
+        android:layout_width="44dp"
+        android:layout_height="240dp"
+        android:layout_margin="5dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/ui_background"
+        android:orientation="vertical"
+        android:padding="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/txt_log_bottom"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_log_top">
 
         <ImageView
-            android:id="@+id/img_color"
-            android:layout_width="43dp"
-            android:layout_height="40dp"
-            android:background="@color/tools_back_color"
-            app:srcCompat="@drawable/color_picker" />
+            android:id="@+id/tool_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="OnColorToolClicked"
+            app:srcCompat="@drawable/color_medium_round" />
 
-        <TextView
-            android:id="@+id/txt_color"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:background="@color/tools_back_color"
-            android:gravity="center"
-            android:text="color"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:textStyle="normal"
-            app:fontFamily="@font/roboto_light" />
+        <ImageView
+            android:id="@+id/tool_layers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/open_layers"
+            tools:layout_editor_absoluteX="94dp"
+            tools:layout_editor_absoluteY="90dp" />
 
+        <ImageView
+            android:id="@+id/tool_load"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/load_medium"
+            tools:layout_editor_absoluteX="432dp"
+            tools:layout_editor_absoluteY="183dp" />
+
+        <ImageView
+            android:id="@+id/tool_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/save_medium"
+            tools:layout_editor_absoluteX="200dp"
+            tools:layout_editor_absoluteY="39dp" />
     </LinearLayout>
 
 
