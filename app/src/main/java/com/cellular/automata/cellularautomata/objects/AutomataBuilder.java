@@ -70,7 +70,7 @@ public class AutomataBuilder {
     private Random random = new Random();
     private long time;
     private long timePast;
-    private int delay = 100;
+    private float delay = 100;
 
     public interface OnTouchListener{
 
@@ -228,7 +228,7 @@ public class AutomataBuilder {
     public void speedUp(){
 
         generating = true;
-        delay = 20;
+        delay = delay * 0.5f;
 
     }
 
@@ -236,19 +236,33 @@ public class AutomataBuilder {
 
         if(generating){
 
+            if(map.size() >= automataRadius*2 * automataRadius*2 * automataRadius*2 -1) return;
+
             //generating random stuff
             timePast = System.currentTimeMillis() - time;
             if(timePast > delay){
                 time = System.currentTimeMillis();
-                addNewCube(new CellPoint(random.nextInt(20)-9,random.nextInt(20)-9, random.nextInt(20)-9),
 
-                        new CellColor(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
+                addNewCube(generateCellPoint(),  new CellColor(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
                 //Log.d("Timer", "half a second");
 
                 GRFX.activityListener.loxTextTop("cubes: " + String.valueOf(map.size()));
             }
 
         }
+
+    }
+
+    CellPoint generateCellPoint(){
+
+        CellPoint point =  new CellPoint(random.nextInt(20)-9,random.nextInt(20)-9, random.nextInt(20)-9);
+        if(cubeExists(point)){
+            generateCellPoint();
+        }else{
+            return point;
+        }
+
+        return point;
 
     }
 
