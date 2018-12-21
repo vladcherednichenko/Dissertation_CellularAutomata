@@ -4,37 +4,36 @@ package com.cellular.automata.cellularautomata;
 import android.util.Log;
 
 import com.cellular.automata.cellularautomata.activity.MainActivity;
+import com.cellular.automata.cellularautomata.core.InputCommander;
 import com.cellular.automata.cellularautomata.core.LifeRule;
 import com.cellular.automata.cellularautomata.core.Rule;
-import com.cellular.automata.cellularautomata.data.CubeMap;
 import com.cellular.automata.cellularautomata.interfaces.ApplicationListener;
-import com.cellular.automata.cellularautomata.interfaces.CellSelectListener;
 import com.cellular.automata.cellularautomata.objects.Cube;
 import com.cellular.automata.cellularautomata.objects.Model;
 import com.cellular.automata.cellularautomata.objects.AutomataBuilder;
 import com.cellular.automata.cellularautomata.utils.CellColor;
 import com.cellular.automata.cellularautomata.utils.CellPoint;
-import com.cellular.automata.cellularautomata.utils.ObjectSelectHelper;
+import com.cellular.automata.cellularautomata.utils.FPSCounter;
 
 import java.util.Random;
 
-public class ApplicationManager implements ApplicationListener, MainActivity.ActivityInterface {
+public class ApplicationManager implements ApplicationListener{
 
     private String TAG = "ApplicationManager";
 
     private AutomataBuilder builder;
     private Environment environment;
+    private InputCommander inputCommander;
+    private FPSCounter fps = new FPSCounter();
 
-    private long time;
-    private long timePast;
     private boolean isGenerating = false;
-    private Rule rule;
 
-    private Random random;
+    private Rule rule;
 
     @Override
     public void create() {
 
+        inputCommander = GRFX.activityListener.getInputCommander();
         builder = new AutomataBuilder();
         environment = new Environment();
 
@@ -64,59 +63,96 @@ public class ApplicationManager implements ApplicationListener, MainActivity.Act
         });
 
         rule = new Rule();
-        random = new Random();
 
     }
 
     @Override
     public void render() {
 
-        if(builder.isTouched()){
+        final int command = inputCommander.readCommand();
 
-            Log.d(TAG, String.valueOf(rule.getNeighboursAmount(new Cube(builder.getTouchResult().touchedCubeCenter, null, false), builder.getMap())));
-            //builder.addNewCube(builder.getTouchResult().newCubeCenter, new CellColor("#4286f4"));
+        switch (command){
 
-        }
+            case InputCommander.START:{
 
-        if(isGenerating){
+                builder.start();
+                break;
 
-            //generating random stuff
+            }
+            case InputCommander.PAUSE:{
 
-            timePast = System.currentTimeMillis() - time;
-            if(timePast > 100){
-                time = System.currentTimeMillis();
-                builder.addNewCube(new CellPoint(random.nextInt(20)-9,random.nextInt(20)-9, random.nextInt(20)-9),
+                builder.pause();
+                break;
 
-                        new CellColor(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
-                //Log.d("Timer", "half a second");
+            }
+            //clearing automata
+            case InputCommander.RESET:{
+
+                isGenerating = false;
+                CellColor colors[] = new CellColor[Settings.testAutomataCoords.length/3];
+                for(int i = 0; i< colors.length; i++){
+                    colors[i] = new CellColor("#4286f4");
+                }
+                Model testModel = new Model(Settings.testAutomataCoords, colors);
+
+                builder.setModel(testModel);
+                builder.build();
+                builder.bindAttributesData();
+
+                GRFX.renderer.resetCam();
+
+                break;
+
+            }
+            case InputCommander.NEXT:{
+
+                builder.speedUp();
+                break;
+
+            }
+            case InputCommander.FIGURE_TOUCHED:{
+
+                //adding / painting / deleting a cube
+                if(builder.isTouched()){
+
+                    Log.d(TAG, String.valueOf(rule.getNeighboursAmount(new Cube(builder.getTouchResult().touchedCubeCenter, null, false), builder.getMap())));
+
+                    String color = Integer.toHexString(inputCommander.currentColor);
+
+                    if(color.length()>=6){
+
+                        color = "#" + color.substring(2);
+                        builder.paintCube(builder.getTouchResult().touchedCubeCenter, new CellColor(color));
+
+                    }
+                    //builder.addNewCube(builder.getTouchResult().newCubeCenter, new CellColor("#4286f4"));
+                }
+
+                break;
+
+            }
+            case InputCommander.STRETCH:{
+
+                builder.stretch();
+                break;
+
+            }
+            case InputCommander.SQUEEZE:{
+
+                builder.squeeze();
+                break;
+
             }
 
         }
 
+        builder.execute();
         builder.draw();
 
-    }
-
-
-    @Override
-    public void goBtnPressed(boolean b) {
-        isGenerating = !isGenerating;
-    }
-
-    @Override
-    public void resetBtnPressed() {
-        GRFX.renderer.resetCam();
-    }
-
-    @Override
-    public void speedUpBtnPressed() {
+        GRFX.activityListener.logText("fps: " + String.valueOf(fps.frames()));
 
     }
 
-    @Override
-    public void colorPicked(int color) {
-
-    }
 
     @Override
     public void resize() {

@@ -7,6 +7,7 @@ import com.cellular.automata.cellularautomata.utils.CellColor;
 import com.cellular.automata.cellularautomata.utils.CellPoint;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 
 public class CubeMap {
@@ -29,7 +30,7 @@ public class CubeMap {
 
     //GETTERS
     public ArrayList<Cube> getCubeList() {
-        return cubeList;
+        return sort();
     }
 
     public ArrayList<CellPoint> getCubeCenters(){
@@ -54,6 +55,35 @@ public class CubeMap {
 
         int[] mapCoords = cubeCoordsToMapCoords(coords);
         return map[mapCoords[0]][mapCoords[1]][mapCoords[2]];
+
+    }
+
+    public Cube getCubeByCenter(CellPoint center){
+
+        if (!cubeExists(center))
+            return null;
+
+        int[] mapCoords = cubeCoordsToMapCoords(new int[]{(int)center.x, (int)center.y, (int)center.z});
+        return map[mapCoords[0]][mapCoords[1]][mapCoords[2]];
+
+    }
+
+    public int height(){
+
+        int low = 10000;
+        int high = -10000;
+
+        for (Cube cube: cubeList){
+
+            if(cube.center.y < low)
+                low = (int)cube.center.y;
+
+            if(cube.center.y > high)
+                high = (int)cube.center.y;
+
+        }
+
+        return high - low +1;
 
     }
 
@@ -162,6 +192,13 @@ public class CubeMap {
         }
 
         return true;
+
+    }
+
+    public ArrayList<Cube> sort(){
+
+        Collections.sort(cubeList);
+        return cubeList;
 
     }
 

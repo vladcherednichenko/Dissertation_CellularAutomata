@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.cellular.automata.cellularautomata.GRFX;
 import com.cellular.automata.cellularautomata.GraphicsRenderer;
+import com.cellular.automata.cellularautomata.animation.Animator;
 import com.cellular.automata.cellularautomata.core.Rule;
 import com.cellular.automata.cellularautomata.data.CubeDataHolder;
 import com.cellular.automata.cellularautomata.data.CubeMap;
@@ -15,6 +16,9 @@ import com.cellular.automata.cellularautomata.utils.CellPoint;
 import com.cellular.automata.cellularautomata.utils.ObjectSelectHelper;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Random;
 
 import static android.opengl.GLES20.GL_ARRAY_BUFFER;
 import static android.opengl.GLES20.glBindBuffer;
@@ -53,10 +57,20 @@ public class AutomataBuilder {
 
     private CellSelectListener selectListener;
     private boolean isTouched = false;
+    private boolean isStretched = false;
+    private boolean viewMode = false;
+    private boolean generating = false;
     private ObjectSelectHelper.TouchResult touchResult;
 
     private Rule rule;
     private OnTouchListener onTouchListener;
+    private Animator animator;
+
+    //temporary
+    private Random random = new Random();
+    private long time;
+    private long timePast;
+    private int delay = 100;
 
     public interface OnTouchListener{
 
@@ -67,6 +81,7 @@ public class AutomataBuilder {
     public AutomataBuilder(){
 
         map = new CubeMap(automataRadius);
+        animator = new Animator(map.size(), map.height(), map.getCubeList());
 
     }
 
@@ -133,7 +148,6 @@ public class AutomataBuilder {
     }
 
     //MAIN METHODS
-
     public boolean isTouched(){
 
         if(isTouched){
@@ -151,6 +165,23 @@ public class AutomataBuilder {
 
     }
 
+    public void stretch(){
+
+        if(isStretched) return;
+
+        animator = new Animator(map.size(), map.height(), map.sort());
+        isStretched = true;
+        viewMode = true;
+
+    }
+
+    public void squeeze(){
+
+        if(!isStretched) return;
+        isStretched = false;
+
+    }
+
     //general function, is called first when want to add a cubed
     public void addNewCube(CellPoint center, CellColor color){
 
@@ -159,6 +190,65 @@ public class AutomataBuilder {
         //rebuild figure
         build();
         bindAttributesData();
+
+    }
+
+    //general function is called first when we want to paint the cube
+    public void paintCube(CellPoint center, CellColor color){
+
+        Cube cubeToRecolor = map.getCubeByCenter(center);
+        if(cubeToRecolor == null) return;
+
+        cubeToRecolor.paintCube(color);
+        build();
+        bindAttributesData();
+
+    }
+
+    //general function is called first when we want to delete the cube
+    public void deleteCube(CellPoint center){
+
+
+
+    }
+
+    public void start(){
+
+        generating = true;
+        delay = 100;
+
+    }
+
+    public void pause(){
+
+        generating = false;
+
+    }
+
+    public void speedUp(){
+
+        generating = true;
+        delay = 20;
+
+    }
+
+    public void execute(){
+
+        if(generating){
+
+            //generating random stuff
+            timePast = System.currentTimeMillis() - time;
+            if(timePast > delay){
+                time = System.currentTimeMillis();
+                addNewCube(new CellPoint(random.nextInt(20)-9,random.nextInt(20)-9, random.nextInt(20)-9),
+
+                        new CellColor(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
+                //Log.d("Timer", "half a second");
+
+                GRFX.activityListener.loxTextTop("cubes: " + String.valueOf(map.size()));
+            }
+
+        }
 
     }
 
@@ -257,7 +347,29 @@ public class AutomataBuilder {
         glVertexAttribPointer(renderer.getShader().getNormalAttributeLocation(), NORMAL_COMPONENT_COUNT, GLES20.GL_FLOAT, false, 0, 0);
 
 
-        glDrawArrays(GLES20.GL_TRIANGLES, 0, CubeDataHolder.getInstance().sizeInVertex * howManyCells());
+
+
+        if(viewMode){
+
+            if(isStretched){
+
+                animator.drawOpenedFigure(renderer.getShader());
+
+            }else{
+
+                animator.drawClosedFigure(renderer.getShader());
+                if(!animator.animationIsRunning())
+                    viewMode = false;
+
+            }
+
+        }else{
+
+            float[] resetScatterVector = {0.0f, 0.0f, 0.0f};
+            renderer.getShader().setScatter(resetScatterVector);
+            glDrawArrays(GLES20.GL_TRIANGLES, 0, CubeDataHolder.getInstance().sizeInVertex * howManyCells());
+
+        }
 
 
     }

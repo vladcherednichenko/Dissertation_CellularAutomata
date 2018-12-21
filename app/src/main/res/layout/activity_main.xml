@@ -175,6 +175,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:onClick="OnLayersButtonPressed"
             app:srcCompat="@drawable/open_layers"
             tools:layout_editor_absoluteX="94dp"
             tools:layout_editor_absoluteY="90dp" />

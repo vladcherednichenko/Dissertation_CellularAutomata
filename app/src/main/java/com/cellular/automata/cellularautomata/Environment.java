@@ -43,8 +43,17 @@ public class Environment implements EnvironmentListener{
             ObjectSelectHelper.TouchResult touchResult = GRFX.renderer.getTouchedResult(normalizedX, normalizedY, builder.getCellCentersList());
             if(touchResult.cubeTouched){
                 builder.handleTouch(touchResult);
+                GRFX.activityListener.getInputCommander().cubeTouched();
             }
 
+        }
+
+    }
+
+    public void draw(){
+
+        for(AutomataBuilder builder: buildersList){
+            builder.draw();
         }
 
     }

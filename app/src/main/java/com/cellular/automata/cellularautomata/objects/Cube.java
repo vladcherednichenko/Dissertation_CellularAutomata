@@ -128,6 +128,13 @@ public class Cube implements Comparable<Cube> {
 
     }
 
+    public void paintCube(CellColor color){
+
+        if(color == null) return;
+        this.color = color;
+        createCubeData();
+
+    }
 
     public void translateCube(CellPoint vector){
         for (int i = 0; i< cubePositionData.length; i++){
