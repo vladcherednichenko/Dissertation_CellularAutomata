@@ -29,6 +29,9 @@ dependencies {
     //color picker
     implementation 'com.github.QuadFlask:colorpicker:0.0.13'
 
+    //screenshot library
+
+    implementation 'com.github.nisrulz:screenshott:2.0.0'
 
 
 }

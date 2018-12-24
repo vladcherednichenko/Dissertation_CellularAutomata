@@ -2,6 +2,7 @@ package com.cellular.automata.cellularautomata.activity;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,6 +29,8 @@ import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
+import github.nisrulz.screenshott.ScreenShott;
+
 public class MainActivity extends AppCompatActivity implements ActivityListener {
 
     private String TAG = "Main Activity";
@@ -42,16 +45,6 @@ public class MainActivity extends AppCompatActivity implements ActivityListener 
     private ImageView goButton, resetButton, speedUpButton, layersButton;
     private TextView txtLog, txtLogTop;
     private ColorPickerView colorPicker;
-
-//    public interface ActivityInterface{
-//
-//        void goBtnPressed(boolean isPlay);
-//        void resetBtnPressed();
-//        void speedUpBtnPressed();
-//        void colorPicked(int color);
-//        void stretchFigure(boolean isStretch);
-//
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +131,26 @@ public class MainActivity extends AppCompatActivity implements ActivityListener 
 
     }
 
+    public Bitmap takeScreenshot(){
+
+        return ScreenShott.getInstance().takeScreenShotOfView(surfaceView);
+    }
+
+
+    // buttons clicked
+    // onClick mesthods
+
+    public void OnSaveToolClicked(View v){
+
+        inputCommander.savePressed();
+
+    }
+
+    public void OnLoadToolClicked(View v){
+
+        inputCommander.loadPressed();
+
+    }
 
     public void OnColorToolClicked(View v){
 
@@ -171,6 +184,9 @@ public class MainActivity extends AppCompatActivity implements ActivityListener 
 
     }
 
+
+    //support methods
+    // utils
     private void hideToolbar(){
 
         toolBar.startAnimation(getSlideLeftAnimation());

@@ -1,6 +1,7 @@
 package com.cellular.automata.cellularautomata.interfaces;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 
 import com.cellular.automata.cellularautomata.core.InputCommander;
 
@@ -15,5 +16,7 @@ public interface ActivityListener {
     void loxTextTop(String text);
 
     InputCommander getInputCommander();
+
+    Bitmap takeScreenshot();
 
 }

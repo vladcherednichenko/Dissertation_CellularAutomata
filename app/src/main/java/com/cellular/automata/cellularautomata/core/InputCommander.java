@@ -19,6 +19,9 @@ public class InputCommander {
     public static final int STRETCH = 7;
     public static final int SQUEEZE = 8;
 
+    public static final int SAVE = 11;
+    public static final int LOAD = 12;
+
     public static final int FIGURE_TOUCHED = 10;
     public static final int NULL = -1;
 
@@ -77,6 +80,18 @@ public class InputCommander {
     public void editModePressed(){
 
         currentCommand = EDIT_MODE;
+
+    }
+
+    public void savePressed(){
+
+        currentCommand = SAVE;
+
+    }
+
+    public void loadPressed(){
+
+        currentCommand = LOAD;
 
     }
 

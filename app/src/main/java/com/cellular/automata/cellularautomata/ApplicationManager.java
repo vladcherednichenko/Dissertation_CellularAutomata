@@ -1,6 +1,7 @@
 package com.cellular.automata.cellularautomata;
 
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.cellular.automata.cellularautomata.activity.MainActivity;
@@ -14,6 +15,7 @@ import com.cellular.automata.cellularautomata.objects.AutomataBuilder;
 import com.cellular.automata.cellularautomata.utils.CellColor;
 import com.cellular.automata.cellularautomata.utils.CellPoint;
 import com.cellular.automata.cellularautomata.utils.FPSCounter;
+import com.cellular.automata.cellularautomata.utils.ImageHelper;
 
 import java.util.Random;
 
@@ -140,6 +142,27 @@ public class ApplicationManager implements ApplicationListener{
             case InputCommander.SQUEEZE:{
 
                 builder.squeeze();
+                break;
+
+            }
+            case InputCommander.SAVE:{
+
+                GRFX.activityListener.loxTextTop("Save pressed");
+                Bitmap image = GRFX.activityListener.takeScreenshot();
+
+                ImageHelper.saveImage(image, "screen1", GRFX.activityListener.getContext(), new ImageHelper.SaveImageCallback() {
+                    @Override
+                    public void onImageSaved() {
+                        Log.d(TAG, "image saved");
+                    }
+                });
+
+                break;
+
+            }3
+            case InputCommander.LOAD:{
+
+                GRFX.activityListener.loxTextTop("Load pressed");
                 break;
 
             }
