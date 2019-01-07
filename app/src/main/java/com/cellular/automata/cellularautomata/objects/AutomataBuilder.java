@@ -16,8 +16,6 @@ import com.cellular.automata.cellularautomata.utils.CellPoint;
 import com.cellular.automata.cellularautomata.utils.ObjectSelectHelper;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Random;
 
 import static android.opengl.GLES20.GL_ARRAY_BUFFER;
@@ -246,7 +244,7 @@ public class AutomataBuilder {
                 addNewCube(generateCellPoint(),  new CellColor(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
                 //Log.d("Timer", "half a second");
 
-                GRFX.activityListener.loxTextTop("cubes: " + String.valueOf(map.size()));
+                GRFX.activityListener.logTextTop("cubes: " + String.valueOf(map.size()));
             }
 
         }

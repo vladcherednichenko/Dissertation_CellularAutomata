@@ -22,7 +22,9 @@ public class InputCommander {
     public static final int SAVE = 11;
     public static final int LOAD = 12;
 
+    public static final int SCREEN_TOUCHED = 9;
     public static final int FIGURE_TOUCHED = 10;
+
     public static final int NULL = -1;
 
     public int currentColor = 0;
@@ -30,7 +32,7 @@ public class InputCommander {
     public int readCommand(){
 
         int ret = currentCommand;
-        currentCommand = NULL;
+        currentCommand = -1;
         return ret;
 
     }
@@ -99,6 +101,12 @@ public class InputCommander {
 
         this.currentColor = color;
         currentCommand = COLOR_SELECTED;
+
+    }
+
+    public void screenTouched(){
+
+        currentCommand = SCREEN_TOUCHED;
 
     }
 

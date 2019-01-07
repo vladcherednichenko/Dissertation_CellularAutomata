@@ -13,7 +13,11 @@ public interface ActivityListener {
 
     void logText(String text);
 
-    void loxTextTop(String text);
+    void logTextTop(String text);
+
+    void logFps (int fps);
+
+    void hideInterface();
 
     InputCommander getInputCommander();
 

@@ -4,7 +4,6 @@ package com.cellular.automata.cellularautomata;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import com.cellular.automata.cellularautomata.activity.MainActivity;
 import com.cellular.automata.cellularautomata.core.InputCommander;
 import com.cellular.automata.cellularautomata.core.LifeRule;
 import com.cellular.automata.cellularautomata.core.Rule;
@@ -13,11 +12,8 @@ import com.cellular.automata.cellularautomata.objects.Cube;
 import com.cellular.automata.cellularautomata.objects.Model;
 import com.cellular.automata.cellularautomata.objects.AutomataBuilder;
 import com.cellular.automata.cellularautomata.utils.CellColor;
-import com.cellular.automata.cellularautomata.utils.CellPoint;
 import com.cellular.automata.cellularautomata.utils.FPSCounter;
 import com.cellular.automata.cellularautomata.utils.ImageHelper;
-
-import java.util.Random;
 
 public class ApplicationManager implements ApplicationListener{
 
@@ -75,6 +71,7 @@ public class ApplicationManager implements ApplicationListener{
 
         switch (command){
 
+            //MAIN CONTROLS
             case InputCommander.START:{
 
                 builder.start();
@@ -87,7 +84,6 @@ public class ApplicationManager implements ApplicationListener{
                 break;
 
             }
-            //clearing automata
             case InputCommander.RESET:{
 
                 isGenerating = false;
@@ -112,6 +108,7 @@ public class ApplicationManager implements ApplicationListener{
                 break;
 
             }
+            //when the figure is touched
             case InputCommander.FIGURE_TOUCHED:{
 
                 //adding / painting / deleting a cube
@@ -133,6 +130,13 @@ public class ApplicationManager implements ApplicationListener{
                 break;
 
             }
+            //when the screen is touched
+            case InputCommander.SCREEN_TOUCHED:{
+
+                GRFX.activityListener.hideInterface();
+                break;
+
+            }
             case InputCommander.STRETCH:{
 
                 builder.stretch();
@@ -147,7 +151,7 @@ public class ApplicationManager implements ApplicationListener{
             }
             case InputCommander.SAVE:{
 
-                GRFX.activityListener.loxTextTop("Save pressed");
+                GRFX.activityListener.logTextTop("Save pressed");
                 Bitmap image = GRFX.activityListener.takeScreenshot();
 
                 ImageHelper.saveImage(image, "screen1", GRFX.activityListener.getContext(), new ImageHelper.SaveImageCallback() {
@@ -159,20 +163,23 @@ public class ApplicationManager implements ApplicationListener{
 
                 break;
 
-            }3
+            }
             case InputCommander.LOAD:{
 
-                GRFX.activityListener.loxTextTop("Load pressed");
+                GRFX.activityListener.logTextTop("Load pressed");
                 break;
 
             }
+
+
+
 
         }
 
         builder.execute();
         builder.draw();
 
-        GRFX.activityListener.logText("fps: " + String.valueOf(fps.frames()));
+        GRFX.activityListener.logFps(fps.frames());
 
     }
 

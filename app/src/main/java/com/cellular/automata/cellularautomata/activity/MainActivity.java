@@ -1,12 +1,10 @@
 package com.cellular.automata.cellularautomata.activity;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -16,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.cellular.automata.cellularautomata.Settings;
 import com.cellular.automata.cellularautomata.core.InputCommander;
 import com.cellular.automata.cellularautomata.interfaces.ActivityListener;
 import com.cellular.automata.cellularautomata.GRFX;
@@ -26,8 +25,7 @@ import com.cellular.automata.cellularautomata.utils.TextResourceReader;
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorChangedListener;
 import com.flask.colorpicker.OnColorSelectedListener;
-import com.flask.colorpicker.builder.ColorPickerClickListener;
-import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
+
 
 import github.nisrulz.screenshott.ScreenShott;
 
@@ -43,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements ActivityListener 
 
     private LinearLayout toolBar, color_bar;
     private ImageView goButton, resetButton, speedUpButton, layersButton;
-    private TextView txtLog, txtLogTop;
+    private TextView txtLogDown, txtLogTop, txtFpsCounter;
     private ColorPickerView colorPicker;
 
     @Override
@@ -58,6 +56,16 @@ public class MainActivity extends AppCompatActivity implements ActivityListener 
 
         surfaceView = findViewById(R.id.surfaceView);
         surfaceView.setActivityListener(this);
+        surfaceView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                inputCommander.screenTouched();
+                return false;
+            }
+
+        });
+
         GRFX.activityListener = this;
 
         CubeDataHolder.getInstance().facetListMedium = TextResourceReader.getFacetsFromFileObject(getApplicationContext(), "cube_medium.obj");
@@ -104,8 +112,9 @@ public class MainActivity extends AppCompatActivity implements ActivityListener 
         });
 
         toolBar = findViewById(R.id.tool_bar);
-        txtLog = findViewById(R.id.txt_log_bottom);
+        txtLogDown = findViewById(R.id.txt_log_bottom);
         txtLogTop = findViewById(R.id.txt_log_top);
+        txtFpsCounter = findViewById(R.id.txt_fps_counter);
         color_bar = findViewById(R.id.color_bar);
         colorPicker = findViewById(R.id.color_picker_view);
         layersButton = findViewById(R.id.tool_layers);
@@ -128,12 +137,16 @@ public class MainActivity extends AppCompatActivity implements ActivityListener 
 
         color_bar.setVisibility(View.INVISIBLE);
         toolBar.setVisibility(View.VISIBLE);
+        txtFpsCounter.setVisibility(Settings.fpsCounter? View.VISIBLE: View.INVISIBLE);
+        txtLogDown.setVisibility(Settings.log_down? View.VISIBLE: View.INVISIBLE);
+        txtLogTop.setVisibility(Settings.log_top? View.VISIBLE: View.INVISIBLE);
 
     }
 
     public Bitmap takeScreenshot(){
 
         return ScreenShott.getInstance().takeScreenShotOfView(surfaceView);
+
     }
 
 
@@ -229,6 +242,10 @@ public class MainActivity extends AppCompatActivity implements ActivityListener 
 
     }
 
+    //Api for Application Manager
+
+
+
     @Override
     public Context getContext() {
         return this;
@@ -245,19 +262,49 @@ public class MainActivity extends AppCompatActivity implements ActivityListener 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                txtLog.setText(text);
+                txtLogDown.setText(text);
             }
         });
 
     }
 
     @Override
-    public void loxTextTop(final String text) {
+    public void logTextTop(final String text) {
 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 txtLogTop.setText(text);
+            }
+        });
+
+    }
+
+    @Override
+    public void logFps(final int fps) {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                txtFpsCounter.setText("fps " + String.valueOf(fps));
+            }
+        });
+
+
+    }
+
+    @Override
+    public void hideInterface() {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(colorBarOpened){
+                    hideColorPicker();
+                    showToolBar();
+                }
+
+
             }
         });
 
