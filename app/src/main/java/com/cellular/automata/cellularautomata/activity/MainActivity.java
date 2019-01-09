@@ -2,6 +2,7 @@ package com.cellular.automata.cellularautomata.activity;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -12,24 +13,23 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.cellular.automata.cellularautomata.Presenter;
 import com.cellular.automata.cellularautomata.Settings;
-import com.cellular.automata.cellularautomata.core.InputCommander;
-import com.cellular.automata.cellularautomata.interfaces.ActivityListener;
+import com.cellular.automata.cellularautomata.fragments.FragmentSave;
+import com.cellular.automata.cellularautomata.interfaces.MainView;
 import com.cellular.automata.cellularautomata.GRFX;
 import com.cellular.automata.cellularautomata.R;
 import com.cellular.automata.cellularautomata.SurfaceViewForAutomata;
-import com.cellular.automata.cellularautomata.data.CubeDataHolder;
-import com.cellular.automata.cellularautomata.utils.TextResourceReader;
+import com.cellular.automata.cellularautomata.objects.Model;
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorChangedListener;
 import com.flask.colorpicker.OnColorSelectedListener;
 
 
-import github.nisrulz.screenshott.ScreenShott;
-
-public class MainActivity extends AppCompatActivity implements ActivityListener {
+public class MainActivity extends AppCompatActivity implements MainView {
 
     private String TAG = "Main Activity";
 
@@ -37,12 +37,81 @@ public class MainActivity extends AppCompatActivity implements ActivityListener 
     boolean isPlay = false;
     boolean colorBarOpened = false;
     boolean layerIconIsStretchedIcon = false;
-    InputCommander inputCommander = new InputCommander();
 
-    private LinearLayout toolBar, color_bar;
+    private LinearLayout toolBar, colorBar, controlsBar;
     private ImageView goButton, resetButton, speedUpButton, layersButton;
     private TextView txtLogDown, txtLogTop, txtFpsCounter;
     private ColorPickerView colorPicker;
+    private ProgressBar progressBar;
+
+    private android.support.v4.app.FragmentManager fragmentManager;
+    private FragmentSave saveFragment;
+
+    private Presenter presenter;
+
+
+
+
+    View.OnTouchListener surfaceViewListener = new android.view.View.OnTouchListener() {
+        @Override
+        public boolean onTouch(android.view.View v, MotionEvent event) {
+
+            presenter.screenTouched();
+            return false;
+        }
+
+    };
+
+    private View.OnClickListener goButtonListener = new android.view.View.OnClickListener() {
+        @Override
+        public void onClick(android.view.View view) {
+
+            isPlay = !isPlay;
+            if (isPlay){
+
+                goButton.setImageDrawable(getResources().getDrawable(R.drawable.pause_icon));
+                presenter.startPressed();
+
+
+            }else{
+
+                goButton.setImageDrawable(getResources().getDrawable(R.drawable.play_icon));
+                presenter.pausePressed();
+
+            }
+
+        }
+    };
+
+    private View.OnClickListener resetButtonListener = new android.view.View.OnClickListener() {
+        @Override
+        public void onClick(android.view.View view) {
+            presenter.stopPressed();
+        }
+    };
+
+    private View.OnClickListener speedUpButtonListener = new android.view.View.OnClickListener() {
+        @Override
+        public void onClick(android.view.View view) { presenter.nextStepPressed(); }
+    };
+
+    private OnColorSelectedListener onColorSelectedListener = new OnColorSelectedListener() {
+        @Override
+        public void onColorSelected(int i) {
+            //Log.d(TAG, "onColorSelected: 0x" + Integer.toHexString(i));
+            presenter.colorSelected(i);
+        }
+    };
+
+    private OnColorChangedListener onColorChangeListener = new OnColorChangedListener() {
+        @Override
+        public void onColorChanged(int i) {
+            //Log.d(TAG, "onColorChanged: 0x" + Integer.toHexString(i));
+            presenter.colorSelected(i);
+        }
+    };
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,179 +122,110 @@ public class MainActivity extends AppCompatActivity implements ActivityListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         surfaceView = findViewById(R.id.surfaceView);
         surfaceView.setActivityListener(this);
-        surfaceView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                inputCommander.screenTouched();
-                return false;
-            }
-
-        });
+        surfaceView.setOnTouchListener(surfaceViewListener);
 
         GRFX.activityListener = this;
 
-        CubeDataHolder.getInstance().facetListMedium = TextResourceReader.getFacetsFromFileObject(getApplicationContext(), "cube_medium.obj");
-        CubeDataHolder.getInstance().setGraphicsQuality(CubeDataHolder.QUALITY_MEDIUM);
-
-
         goButton = findViewById(R.id.play_icon);
-        goButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                isPlay = !isPlay;
-                if (isPlay){
-
-                    goButton.setImageDrawable(getResources().getDrawable(R.drawable.pause_icon));
-                    inputCommander.startPressed();
-
-
-                }else{
-
-                    goButton.setImageDrawable(getResources().getDrawable(R.drawable.play_icon));
-                    inputCommander.pausePressed();
-
-                }
-
-            }
-        });
-
+        goButton.setOnClickListener(goButtonListener);
 
         resetButton = findViewById(R.id.reset_icon);
-        resetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                inputCommander.resetPressed();
-            }
-        });
+        resetButton.setOnClickListener(resetButtonListener);
 
         speedUpButton = findViewById(R.id.speed_up_icon);
-        speedUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                inputCommander.nextStepPressed();
-            }
-        });
+        speedUpButton.setOnClickListener(speedUpButtonListener);
 
         toolBar = findViewById(R.id.tool_bar);
+        controlsBar = findViewById(R.id.controls_bar);
         txtLogDown = findViewById(R.id.txt_log_bottom);
         txtLogTop = findViewById(R.id.txt_log_top);
         txtFpsCounter = findViewById(R.id.txt_fps_counter);
-        color_bar = findViewById(R.id.color_bar);
-        colorPicker = findViewById(R.id.color_picker_view);
+        colorBar = findViewById(R.id.color_bar);
         layersButton = findViewById(R.id.tool_layers);
+        progressBar = findViewById(R.id.progress_bar);
 
-        colorPicker.addOnColorSelectedListener(new OnColorSelectedListener() {
-            @Override
-            public void onColorSelected(int i) {
-                //Log.d(TAG, "onColorSelected: 0x" + Integer.toHexString(i));
-                inputCommander.colorSelected(i);
-            }
-        });
+        // Color picker
+        colorPicker = findViewById(R.id.color_picker_view);
+        colorPicker.addOnColorSelectedListener(onColorSelectedListener);
+        colorPicker.addOnColorChangedListener(onColorChangeListener);
 
-        colorPicker.addOnColorChangedListener(new OnColorChangedListener() {
-            @Override
-            public void onColorChanged(int i) {
-                //Log.d(TAG, "onColorChanged: 0x" + Integer.toHexString(i));
-                inputCommander.colorSelected(i);
-            }
-        });
+        // Set default visibility
+        colorBar.setVisibility(android.view.View.INVISIBLE);
+        toolBar.setVisibility(android.view.View.VISIBLE);
+        txtFpsCounter.setVisibility(Settings.fpsCounter? android.view.View.VISIBLE: android.view.View.INVISIBLE);
+        txtLogDown.setVisibility(Settings.log_down? android.view.View.VISIBLE: android.view.View.INVISIBLE);
+        txtLogTop.setVisibility(Settings.log_top? android.view.View.VISIBLE: android.view.View.INVISIBLE);
 
-        color_bar.setVisibility(View.INVISIBLE);
-        toolBar.setVisibility(View.VISIBLE);
-        txtFpsCounter.setVisibility(Settings.fpsCounter? View.VISIBLE: View.INVISIBLE);
-        txtLogDown.setVisibility(Settings.log_down? View.VISIBLE: View.INVISIBLE);
-        txtLogTop.setVisibility(Settings.log_top? View.VISIBLE: View.INVISIBLE);
+        fragmentManager = getSupportFragmentManager();
+        presenter = new Presenter();
+        presenter.attachView(this);
 
     }
-
-    public Bitmap takeScreenshot(){
-
-        return ScreenShott.getInstance().takeScreenShotOfView(surfaceView);
-
-    }
-
 
     // buttons clicked
-    // onClick mesthods
+    // onClick methods
 
-    public void OnSaveToolClicked(View v){
+    public void OnSaveToolClicked(android.view.View v){
 
-        inputCommander.savePressed();
-
-    }
-
-    public void OnLoadToolClicked(View v){
-
-        inputCommander.loadPressed();
+        presenter.savePressed();
 
     }
 
-    public void OnColorToolClicked(View v){
+    public void OnLoadToolClicked(android.view.View v){
+
+        presenter.loadPressed();
+
+    }
+
+    public void OnColorToolClicked(android.view.View v){
 
         hideToolbar();
         showColorPicker();
 
     }
 
-    public void OnCloseColorBarClicked(View v){
+    public void OnCloseColorBarClicked(android.view.View v){
 
         hideColorPicker();
-        showToolBar();
+        showToolbar();
 
     }
 
-    public void OnLayersButtonPressed(View v){
+    public void OnLayersButtonClicked(android.view.View v){
 
         layerIconIsStretchedIcon = !layerIconIsStretchedIcon;
         if(layerIconIsStretchedIcon){
 
             layersButton.setImageDrawable(getResources().getDrawable(R.drawable.close_layers));
-            inputCommander.stretchPressed();
+            presenter.stretchPressed();
 
         }else{
 
             layersButton.setImageDrawable(getResources().getDrawable(R.drawable.open_layers));
-            inputCommander.squeezePressed();
+            presenter.squeezePressed();
 
         }
 
 
     }
 
-
     //support methods
     // utils
-    private void hideToolbar(){
-
-        toolBar.startAnimation(getSlideLeftAnimation());
-        toolBar.setVisibility(View.INVISIBLE);
-
-    }
-
-    private void showToolBar(){
-
-        toolBar.setVisibility(View.VISIBLE);
-        toolBar.startAnimation(getSlideRightAnimation());
-
-    }
 
     private void showColorPicker(){
 
-        color_bar.setVisibility(View.VISIBLE);
-        color_bar.startAnimation(getSlideRightAnimation());
+        colorBar.setVisibility(android.view.View.VISIBLE);
+        colorBar.startAnimation(getSlideRightAnimation());
         colorBarOpened = true;
 
     }
 
     private void hideColorPicker(){
 
-        color_bar.startAnimation(getSlideLeftAnimation());
-        color_bar.setVisibility(View.INVISIBLE);
+        colorBar.startAnimation(getSlideLeftAnimation());
+        colorBar.setVisibility(android.view.View.INVISIBLE);
         colorBarOpened = false;
 
     }
@@ -242,9 +242,22 @@ public class MainActivity extends AppCompatActivity implements ActivityListener 
 
     }
 
-    //Api for Application Manager
+    private void loadSaveFragment(){
+
+        saveFragment = new FragmentSave();
+        saveFragment.setPresenter(presenter);
+        fragmentManager.beginTransaction().add(R.id.fragment_frame, saveFragment, "CATEGORIES").commit();
+
+//        FragmentTransaction transaction = fragmentManager.beginTransaction();
+//        transaction.setCustomAnimations(R.anim.fade_in, R.anim.menu_slide_out);
+//        transaction.replace(R.id.fragment_container, setsFragment, "SETS");
+//        transaction.commit();
+
+    }
 
 
+
+    // View for presenter
 
     @Override
     public Context getContext() {
@@ -301,7 +314,7 @@ public class MainActivity extends AppCompatActivity implements ActivityListener 
             public void run() {
                 if(colorBarOpened){
                     hideColorPicker();
-                    showToolBar();
+                    showToolbar();
                 }
 
 
@@ -311,9 +324,79 @@ public class MainActivity extends AppCompatActivity implements ActivityListener 
     }
 
     @Override
-    public InputCommander getInputCommander() {
-        return inputCommander;
+    public void openSaveActivity(final Model model, final Bitmap screenShot) {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                loadSaveFragment();
+
+//                ModelParcelable pModel = new ModelParcelable("123", "path", 1, 1);
+//                Intent intent = new Intent(MainActivity.this, SaveActivity.class);
+//                //intent.putExtra("SCREEN", screenShot);
+//                intent.putExtra("MODEL", pModel);
+//                startActivity(intent);
+
+            }
+        });
+
+
     }
+
+    @Override
+    public void hideFragments() {
+
+        for (Fragment fragment:getSupportFragmentManager().getFragments()) {
+            getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+        }
+
+    }
+
+    @Override
+    public void hideControlsBar(){
+
+        controlsBar.startAnimation(getSlideLeftAnimation());
+        controlsBar.setVisibility(android.view.View.INVISIBLE);
+
+    }
+
+    @Override
+    public void showControlsBar(){
+
+        controlsBar.setVisibility(android.view.View.VISIBLE);
+        controlsBar.startAnimation(getSlideRightAnimation());
+
+    }
+
+    public void hideToolbar(){
+
+        toolBar.startAnimation(getSlideLeftAnimation());
+        toolBar.setVisibility(android.view.View.INVISIBLE);
+
+    }
+
+    public void showToolbar(){
+
+        toolBar.setVisibility(android.view.View.VISIBLE);
+        toolBar.startAnimation(getSlideRightAnimation());
+
+    }
+
+    @Override
+    public void showProgressBar() {
+
+        progressBar.setVisibility(View.VISIBLE);
+
+    }
+
+    @Override
+    public void hideProgressBar() {
+
+        progressBar.setVisibility(View.INVISIBLE);
+
+    }
+
 
 
 }

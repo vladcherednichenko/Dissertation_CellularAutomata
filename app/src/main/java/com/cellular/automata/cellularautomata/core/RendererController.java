@@ -1,6 +1,6 @@
 package com.cellular.automata.cellularautomata.core;
 
-public class InputCommander {
+public class RendererController {
 
     //holds all the commands for Automata
     // save actions user made on screen

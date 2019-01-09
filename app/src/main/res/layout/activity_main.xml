@@ -12,7 +12,47 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <android.support.v7.widget.LinearLayoutCompat
+    <FrameLayout
+        android:id="@+id/fragment_frame"
+        android:layout_width="match_parent"
+        android:layout_height="341dp"
+        android:layout_margin="20dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </FrameLayout>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:visibility="invisible"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:indeterminateDrawable="@drawable/progress_intermediate"
+        android:paddingTop="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </ProgressBar>
+
+    <LinearLayout
         android:id="@+id/controls_bar"
         android:layout_width="37dp"
         android:layout_height="154dp"
@@ -54,7 +94,7 @@
             android:src="@drawable/speed_up_icon" />
 
 
-    </android.support.v7.widget.LinearLayoutCompat>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/txt_log_bottom"
@@ -174,7 +214,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:onClick="OnLayersButtonPressed"
+            android:onClick="OnLayersButtonClicked"
             app:srcCompat="@drawable/open_layers"
             tools:layout_editor_absoluteX="94dp"
             tools:layout_editor_absoluteY="90dp" />
@@ -207,6 +247,8 @@
         android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
 
 
 </android.support.constraint.ConstraintLayout>

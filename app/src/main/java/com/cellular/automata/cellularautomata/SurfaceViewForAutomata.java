@@ -8,8 +8,10 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.widget.TextView;
 
-import com.cellular.automata.cellularautomata.interfaces.ActivityListener;
+import com.cellular.automata.cellularautomata.data.CubeDataHolder;
+import com.cellular.automata.cellularautomata.interfaces.MainView;
 import com.cellular.automata.cellularautomata.utils.AntialiasingConfigurator;
+import com.cellular.automata.cellularautomata.utils.TextResourceReader;
 
 import static android.view.MotionEvent.ACTION_DOWN;
 import static android.view.MotionEvent.ACTION_MOVE;
@@ -70,9 +72,9 @@ public class SurfaceViewForAutomata extends GLSurfaceView{
 
     final DisplayMetrics displayMetrics = new DisplayMetrics();
 
-    private ActivityListener activityListener;
+    private MainView activityListener;
 
-    public void setActivityListener(ActivityListener listener){
+    public void setActivityListener(MainView listener){
         this.activityListener = listener;
         renderer.setActicvityListener(listener);
     }
@@ -96,10 +98,11 @@ public class SurfaceViewForAutomata extends GLSurfaceView{
         super(context);
 
         setEGLContextClientVersion(2);
+        loadDefaultModel();
         //setEGLConfigChooser(new MyConfigChooser());
 
 
-        GRFX.appManager = new ApplicationManager();
+        GRFX.appManager = new RendererManager();
         this.renderer = new GraphicsRenderer(GRFX.appManager);
         GRFX.renderer = renderer;
 
@@ -112,8 +115,9 @@ public class SurfaceViewForAutomata extends GLSurfaceView{
         super(context, attrs);
 
         setEGLContextClientVersion(2);
+        loadDefaultModel();
 
-        GRFX.appManager = new ApplicationManager();
+        GRFX.appManager = new RendererManager();
         this.renderer = new GraphicsRenderer(GRFX.appManager);
         GRFX.renderer = renderer;
 
@@ -132,6 +136,13 @@ public class SurfaceViewForAutomata extends GLSurfaceView{
 
 
     }
+
+    private void loadDefaultModel(){
+
+        CubeDataHolder.getInstance().facetListMedium = TextResourceReader.getFacetsFromFileObject(getContext(), "cube_medium.obj");
+        CubeDataHolder.getInstance().setGraphicsQuality(CubeDataHolder.QUALITY_MEDIUM);
+
+    };
 
 
     @Override

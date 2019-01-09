@@ -2,7 +2,7 @@ package com.cellular.automata.cellularautomata.shaders;
 
 import android.opengl.Matrix;
 
-import com.cellular.automata.cellularautomata.interfaces.ActivityListener;
+import com.cellular.automata.cellularautomata.interfaces.MainView;
 import com.cellular.automata.cellularautomata.R;
 import com.cellular.automata.cellularautomata.utils.ShaderHelper;
 import com.cellular.automata.cellularautomata.utils.TextResourceReader;
@@ -69,7 +69,7 @@ public class FigureShader {
         return aNormalLocation;
     }
 
-    public FigureShader(ActivityListener activList) {
+    public FigureShader(MainView activList) {
 
         // Compile the shaders and link the program.
         program = ShaderHelper.buildProgram(

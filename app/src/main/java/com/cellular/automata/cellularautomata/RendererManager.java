@@ -4,24 +4,24 @@ package com.cellular.automata.cellularautomata;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import com.cellular.automata.cellularautomata.core.InputCommander;
+import com.cellular.automata.cellularautomata.core.RendererController;
 import com.cellular.automata.cellularautomata.core.LifeRule;
 import com.cellular.automata.cellularautomata.core.Rule;
 import com.cellular.automata.cellularautomata.interfaces.ApplicationListener;
+import com.cellular.automata.cellularautomata.interfaces.ScreenshotListener;
 import com.cellular.automata.cellularautomata.objects.Cube;
 import com.cellular.automata.cellularautomata.objects.Model;
 import com.cellular.automata.cellularautomata.objects.AutomataBuilder;
 import com.cellular.automata.cellularautomata.utils.CellColor;
 import com.cellular.automata.cellularautomata.utils.FPSCounter;
-import com.cellular.automata.cellularautomata.utils.ImageHelper;
 
-public class ApplicationManager implements ApplicationListener{
+public class RendererManager implements ApplicationListener{
 
-    private String TAG = "ApplicationManager";
+    private String TAG = "RendererManager";
 
     private AutomataBuilder builder;
     private Environment environment;
-    private InputCommander inputCommander;
+    private RendererController rendererController;
     private FPSCounter fps = new FPSCounter();
 
     private boolean isGenerating = false;
@@ -31,7 +31,7 @@ public class ApplicationManager implements ApplicationListener{
     @Override
     public void create() {
 
-        inputCommander = GRFX.activityListener.getInputCommander();
+        rendererController = GRFX.rendererController;
         builder = new AutomataBuilder();
         environment = new Environment();
 
@@ -67,24 +67,24 @@ public class ApplicationManager implements ApplicationListener{
     @Override
     public void render() {
 
-        final int command = inputCommander.readCommand();
+        final int command = rendererController.readCommand();
 
         switch (command){
 
             //MAIN CONTROLS
-            case InputCommander.START:{
+            case RendererController.START:{
 
                 builder.start();
                 break;
 
             }
-            case InputCommander.PAUSE:{
+            case RendererController.PAUSE:{
 
                 builder.pause();
                 break;
 
             }
-            case InputCommander.RESET:{
+            case RendererController.RESET:{
 
                 isGenerating = false;
                 CellColor colors[] = new CellColor[Settings.testAutomataCoords.length/3];
@@ -102,21 +102,21 @@ public class ApplicationManager implements ApplicationListener{
                 break;
 
             }
-            case InputCommander.NEXT:{
+            case RendererController.NEXT:{
 
                 builder.speedUp();
                 break;
 
             }
             //when the figure is touched
-            case InputCommander.FIGURE_TOUCHED:{
+            case RendererController.FIGURE_TOUCHED:{
 
                 //adding / painting / deleting a cube
                 if(builder.isTouched()){
 
                     Log.d(TAG, String.valueOf(rule.getNeighboursAmount(new Cube(builder.getTouchResult().touchedCubeCenter, null, false), builder.getMap())));
 
-                    String color = Integer.toHexString(inputCommander.currentColor);
+                    String color = Integer.toHexString(rendererController.currentColor);
 
                     if(color.length()>=6){
 
@@ -130,47 +130,19 @@ public class ApplicationManager implements ApplicationListener{
                 break;
 
             }
-            //when the screen is touched
-            case InputCommander.SCREEN_TOUCHED:{
 
-                GRFX.activityListener.hideInterface();
-                break;
-
-            }
-            case InputCommander.STRETCH:{
+            case RendererController.STRETCH:{
 
                 builder.stretch();
                 break;
 
             }
-            case InputCommander.SQUEEZE:{
+            case RendererController.SQUEEZE:{
 
                 builder.squeeze();
                 break;
 
             }
-            case InputCommander.SAVE:{
-
-                GRFX.activityListener.logTextTop("Save pressed");
-                Bitmap image = GRFX.activityListener.takeScreenshot();
-
-                ImageHelper.saveImage(image, "screen1", GRFX.activityListener.getContext(), new ImageHelper.SaveImageCallback() {
-                    @Override
-                    public void onImageSaved() {
-                        Log.d(TAG, "image saved");
-                    }
-                });
-
-                break;
-
-            }
-            case InputCommander.LOAD:{
-
-                GRFX.activityListener.logTextTop("Load pressed");
-                break;
-
-            }
-
 
 
 

@@ -1,22 +1,27 @@
 package com.cellular.automata.cellularautomata;
 
+import android.graphics.Bitmap;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 
-import com.cellular.automata.cellularautomata.interfaces.ActivityListener;
+import com.cellular.automata.cellularautomata.interfaces.MainView;
 import com.cellular.automata.cellularautomata.interfaces.ApplicationListener;
 import com.cellular.automata.cellularautomata.interfaces.EnvironmentListener;
+import com.cellular.automata.cellularautomata.interfaces.ScreenshotListener;
 import com.cellular.automata.cellularautomata.shaders.FigureShader;
 import com.cellular.automata.cellularautomata.utils.CellColor;
 import com.cellular.automata.cellularautomata.utils.CellPoint;
 import com.cellular.automata.cellularautomata.utils.ObjectSelectHelper;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import static android.opengl.GLES20.glReadPixels;
 import static android.opengl.Matrix.invertM;
 import static android.opengl.Matrix.multiplyMM;
 import static android.opengl.Matrix.multiplyMV;
@@ -25,9 +30,10 @@ import static android.opengl.Matrix.translateM;
 
 public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
-    private ActivityListener activityListener;
+    private MainView activityListener;
     private ApplicationListener applicationListener;
     private EnvironmentListener environmentListener;
+    private ScreenshotListener screenshotListener;
 
     //shaders
     private FigureShader figureShader;
@@ -35,13 +41,19 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
     private volatile float xAngle = -45f;
     private volatile float yAngle = 10f;
 
+    //moving figure left-right, up-down
     private float strideX = 0f;
     private float strideY = 0f;
 
-    private float width;
-    private float height;
+    //screen
+    private int width;
+    private int height;
 
+    //initial scale
     private float scaleFactor = 1f;
+
+    //other
+    private boolean screenshot = false;
 
     //mvp matrices
     private float[] viewMatrix = new float[16];
@@ -87,11 +99,13 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
     public void setStride(float strideX, float strideY){this.strideX = strideX; this.strideY = strideY; }
     public float getStrideX(){return strideX;}
     public float getStrideY(){return strideY;}
-
     public void setXAngle(float xAngle) { this.xAngle = xAngle; }
     public void setYAngle(float yAngle) { this.yAngle = yAngle > 360? yAngle - 360: yAngle; }
     public float getXAngle() {return this.xAngle; }
     public float getYAngle() { return this.yAngle; }
+
+    public void screenshot(ScreenshotListener listener){this.screenshotListener = listener; this.screenshot = true;}
+
 
     public void handleTouch(float x, float y){
 
@@ -104,7 +118,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
         this.environmentListener = environmentListener;
     }
 
-    public void setActicvityListener(ActivityListener activityListener){
+    public void setActicvityListener(MainView activityListener){
         this.activityListener = activityListener;
     }
 
@@ -207,18 +221,6 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
-
-//        calculateModelMatrix();
-//
-//        calculateLightMatrices(xAngle, yAngle);
-//
-//        calculateInvertedMVPMatrix();
-//
-//        setUniforms();
-//
-//        setScaleFactor();
-
-
         calculateModelMatrix();
 
         calculateLightMatrices(xAngle, yAngle);
@@ -229,10 +231,11 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
         setScaleFactor();
 
-
         if ( applicationListener == null) return;
 
         applicationListener.render();
+
+        if(this.screenshot){takeScreenshot(); screenshot = false;}
 
     }
 
@@ -268,14 +271,10 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
         System.arraycopy(frontLightModelMatrix ,0, backLightModelMatrix, 0, frontLightModelMatrix.length);
         System.arraycopy(frontLightModelMatrix ,0, rightLightModelMatrix, 0, frontLightModelMatrix.length);
         System.arraycopy(frontLightModelMatrix ,0, topLightModelMatrix, 0, frontLightModelMatrix.length);
-        //System.arraycopy(frontLightModelMatrix ,0, leftLightModelMatrix, 0, frontLightModelMatrix.length);
-        //System.arraycopy(frontLightModelMatrix ,0, bottomLightModelMatrix, 0, frontLightModelMatrix.length);
 
         Matrix.translateM(backLightModelMatrix, 0, 0.0f, 0.0f, -lightDistance);
         Matrix.translateM(rightLightModelMatrix, 0, lightDistance, 0.0f, 0.0f);
         Matrix.translateM(topLightModelMatrix,  0, 0.0f, lightDistance, 0.0f);
-        //Matrix.translateM(leftLightModelMatrix, 0, -lightDistance, 0.0f, 0.0f);
-        //Matrix.translateM(bottomLightModelMatrix, 0, 0.0f, -lightDistance, 0.0f);
 
 
 
@@ -317,6 +316,32 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
         figureShader.setScaleFactor(scaleFactor);
     }
 
+    //UTILS
+    private void takeScreenshot(){
+
+        int screenshotSize = width * height;
+        ByteBuffer bb = ByteBuffer.allocateDirect(screenshotSize * 4);
+        bb.order(ByteOrder.nativeOrder());
+        glReadPixels(0, 0, width, height, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, bb);
+        int pixelsBuffer[] = new int[screenshotSize];
+        bb.asIntBuffer().get(pixelsBuffer);
+        bb = null;
+
+        for (int i = 0; i < screenshotSize; ++i) {
+            // The alpha and green channels' positions are preserved while the      red and blue are swapped
+            pixelsBuffer[i] = ((pixelsBuffer[i] & 0xff00ff00)) |    ((pixelsBuffer[i] & 0x000000ff) << 16) | ((pixelsBuffer[i] & 0x00ff0000) >> 16);
+        }
+
+        Bitmap image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        image.setPixels(pixelsBuffer, screenshotSize-width, -width, 0, 0, width, height);
+
+        if(screenshotListener != null){
+
+            screenshotListener.onScreenShot(image);
+
+        }
+
+    }
 
 
 

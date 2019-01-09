@@ -43,7 +43,7 @@ public class Environment implements EnvironmentListener{
             ObjectSelectHelper.TouchResult touchResult = GRFX.renderer.getTouchedResult(normalizedX, normalizedY, builder.getCellCentersList());
             if(touchResult.cubeTouched){
                 builder.handleTouch(touchResult);
-                GRFX.activityListener.getInputCommander().cubeTouched();
+                GRFX.rendererController.cubeTouched();
             }
 
         }
