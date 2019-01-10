@@ -4,53 +4,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWhite"
+    android:background="@drawable/save_background"
     android:orientation="horizontal"
     tools:context="com.cellular.automata.cellularautomata.fragments.FragmentSave">
 
 
     <ImageView
         android:id="@+id/ic_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="59dp"
+        android:layout_height="55dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:alpha="1"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_menu_left" />
 
     <ImageView
         android:id="@+id/img_screenshot"
-        android:layout_width="190dp"
-        android:layout_height="179dp"
+        android:layout_width="279dp"
+        android:layout_height="191dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@mipmap/ic_launcher" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="320dp"
-        android:layout_height="53dp"
-        android:layout_marginBottom="8dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="64dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="36dp"
-        android:orientation="horizontal"
         android:background="@drawable/input_background_full"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/img_screenshot"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintStart_toStartOf="parent">
 
         <EditText
             android:id="@+id/inputName"
@@ -58,9 +57,10 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/input_background"
-            android:hint="@string/app_name"
+            android:hint="@string/input_hint"
             android:inputType="text"
             android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:textColor="@android:color/black"
             android:textSize="20sp" />
 
@@ -74,5 +74,21 @@
             android:textSize="20sp" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/hintTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="hint"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/img_screenshot"
+        app:layout_constraintVertical_bias="0.588"
+        tools:layout_editor_absoluteX="279dp" />
 
 </android.support.constraint.ConstraintLayout>

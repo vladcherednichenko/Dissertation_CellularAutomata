@@ -32,7 +32,7 @@ public class Presenter {
 
     public void saveFragmentReturnPressed(){
 
-        view.hideFragments();
+        view.removeFragments();
         view.showControlsBar();
         view.showToolbar();
 
@@ -90,6 +90,7 @@ public class Presenter {
 
         view.hideControlsBar();
         view.hideToolbar();
+        view.showProgressBar();
 
         view.logTextTop("Save pressed");
 
@@ -99,6 +100,7 @@ public class Presenter {
 
                 Model model = new Model();
                 view.openSaveActivity(model, bitmap);
+                view.hideProgressBar();
 
             }
         });

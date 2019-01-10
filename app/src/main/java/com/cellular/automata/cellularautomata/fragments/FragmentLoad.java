@@ -7,22 +7,20 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.cellular.automata.cellularautomata.Presenter;
 import com.cellular.automata.cellularautomata.R;
 
 
-public class FragmentSave extends Fragment {
+public class FragmentLoad extends Fragment {
 
     private Presenter presenter;
 
     private View view;
 
-    private ImageView imgReturn, imgScreenshot;
+    private ImageView imgReturn;
 
-    private Bitmap screenshot;
 
     private View.OnClickListener onReturnClickListener = new View.OnClickListener() {
         @Override
@@ -38,26 +36,13 @@ public class FragmentSave extends Fragment {
 
     }
 
-    public void setScreenshot(Bitmap screenshot) {
-
-        this.screenshot = screenshot;
-
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.fragment_save, container, false);
+        view = inflater.inflate(R.layout.fragment_load, container, false);
 
         imgReturn = view.findViewById(R.id.ic_back);
         imgReturn.setOnClickListener(onReturnClickListener);
-        imgScreenshot = view.findViewById(R.id.img_screenshot);
-
-        if(screenshot != null){
-            imgScreenshot.setImageBitmap(screenshot);
-        }
-
-
 
 
         return view;

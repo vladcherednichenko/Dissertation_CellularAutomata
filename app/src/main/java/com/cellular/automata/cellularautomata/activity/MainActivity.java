@@ -3,6 +3,7 @@ package com.cellular.automata.cellularautomata.activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import com.cellular.automata.cellularautomata.Presenter;
 import com.cellular.automata.cellularautomata.Settings;
+import com.cellular.automata.cellularautomata.fragments.FragmentLoad;
 import com.cellular.automata.cellularautomata.fragments.FragmentSave;
 import com.cellular.automata.cellularautomata.interfaces.MainView;
 import com.cellular.automata.cellularautomata.GRFX;
@@ -45,7 +47,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private ProgressBar progressBar;
 
     private android.support.v4.app.FragmentManager fragmentManager;
+
     private FragmentSave saveFragment;
+    private FragmentLoad loadFragment;
 
     private Presenter presenter;
 
@@ -217,41 +221,79 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private void showColorPicker(){
 
         colorBar.setVisibility(android.view.View.VISIBLE);
-        colorBar.startAnimation(getSlideRightAnimation());
+        colorBar.startAnimation(getToolbarSlideRightAnimation());
         colorBarOpened = true;
 
     }
 
     private void hideColorPicker(){
 
-        colorBar.startAnimation(getSlideLeftAnimation());
+        colorBar.startAnimation(getToolbarSlideLeftAnimation());
         colorBar.setVisibility(android.view.View.INVISIBLE);
         colorBarOpened = false;
 
     }
 
-    private Animation getSlideRightAnimation(){
+    private Animation getToolbarSlideRightAnimation(){
 
         return AnimationUtils.loadAnimation(getContext(),R.anim.toolbar_slide_right);
 
     }
 
-    private Animation getSlideLeftAnimation(){
+    private Animation getToolbarSlideLeftAnimation(){
 
         return AnimationUtils.loadAnimation(getContext(),R.anim.toolbar_slide_left);
 
     }
 
-    private void loadSaveFragment(){
+    private Animation getControlBarSlideRightAnimation(){
+
+        return AnimationUtils.loadAnimation(getContext(),R.anim.controlbar_slide_right);
+
+
+    }
+
+    private Animation getControlBarSlideLeftAnimation(){
+
+        return AnimationUtils.loadAnimation(getContext(),R.anim.controlbar_slide_left);
+
+    }
+
+    private Animation getFragmentSlideLeftAnimation(){
+
+        return AnimationUtils.loadAnimation(getContext(),R.anim.fragment_slide_left);
+
+    }
+
+    private Animation getFragmentBarSlideRightAnimation(){
+
+        return AnimationUtils.loadAnimation(getContext(),R.anim.fragment_slide_right);
+
+    }
+
+    private void loadSaveFragment(Model model, Bitmap screenshot){
 
         saveFragment = new FragmentSave();
         saveFragment.setPresenter(presenter);
-        fragmentManager.beginTransaction().add(R.id.fragment_frame, saveFragment, "CATEGORIES").commit();
+        saveFragment.setScreenshot(screenshot);
 
-//        FragmentTransaction transaction = fragmentManager.beginTransaction();
-//        transaction.setCustomAnimations(R.anim.fade_in, R.anim.menu_slide_out);
-//        transaction.replace(R.id.fragment_container, setsFragment, "SETS");
-//        transaction.commit();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setCustomAnimations(R.anim.fragment_slide_left, R.anim.fragment_slide_left);
+        transaction.replace(R.id.fragment_frame, saveFragment, "SETS");
+        transaction.commit();
+
+    }
+
+    private void loadLoadFragment(){
+
+        removeFragments();
+
+        loadFragment = new FragmentLoad();
+        loadFragment.setPresenter(presenter);
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setCustomAnimations(R.anim.fragment_slide_left, R.anim.fragment_slide_left);
+        transaction.replace(R.id.fragment_frame, loadFragment, "SETS");
+        transaction.commit();;
 
     }
 
@@ -330,13 +372,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
             @Override
             public void run() {
 
-                loadSaveFragment();
-
-//                ModelParcelable pModel = new ModelParcelable("123", "path", 1, 1);
-//                Intent intent = new Intent(MainActivity.this, SaveActivity.class);
-//                //intent.putExtra("SCREEN", screenShot);
-//                intent.putExtra("MODEL", pModel);
-//                startActivity(intent);
+                loadSaveFragment(model, screenShot);
 
             }
         });
@@ -345,10 +381,14 @@ public class MainActivity extends AppCompatActivity implements MainView {
     }
 
     @Override
-    public void hideFragments() {
+    public void removeFragments() {
 
         for (Fragment fragment:getSupportFragmentManager().getFragments()) {
-            getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.setCustomAnimations(R.anim.fragment_slide_left, R.anim.fragment_slide_right);
+            transaction.remove(fragment).commit();
+
         }
 
     }
@@ -356,7 +396,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @Override
     public void hideControlsBar(){
 
-        controlsBar.startAnimation(getSlideLeftAnimation());
+        controlsBar.startAnimation(getControlBarSlideRightAnimation());
         controlsBar.setVisibility(android.view.View.INVISIBLE);
 
     }
@@ -365,13 +405,13 @@ public class MainActivity extends AppCompatActivity implements MainView {
     public void showControlsBar(){
 
         controlsBar.setVisibility(android.view.View.VISIBLE);
-        controlsBar.startAnimation(getSlideRightAnimation());
+        controlsBar.startAnimation(getControlBarSlideLeftAnimation());
 
     }
 
     public void hideToolbar(){
 
-        toolBar.startAnimation(getSlideLeftAnimation());
+        toolBar.startAnimation(getToolbarSlideLeftAnimation());
         toolBar.setVisibility(android.view.View.INVISIBLE);
 
     }
@@ -379,21 +419,32 @@ public class MainActivity extends AppCompatActivity implements MainView {
     public void showToolbar(){
 
         toolBar.setVisibility(android.view.View.VISIBLE);
-        toolBar.startAnimation(getSlideRightAnimation());
+        toolBar.startAnimation(getToolbarSlideRightAnimation());
 
     }
 
     @Override
     public void showProgressBar() {
 
-        progressBar.setVisibility(View.VISIBLE);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.VISIBLE);
+            }
+        });
 
     }
 
     @Override
     public void hideProgressBar() {
 
-        progressBar.setVisibility(View.INVISIBLE);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.INVISIBLE);
+
+            }
+        });
 
     }
 

@@ -20,7 +20,7 @@ public interface MainView {
 
     void openSaveActivity(Model model, Bitmap screenShot);
 
-    void hideFragments();
+    void removeFragments();
 
     void hideControlsBar();
 
