@@ -1,13 +1,13 @@
 package com.cellular.automata.cellularautomata.utils;
 
 
-public class CellPoint {
+public class CubeCenter {
 
     public float x;
     public float y;
     public float z;
 
-    public CellPoint(float x, float y, float z) {
+    public CubeCenter(float x, float y, float z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -23,20 +23,20 @@ public class CellPoint {
         z += vector.z;
     }
 
-    public CellPoint translateAndCopy(Geometry.Vector vector) {
-        return new CellPoint(
+    public CubeCenter translateAndCopy(Geometry.Vector vector) {
+        return new CubeCenter(
                 x + vector.x,
                 y + vector.y,
                 z + vector.z);
     }
 
-    public CellPoint clone(){
+    public CubeCenter clone(){
 
-        return new CellPoint(x, y, z);
+        return new CubeCenter(x, y, z);
 
     }
 
-    public boolean equals(CellPoint secondPoint){
+    public boolean equals(CubeCenter secondPoint){
 
         return this.x == secondPoint.x &&
                 this.y == secondPoint.y &&

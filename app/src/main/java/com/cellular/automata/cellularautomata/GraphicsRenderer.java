@@ -11,7 +11,7 @@ import com.cellular.automata.cellularautomata.interfaces.EnvironmentListener;
 import com.cellular.automata.cellularautomata.interfaces.ScreenshotListener;
 import com.cellular.automata.cellularautomata.shaders.FigureShader;
 import com.cellular.automata.cellularautomata.utils.CellColor;
-import com.cellular.automata.cellularautomata.utils.CellPoint;
+import com.cellular.automata.cellularautomata.utils.CubeCenter;
 import com.cellular.automata.cellularautomata.utils.ObjectSelectHelper;
 
 import java.nio.ByteBuffer;
@@ -129,7 +129,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
     }
 
-    public ObjectSelectHelper.TouchResult getTouchedResult(float normalizedX, float normalizedY, ArrayList<CellPoint> cellCentersList){
+    public ObjectSelectHelper.TouchResult getTouchedResult(float normalizedX, float normalizedY, ArrayList<CubeCenter> cellCentersList){
 
         return ObjectSelectHelper.getTouchResult(cellCentersList, normalizedX, normalizedY, invertedViewProjectionMatrix, modelMatrix, scaleFactor, strideX, strideY, (float)height/width);
 

@@ -271,19 +271,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     }
 
-    private void loadSaveFragment(Model model, Bitmap screenshot){
-
-        saveFragment = new FragmentSave();
-        saveFragment.setPresenter(presenter);
-        saveFragment.setScreenshot(screenshot);
-
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.setCustomAnimations(R.anim.fragment_slide_left, R.anim.fragment_slide_left);
-        transaction.replace(R.id.fragment_frame, saveFragment, "SETS");
-        transaction.commit();
-
-    }
-
     private void loadLoadFragment(){
 
         removeFragments();
@@ -366,17 +353,42 @@ public class MainActivity extends AppCompatActivity implements MainView {
     }
 
     @Override
-    public void openSaveActivity(final Model model, final Bitmap screenShot) {
+    public void openSaveFragment(final Model model, final Bitmap screenshot) {
 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
 
-                loadSaveFragment(model, screenShot);
+                saveFragment = new FragmentSave();
+                saveFragment.setPresenter(presenter);
+                saveFragment.setScreenshot(screenshot);
+
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.setCustomAnimations(R.anim.fragment_slide_left, R.anim.fragment_slide_left);
+                transaction.replace(R.id.fragment_frame, saveFragment, "SETS");
+                transaction.commit();
 
             }
         });
 
+    }
+
+    public void openLoadFragment(){
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                loadFragment = new FragmentLoad();
+                loadFragment.setPresenter(presenter);
+
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.setCustomAnimations(R.anim.fragment_slide_left, R.anim.fragment_slide_left);
+                transaction.replace(R.id.fragment_frame, loadFragment, "SETS");
+                transaction.commit();
+
+            }
+        });
 
     }
 

@@ -9,10 +9,11 @@ import com.cellular.automata.cellularautomata.animation.Animator;
 import com.cellular.automata.cellularautomata.core.Rule;
 import com.cellular.automata.cellularautomata.data.CubeDataHolder;
 import com.cellular.automata.cellularautomata.data.CubeMap;
+import com.cellular.automata.cellularautomata.data.RenderCubeMap;
 import com.cellular.automata.cellularautomata.data.VertexArray;
 import com.cellular.automata.cellularautomata.interfaces.CellSelectListener;
 import com.cellular.automata.cellularautomata.utils.CellColor;
-import com.cellular.automata.cellularautomata.utils.CellPoint;
+import com.cellular.automata.cellularautomata.utils.CubeCenter;
 import com.cellular.automata.cellularautomata.utils.ObjectSelectHelper;
 
 import java.util.ArrayList;
@@ -29,9 +30,9 @@ import static com.cellular.automata.cellularautomata.Constants.COLOR_COMPONENT_C
 import static com.cellular.automata.cellularautomata.Constants.NORMAL_COMPONENT_COUNT;
 import static com.cellular.automata.cellularautomata.Constants.POSITION_COMPONENT_COUNT;
 
-public class AutomataBuilder {
+public class RenderBuilder {
 
-    private String TAG = "AUTOMATA BUILDER";
+    private String TAG = "RENDER_BUILDER";
 
     private VertexArray vertexPosArray;
     private VertexArray vertexColorArray;
@@ -50,25 +51,19 @@ public class AutomataBuilder {
     private int vertexBufferNormalIdx = 0;
 
     //the automata radius (from center to the bound)
-    private int automataRadius = 30;
-    private CubeMap map;
+    private int automataRadius = 0;
+    private RenderCubeMap renderMap;
 
     private CellSelectListener selectListener;
     private boolean isTouched = false;
     private boolean isStretched = false;
     private boolean viewMode = false;
-    private boolean generating = false;
+
     private ObjectSelectHelper.TouchResult touchResult;
 
-    private Rule rule;
     private OnTouchListener onTouchListener;
     private Animator animator;
 
-    //temporary
-    private Random random = new Random();
-    private long time;
-    private long timePast;
-    private float delay = 100;
 
     public interface OnTouchListener{
 
@@ -76,12 +71,12 @@ public class AutomataBuilder {
 
     }
 
-    public AutomataBuilder(){
+    public RenderBuilder(int automataRadius){
 
-        map = new CubeMap(automataRadius);
-        animator = new Animator(map.size(), map.height(), map.getCubeList());
+        this.renderMap = new RenderCubeMap(automataRadius);
 
     }
+
 
     //GETTERS
 
@@ -89,21 +84,15 @@ public class AutomataBuilder {
         return touchResult;
     }
 
-    public ArrayList<CellPoint> getCellCentersList(){
+    public ArrayList<CubeCenter> getCellCentersList(){
 
-        return map.getCubeCenters();
-
-    }
-
-    public int getAutomataRadius(){
-
-        return automataRadius;
+        return renderMap.getCubeCenters();
 
     }
 
-    public CubeMap getMap() {
+    public RenderCubeMap getRenderMap() {
 
-        return map;
+        return renderMap;
 
     }
 
@@ -116,11 +105,12 @@ public class AutomataBuilder {
 
     }
 
-    public void setRule(Rule rule){
+    public void setAutomataRadius(int radius){
 
-        this.rule = rule;
+        this.automataRadius = radius;
 
     }
+
 
     public void setOnTouchListener(OnTouchListener listener){
 
@@ -128,22 +118,14 @@ public class AutomataBuilder {
 
     }
 
-    //sets the cellList
-    public void setModel(Model modelToLoad){
+    public void setRenderMap(RenderCubeMap map){
 
-        map.clear();
-
-        float [] rawCoords = modelToLoad.getAutomataCoords();
-        CellColor[] cellColors = modelToLoad.getAutomataColors();
-
-        for(int i = 0; i< modelToLoad.getCellsNumber(); i++){
-
-            CellPoint cellCenter = new CellPoint(rawCoords[i*3], rawCoords[i*3 + 1], rawCoords[i*3 + 2]);
-            map.add(new Cube(cellCenter, cellColors[i]));
-
-        }
+        this.renderMap = map;
+        animator = new Animator(renderMap.size(), renderMap.height(), renderMap.getRenderCubeList());
 
     }
+
+
 
     //MAIN METHODS
     public boolean isTouched(){
@@ -167,7 +149,7 @@ public class AutomataBuilder {
 
         if(isStretched) return;
 
-        animator = new Animator(map.size(), map.height(), map.sort());
+        animator = new Animator(renderMap.size(), renderMap.height(), renderMap.sort());
         isStretched = true;
         viewMode = true;
 
@@ -181,10 +163,24 @@ public class AutomataBuilder {
     }
 
     //general function, is called first when want to add a cubed
-    public void addNewCube(CellPoint center, CellColor color){
+    public void addNewCube(CubeCenter center, CellColor color){
 
-        map.add(new Cube(center, color));
+        addNewCube(new RenderCube(center, color));
 
+    }
+
+    public void addNewCube(RenderCube renderCube){
+
+        renderMap.add(renderCube);
+        //rebuild figure
+        build();
+        bindAttributesData();
+
+    }
+
+    public void addAllCubes(ArrayList<RenderCube> renderCubes){
+
+        renderMap.addAll(renderCubes);
         //rebuild figure
         build();
         bindAttributesData();
@@ -192,77 +188,25 @@ public class AutomataBuilder {
     }
 
     //general function is called first when we want to paint the cube
-    public void paintCube(CellPoint center, CellColor color){
+    public void paintCube(CubeCenter center, CellColor color){
 
-        Cube cubeToRecolor = map.getCubeByCenter(center);
-        if(cubeToRecolor == null) return;
+        RenderCube renderCubeToRecolor = renderMap.getCubeByCenter(center);
+        if(renderCubeToRecolor == null) return;
 
-        cubeToRecolor.paintCube(color);
+        renderCubeToRecolor.paintCube(color);
         build();
         bindAttributesData();
 
     }
 
     //general function is called first when we want to delete the cube
-    public void deleteCube(CellPoint center){
+    public void deleteCube(CubeCenter center){
 
 
 
     }
 
-    public void start(){
 
-        generating = true;
-        delay = 100;
-
-    }
-
-    public void pause(){
-
-        generating = false;
-
-    }
-
-    public void speedUp(){
-
-        generating = true;
-        delay = delay * 0.5f;
-
-    }
-
-    public void execute(){
-
-        if(generating){
-
-            if(map.size() >= automataRadius*2 * automataRadius*2 * automataRadius*2 -1) return;
-
-            //generating random stuff
-            timePast = System.currentTimeMillis() - time;
-            if(timePast > delay){
-                time = System.currentTimeMillis();
-
-                addNewCube(generateCellPoint(),  new CellColor(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
-                //Log.d("Timer", "half a second");
-
-                GRFX.activityListener.logTextTop("cubes: " + String.valueOf(map.size()));
-            }
-
-        }
-
-    }
-
-    CellPoint generateCellPoint(){
-
-        CellPoint point =  new CellPoint(random.nextInt(20)-9,random.nextInt(20)-9, random.nextInt(20)-9);
-        if(cubeExists(point)){
-            generateCellPoint();
-        }else{
-            return point;
-        }
-
-        return point;
-
-    }
 
     //here all the vertex data should be generated
     public void build(){
@@ -280,9 +224,9 @@ public class AutomataBuilder {
         vertexNormalData = new float[CubeDataHolder.getInstance().sizeInVertex * NORMAL_COMPONENT_COUNT * howManyCells()];
         vertexColorData = new float[(vertexPositionData.length / POSITION_COMPONENT_COUNT) * COLOR_COMPONENT_COUNT];
 
-        for (Cube cube : map.getCubeList()){
+        for (RenderCube renderCube : renderMap.getRenderCubeList()){
 
-            appendCell(cube);
+            appendCell(renderCube);
 
         }
 
@@ -296,21 +240,21 @@ public class AutomataBuilder {
 
     }
 
-    private void appendCell(Cube cube){
+    private void appendCell(RenderCube renderCube){
 
-        for (float f: cube.getCubePositionData()){
+        for (float f: renderCube.getCubePositionData()){
             vertexPositionData[vertexDataOffset++] = f;
         }
 
-        for (float f: cube.getCubeNormalData()){
+        for (float f: renderCube.getCubeNormalData()){
             vertexNormalData[vertexNormalDataOffset++] = f;
         }
 
-        for (float f: cube.getCubeColorData()){
+        for (float f: renderCube.getCubeColorData()){
             vertexColorData[vertexColorDataOffset++] = f;
         }
 
-        cube.releaseCubeData();
+        renderCube.releaseCubeData();
 
     }
 
@@ -390,13 +334,13 @@ public class AutomataBuilder {
 
     private int howManyCells(){
 
-        return map.size();
+        return renderMap.size();
 
     }
 
-    private boolean cubeExists(CellPoint cubeCenter){
+    public boolean cubeExists(CubeCenter cubeCenter){
 
-        return map.cubeExists(cubeCenter);
+        return renderMap.cubeExists(cubeCenter);
 
     }
 

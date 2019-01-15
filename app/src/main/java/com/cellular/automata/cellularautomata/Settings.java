@@ -4,6 +4,7 @@ public class Settings {
 
     public static boolean validateShaderProgram = true;
     public static String backgroundColor = "#b2b2b2";
+    public static String defaultCubeColor = "#fc9228";
     public static boolean generateCellsDataAfterCreation = true;
     public static boolean debugTextViewEnabled = false;
     public static boolean antialiasing = false;

@@ -10,7 +10,7 @@ public class Geometry {
     }
 
 
-    public static float distanceBetween(CellPoint point, Ray ray) {
+    public static float distanceBetween(CubeCenter point, Ray ray) {
         Vector p1ToPoint = vectorBetween(ray.point, point);
         Vector p2ToPoint = vectorBetween(ray.point.translateAndCopy(ray.vector), point);
 
@@ -30,9 +30,9 @@ public class Geometry {
 
 
     public static class Ray {
-        public final CellPoint point;
+        public final CubeCenter point;
         public final Vector vector;
-        public Ray(CellPoint point, Vector vector) {
+        public Ray(CubeCenter point, Vector vector) {
             this.point = point;
             this.vector = vector;
         }
@@ -47,7 +47,7 @@ public class Geometry {
             this.z = z;
         }
 
-        public Vector (CellPoint a, CellPoint b){
+        public Vector (CubeCenter a, CubeCenter b){
 
             this.x = b.x - a.x;
             this.y = b.y - a.y;
@@ -79,14 +79,14 @@ public class Geometry {
 
 
     public static class Sphere {
-        public final CellPoint center;
+        public final CubeCenter center;
         public final float radius;
-        public Sphere(CellPoint center, float radius) {
+        public Sphere(CubeCenter center, float radius) {
             this.center = center;
             this.radius = radius;
         }
     }
-    public static Vector vectorBetween(CellPoint from, CellPoint to) {
+    public static Vector vectorBetween(CubeCenter from, CubeCenter to) {
         return new Vector(
                 to.x - from.x,
                 to.y - from.y,
@@ -98,10 +98,10 @@ public class Geometry {
 
 
         public String name;
-        public CellPoint p, q, r;
+        public CubeCenter p, q, r;
         public Vector normal;
 
-        public Parallelogram(CellPoint p, CellPoint q, CellPoint r, Vector normal, String name) {
+        public Parallelogram(CubeCenter p, CubeCenter q, CubeCenter r, Vector normal, String name) {
             this.p = p;
             this.q = q;
             this.r = r;
@@ -110,7 +110,7 @@ public class Geometry {
         }
 
 
-        public boolean pointInside(CellPoint a){
+        public boolean pointInside(CubeCenter a){
 
             Vector pq = new Vector (this.p, q);
             Vector pr = new Vector (this.p, r);

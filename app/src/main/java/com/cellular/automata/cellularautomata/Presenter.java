@@ -25,10 +25,13 @@ public class Presenter {
 
     }
 
+    public void loadFragmentReturnPressed(){
 
+        view.removeFragments();
+        view.showControlsBar();
+        view.showToolbar();
 
-
-
+    }
 
     public void saveFragmentReturnPressed(){
 
@@ -99,7 +102,7 @@ public class Presenter {
             public void onScreenShot(Bitmap bitmap) {
 
                 Model model = new Model();
-                view.openSaveActivity(model, bitmap);
+                view.openSaveFragment(model, bitmap);
                 view.hideProgressBar();
 
             }
@@ -119,7 +122,14 @@ public class Presenter {
 
     public void loadPressed(){
 
-        view.logTextTop("Load pressed");
+        if(Settings.log_top){ view.logTextTop("Load pressed"); }
+
+        view.hideControlsBar();
+        view.hideToolbar();
+        view.showProgressBar();
+        view.openLoadFragment();
+        view.hideProgressBar();
+
 
     }
 

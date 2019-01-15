@@ -1,15 +1,19 @@
 package com.cellular.automata.cellularautomata.core;
 
+import android.util.SparseArray;
+
+import com.cellular.automata.cellularautomata.Settings;
+import com.cellular.automata.cellularautomata.data.Cube;
 import com.cellular.automata.cellularautomata.data.CubeMap;
-import com.cellular.automata.cellularautomata.objects.Cube;
+import com.cellular.automata.cellularautomata.data.RenderCubeMap;
+import com.cellular.automata.cellularautomata.objects.RenderCube;
 
 import java.util.ArrayList;
 
 public class Rule {
 
-
-    private int minAliveNeighboursValue = 2;
-    private int maxAliveNeighboursValue = 3;
+    private int [] keepAliveNeighboursNumber = {1};
+    private int [] reviveNeighboursNumber = {1};
 
     //GETTERS
     public int getNeighboursAmount(Cube cube, CubeMap map){
@@ -23,9 +27,15 @@ public class Rule {
     public ArrayList<Cube> nextIterations(CubeMap map){
 
         ArrayList<Cube> nextIteration = new ArrayList<>();
-        for (Cube cube: map.getCubeList()){
+        for (Cube cube : map.toList()){
 
             int neighboursAmount = getNeighboursAmount(cube, map);
+            if(inKeepAlive(neighboursAmount) || inRevive(neighboursAmount)){
+                cube.setAlive(true);
+                cube.setColor(Settings.defaultCubeColor);
+            }else{
+                cube.setAlive(false);
+            }
 
         }
 
@@ -35,21 +45,19 @@ public class Rule {
 
     public ArrayList<Cube> neighbours(Cube cube, CubeMap map){
 
-        ArrayList<Cube> result = new ArrayList<Cube>();
+        ArrayList<Cube> result = new ArrayList<>();
 
-        if (map.size() == 0)
+        if (map.numberAllAlive() == 0)
             return result;
 
-        int [] coords = new int[]{(int)cube.center.x, (int)cube.center.y, (int) cube.center.z};
+        for (int x = cube.getCoords()[0]-1; x<= cube.getCoords()[0]+1; x++){
+            for (int y = cube.getCoords()[1]-1; y<= cube.getCoords()[1]+1; y++){
+                for (int z = cube.getCoords()[2]-1; z<= cube.getCoords()[2]+1; z++){
 
-        for (int x = coords[0]-1; x<= coords[0]+1; x++){
-            for (int y = coords[1]-1; y<= coords[1]+1; y++){
-                for (int z = coords[2]-1; z<= coords[2]+1; z++){
+                    Cube returnCube = map.getCubeAt(new int []{x, y, z});
 
-                    Cube returnedCube = map.getCubeAt(new int []{x, y, z});
-
-                    if(returnedCube!= null)
-                        result.add(returnedCube);
+                    if(returnCube != null && returnCube.isAlive())
+                        result.add(returnCube);
 
                 }
             }
@@ -59,5 +67,32 @@ public class Rule {
 
     }
 
+
+    // UTILS
+
+    private boolean inKeepAlive(int amount){
+
+        for(int i = 0; i< keepAliveNeighboursNumber.length; i++){
+            if(keepAliveNeighboursNumber[i] == amount){
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+
+    private boolean inRevive(int amount){
+
+        for(int i = 0; i< reviveNeighboursNumber.length; i++){
+            if(reviveNeighboursNumber[i] == amount){
+                return true;
+            }
+        }
+
+        return false;
+
+    }
 
 }

@@ -6,16 +6,16 @@ import com.cellular.automata.cellularautomata.Constants;
 import com.cellular.automata.cellularautomata.Settings;
 import com.cellular.automata.cellularautomata.data.CubeDataHolder;
 import com.cellular.automata.cellularautomata.utils.CellColor;
-import com.cellular.automata.cellularautomata.utils.CellPoint;
+import com.cellular.automata.cellularautomata.utils.CubeCenter;
 
-public class Cube implements Comparable<Cube> {
+public class RenderCube implements Comparable<RenderCube> {
 
-    private static final String TAG = "Cube";
+    private static final String TAG = "RenderCube";
 
     private float cubeSize = 1;
     private int STRIDE = 0;
 
-    public CellPoint center;
+    public CubeCenter center;
     public CellColor color;
 
     private float[] cubePositionData;
@@ -58,7 +58,7 @@ public class Cube implements Comparable<Cube> {
 
     private boolean cubeDataCreated = false;
 
-    public Cube(CellPoint center, CellColor color){
+    public RenderCube(CubeCenter center, CellColor color){
 
         this.center = center;
         this.color = color;
@@ -69,7 +69,7 @@ public class Cube implements Comparable<Cube> {
 
     }
 
-    public Cube(CellPoint center, CellColor color, boolean shouldGenerateData){
+    public RenderCube(CubeCenter center, CellColor color, boolean shouldGenerateData){
 
         this.center = center;
         this.color = color;
@@ -136,7 +136,7 @@ public class Cube implements Comparable<Cube> {
 
     }
 
-    public void translateCube(CellPoint vector){
+    public void translateCube(CubeCenter vector){
         for (int i = 0; i< cubePositionData.length; i++){
 
             switch(i % Constants.POSITION_COMPONENT_COUNT) {
@@ -158,8 +158,8 @@ public class Cube implements Comparable<Cube> {
     }
 
     @Override
-    public int compareTo(@NonNull Cube cube) {
-        float compareOrder = cube.center.y;
+    public int compareTo(@NonNull RenderCube renderCube) {
+        float compareOrder = renderCube.center.y;
 
         return Math.round(this.center.y - compareOrder);
     }

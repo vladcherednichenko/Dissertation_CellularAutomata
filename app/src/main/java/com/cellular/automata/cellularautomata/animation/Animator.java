@@ -3,7 +3,7 @@ package com.cellular.automata.cellularautomata.animation;
 import android.opengl.GLES20;
 
 import com.cellular.automata.cellularautomata.data.CubeDataHolder;
-import com.cellular.automata.cellularautomata.objects.Cube;
+import com.cellular.automata.cellularautomata.objects.RenderCube;
 import com.cellular.automata.cellularautomata.shaders.FigureShader;
 
 import java.util.ArrayList;
@@ -30,13 +30,13 @@ public class Animator {
 
     private final int cubeNumber;
     private final int objectHeight;
-    private final ArrayList<Cube> cubes;
+    private final ArrayList<RenderCube> renderCubes;
 
     public boolean animationIsRunning(){return animationSqueezeIsRunning || animationStretchIsRunning;}
 
-    public Animator(int cubeNumber, int objectHeight, ArrayList<Cube> cubes){
+    public Animator(int cubeNumber, int objectHeight, ArrayList<RenderCube> renderCubes){
         this.objectHeight = objectHeight;
-        this.cubes = cubes;
+        this.renderCubes = renderCubes;
         this.cubeNumber = cubeNumber;
     }
 
@@ -51,20 +51,20 @@ public class Animator {
         if (!figureIsOpened ){
             animateStretch(shader);
         }else{
-            float currentY = cubes.get(cubes.size()-1).center.y;
+            float currentY = renderCubes.get(renderCubes.size()-1).center.y;
             scatterVector = new float[]{0.0f, objectHeight/2, 0.0f};
 
             int cubesToDraw = 0;
 
-            for (int i = 0; i< cubes.size(); i++){
+            for (int i = 0; i< renderCubes.size(); i++){
 
 
-                Cube cube = cubes.get(cubes.size()-1 - i);
-                if (cube.center.y != currentY || i == cubes.size()-1){
+                RenderCube renderCube = renderCubes.get(renderCubes.size()-1 - i);
+                if (renderCube.center.y != currentY || i == renderCubes.size()-1){
 
-                    if (i == (cubes.size()-1)){ cubesToDraw++; i++;};
+                    if (i == (renderCubes.size()-1)){ cubesToDraw++; i++;};
 
-                    currentY = cube.center.y;
+                    currentY = renderCube.center.y;
                     shader.setScatter(scatterVector);
 
                     GLES20.glDrawArrays(GLES20.GL_TRIANGLES, CubeDataHolder.getInstance().sizeInVertex * (cubeNumber-i), CubeDataHolder.getInstance().sizeInVertex * cubesToDraw);
@@ -125,21 +125,21 @@ public class Animator {
 
         float animationPercentage = frame / animationFramesAmount;
 
-        float currentY = cubes.get(cubes.size()-1).center.y;
+        float currentY = renderCubes.get(renderCubes.size()-1).center.y;
         scatterVector = new float[]{0.0f, objectHeight/2, 0.0f};
 
 
         int cubesToDraw = 0;
 
-        for (int i = 0; i< cubes.size(); i++){
+        for (int i = 0; i< renderCubes.size(); i++){
 
 
-            Cube cube = cubes.get(cubes.size()-1 - i);
-            if (cube.center.y != currentY || i == cubes.size()-1){
+            RenderCube renderCube = renderCubes.get(renderCubes.size()-1 - i);
+            if (renderCube.center.y != currentY || i == renderCubes.size()-1){
 
-                if (i == (cubes.size()-1)){ cubesToDraw++; i++;};
+                if (i == (renderCubes.size()-1)){ cubesToDraw++; i++;};
 
-                currentY = cube.center.y;
+                currentY = renderCube.center.y;
                 shader.setScatter(new float[]{scatterVector[0], scatterVector[1] * animationPercentage, scatterVector[2]});
 
                 glDrawArrays(GLES20.GL_TRIANGLES, CubeDataHolder.getInstance().sizeInVertex * (cubeNumber-i), CubeDataHolder.getInstance().sizeInVertex * cubesToDraw);
@@ -183,21 +183,21 @@ public class Animator {
 
         float animationPercentage = (animationFramesAmount - frame) / animationFramesAmount;
 
-        float currentY = cubes.get(cubes.size()-1).center.y;
+        float currentY = renderCubes.get(renderCubes.size()-1).center.y;
         scatterVector = new float[]{0.0f, objectHeight/2, 0.0f};
 
 
         int cubesToDraw = 0;
 
-        for (int i = 0; i< cubes.size(); i++){
+        for (int i = 0; i< renderCubes.size(); i++){
 
 
-            Cube cube = cubes.get(cubes.size()-1 - i);
-            if (cube.center.y != currentY || i == cubes.size()-1){
+            RenderCube renderCube = renderCubes.get(renderCubes.size()-1 - i);
+            if (renderCube.center.y != currentY || i == renderCubes.size()-1){
 
-                if (i == (cubes.size()-1)){ cubesToDraw++; i++;};
+                if (i == (renderCubes.size()-1)){ cubesToDraw++; i++;};
 
-                currentY = cube.center.y;
+                currentY = renderCube.center.y;
                 shader.setScatter(new float[]{scatterVector[0], scatterVector[1] * animationPercentage, scatterVector[2]});
 
                 glDrawArrays(GLES20.GL_TRIANGLES, CubeDataHolder.getInstance().sizeInVertex * (cubeNumber-i), CubeDataHolder.getInstance().sizeInVertex * cubesToDraw);

@@ -25,7 +25,7 @@ public class FragmentLoad extends Fragment {
     private View.OnClickListener onReturnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            presenter.saveFragmentReturnPressed();
+            presenter.loadFragmentReturnPressed();
         }
     };
 

@@ -18,7 +18,9 @@ public interface MainView {
 
     void hideInterface();
 
-    void openSaveActivity(Model model, Bitmap screenShot);
+    void openSaveFragment(Model model, Bitmap screenShot);
+
+    void openLoadFragment();
 
     void removeFragments();
 

@@ -1,15 +1,11 @@
 package com.cellular.automata.cellularautomata;
 
-import android.content.Context;
-
-import com.cellular.automata.cellularautomata.data.CubeMap;
-import com.cellular.automata.cellularautomata.objects.Cube;
+import com.cellular.automata.cellularautomata.data.RenderCubeMap;
+import com.cellular.automata.cellularautomata.objects.RenderCube;
 import com.cellular.automata.cellularautomata.utils.CellColor;
-import com.cellular.automata.cellularautomata.utils.CellPoint;
+import com.cellular.automata.cellularautomata.utils.CubeCenter;
 
 import org.junit.Test;
-
-import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
@@ -28,12 +24,12 @@ public class ExampleUnitTest {
     @Test
     public void cube_map_test() {
 
-        CubeMap map = new CubeMap(4);
+        RenderCubeMap map = new RenderCubeMap(4);
 
-        Cube cube = new Cube(new CellPoint(0, 0, 0), new CellColor("#222222"), false);
-        Cube cube1 = new Cube(new CellPoint(0, 0, 0), new CellColor("#222222"), false);
+        RenderCube renderCube = new RenderCube(new CubeCenter(0, 0, 0), new CellColor("#222222"), false);
+        RenderCube renderCube1 = new RenderCube(new CubeCenter(0, 0, 0), new CellColor("#222222"), false);
 
-        assertTrue(map.cubeInBounds(cube1));
+        assertTrue(map.cubeInBounds(renderCube1));
 
     }
 }

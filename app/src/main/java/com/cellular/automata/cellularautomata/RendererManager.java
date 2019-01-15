@@ -1,17 +1,16 @@
 package com.cellular.automata.cellularautomata;
 
 
-import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.cellular.automata.cellularautomata.core.RendererController;
 import com.cellular.automata.cellularautomata.core.LifeRule;
 import com.cellular.automata.cellularautomata.core.Rule;
+import com.cellular.automata.cellularautomata.data.Automata;
 import com.cellular.automata.cellularautomata.interfaces.ApplicationListener;
-import com.cellular.automata.cellularautomata.interfaces.ScreenshotListener;
-import com.cellular.automata.cellularautomata.objects.Cube;
+import com.cellular.automata.cellularautomata.objects.RenderCube;
 import com.cellular.automata.cellularautomata.objects.Model;
-import com.cellular.automata.cellularautomata.objects.AutomataBuilder;
+import com.cellular.automata.cellularautomata.objects.RenderBuilder;
 import com.cellular.automata.cellularautomata.utils.CellColor;
 import com.cellular.automata.cellularautomata.utils.FPSCounter;
 
@@ -19,11 +18,14 @@ public class RendererManager implements ApplicationListener{
 
     private String TAG = "RendererManager";
 
-    private AutomataBuilder builder;
+    private RenderBuilder renderBuilder;
+    private Automata automata;
     private Environment environment;
     private RendererController rendererController;
     private FPSCounter fps = new FPSCounter();
 
+    private long startTime = 0;
+    private long delay = 500;
     private boolean isGenerating = false;
 
     private Rule rule;
@@ -32,8 +34,8 @@ public class RendererManager implements ApplicationListener{
     public void create() {
 
         rendererController = GRFX.rendererController;
-        builder = new AutomataBuilder();
         environment = new Environment();
+        automata = new Automata();
 
         CellColor colors[] = new CellColor[Settings.testAutomataCoords.length/3];
         for(int i = 0; i< colors.length; i++){
@@ -42,19 +44,18 @@ public class RendererManager implements ApplicationListener{
 
         Model testModel = new Model(Settings.testAutomataCoords, colors);
 
-        builder.setModel(testModel);
-        builder.build();
-        builder.bindAttributesData();
+        automata.setModel(testModel);
+        automata.setRule(new LifeRule());
 
-        builder.setRule(new LifeRule());
-        environment.addBuilder(builder);
+        renderBuilder = automata.getRenderBuilder();
+        environment.addBuilder(renderBuilder);
 
-        builder.setOnTouchListener(new AutomataBuilder.OnTouchListener() {
+        renderBuilder.setOnTouchListener(new RenderBuilder.OnTouchListener() {
             @Override
             public void onTouch() {
 
                 if(GRFX.activityListener!= null){
-                    GRFX.activityListener.logText("nb: " + String.valueOf(rule.getNeighboursAmount(new Cube(builder.getTouchResult().touchedCubeCenter, null, false), builder.getMap())));
+                    //GRFX.activityListener.logText("nb: " + String.valueOf(rule.getNeighboursAmount(new RenderCube(renderBuilder.getTouchResult().touchedCubeCenter, null, false), renderBuilder.getRenderMap())));
                 }
 
             }
@@ -74,13 +75,13 @@ public class RendererManager implements ApplicationListener{
             //MAIN CONTROLS
             case RendererController.START:{
 
-                builder.start();
+                automata.start();
                 break;
 
             }
             case RendererController.PAUSE:{
 
-                builder.pause();
+                automata.pause();
                 break;
 
             }
@@ -93,10 +94,7 @@ public class RendererManager implements ApplicationListener{
                 }
                 Model testModel = new Model(Settings.testAutomataCoords, colors);
 
-                builder.setModel(testModel);
-                builder.build();
-                builder.bindAttributesData();
-
+                automata.setModel(testModel);
                 GRFX.renderer.resetCam();
 
                 break;
@@ -104,7 +102,7 @@ public class RendererManager implements ApplicationListener{
             }
             case RendererController.NEXT:{
 
-                builder.speedUp();
+                automata.speedUp();
                 break;
 
             }
@@ -112,19 +110,19 @@ public class RendererManager implements ApplicationListener{
             case RendererController.FIGURE_TOUCHED:{
 
                 //adding / painting / deleting a cube
-                if(builder.isTouched()){
+                if(renderBuilder.isTouched()){
 
-                    Log.d(TAG, String.valueOf(rule.getNeighboursAmount(new Cube(builder.getTouchResult().touchedCubeCenter, null, false), builder.getMap())));
+                    //Log.d(TAG, String.valueOf(rule.getNeighboursAmount(new RenderCube(renderBuilder.getTouchResult().touchedCubeCenter, null, false), renderBuilder.getRenderMap())));
 
                     String color = Integer.toHexString(rendererController.currentColor);
 
                     if(color.length()>=6){
 
                         color = "#" + color.substring(2);
-                        builder.paintCube(builder.getTouchResult().touchedCubeCenter, new CellColor(color));
+                        renderBuilder.paintCube(renderBuilder.getTouchResult().touchedCubeCenter, new CellColor(color));
 
                     }
-                    //builder.addNewCube(builder.getTouchResult().newCubeCenter, new CellColor("#4286f4"));
+                    //renderBuilder.addNewCube(renderBuilder.getTouchResult().newCubeCenter, new CellColor("#4286f4"));
                 }
 
                 break;
@@ -133,13 +131,13 @@ public class RendererManager implements ApplicationListener{
 
             case RendererController.STRETCH:{
 
-                builder.stretch();
+                renderBuilder.stretch();
                 break;
 
             }
             case RendererController.SQUEEZE:{
 
-                builder.squeeze();
+                renderBuilder.squeeze();
                 break;
 
             }
@@ -148,8 +146,8 @@ public class RendererManager implements ApplicationListener{
 
         }
 
-        builder.execute();
-        builder.draw();
+        automata.execute();
+        renderBuilder.draw();
 
         GRFX.activityListener.logFps(fps.frames());
 
