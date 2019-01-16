@@ -40,8 +40,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
     boolean colorBarOpened = false;
     boolean layerIconIsStretchedIcon = false;
 
-    private LinearLayout toolBar, colorBar, controlsBar;
-    private ImageView goButton, resetButton, speedUpButton, layersButton;
+    private LinearLayout toolBar, colorBar, controlsBar, layersToolbar;
+    private ImageView goButton, resetButton, nextStepButton, layersButton, layerUpButton, layerDownButton;
     private TextView txtLogDown, txtLogTop, txtFpsCounter;
     private ColorPickerView colorPicker;
     private ProgressBar progressBar;
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
 
 
-    View.OnTouchListener surfaceViewListener = new android.view.View.OnTouchListener() {
+    private View.OnTouchListener surfaceViewListener = new android.view.View.OnTouchListener() {
         @Override
         public boolean onTouch(android.view.View v, MotionEvent event) {
 
@@ -87,6 +87,20 @@ public class MainActivity extends AppCompatActivity implements MainView {
         }
     };
 
+    private View.OnClickListener layerUpListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+        }
+    };
+
+    private View.OnClickListener layerDownListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+        }
+    };
+
     private View.OnClickListener resetButtonListener = new android.view.View.OnClickListener() {
         @Override
         public void onClick(android.view.View view) {
@@ -94,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         }
     };
 
-    private View.OnClickListener speedUpButtonListener = new android.view.View.OnClickListener() {
+    private View.OnClickListener nextStepButtonListener = new android.view.View.OnClickListener() {
         @Override
         public void onClick(android.view.View view) { presenter.nextStepPressed(); }
     };
@@ -138,17 +152,24 @@ public class MainActivity extends AppCompatActivity implements MainView {
         resetButton = findViewById(R.id.reset_icon);
         resetButton.setOnClickListener(resetButtonListener);
 
-        speedUpButton = findViewById(R.id.speed_up_icon);
-        speedUpButton.setOnClickListener(speedUpButtonListener);
+        nextStepButton = findViewById(R.id.next_step_icon);
+        nextStepButton.setOnClickListener(nextStepButtonListener);
 
         toolBar = findViewById(R.id.tool_bar);
         controlsBar = findViewById(R.id.controls_bar);
+        layersToolbar = findViewById(R.id.layers_navigation_toolbar);
         txtLogDown = findViewById(R.id.txt_log_bottom);
         txtLogTop = findViewById(R.id.txt_log_top);
         txtFpsCounter = findViewById(R.id.txt_fps_counter);
         colorBar = findViewById(R.id.color_bar);
         layersButton = findViewById(R.id.tool_layers);
         progressBar = findViewById(R.id.progress_bar);
+        layerUpButton = findViewById(R.id.layers_up);
+        layerDownButton = findViewById(R.id.layers_down);
+
+        // Set listeners
+        layerUpButton.setOnClickListener(layerUpListener);
+        layerDownButton.setOnClickListener(layerDownListener);
 
         // Color picker
         colorPicker = findViewById(R.id.color_picker_view);
@@ -158,7 +179,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
         // Set default visibility
         colorBar.setVisibility(android.view.View.INVISIBLE);
         toolBar.setVisibility(android.view.View.VISIBLE);
-        txtFpsCounter.setVisibility(Settings.fpsCounter? android.view.View.VISIBLE: android.view.View.INVISIBLE);
+        layersToolbar.setVisibility(View.INVISIBLE);
+        txtFpsCounter.setVisibility(Settings.log_fps_counter ? android.view.View.VISIBLE: android.view.View.INVISIBLE);
         txtLogDown.setVisibility(Settings.log_down? android.view.View.VISIBLE: android.view.View.INVISIBLE);
         txtLogTop.setVisibility(Settings.log_top? android.view.View.VISIBLE: android.view.View.INVISIBLE);
 
@@ -215,8 +237,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     }
 
-    //support methods
+    // support methods
     // utils
+
 
     private void showColorPicker(){
 
@@ -287,6 +310,20 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
 
     // View for presenter
+
+    public void hideLayersBar(){
+
+        layersToolbar.startAnimation(getControlBarSlideRightAnimation());
+        layersToolbar.setVisibility(android.view.View.INVISIBLE);
+
+    }
+
+    public void showLayersBar(){
+
+        layersToolbar.setVisibility(android.view.View.VISIBLE);
+        layersToolbar.startAnimation(getControlBarSlideLeftAnimation());
+
+    }
 
     @Override
     public Context getContext() {

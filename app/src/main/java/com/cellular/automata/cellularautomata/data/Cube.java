@@ -33,9 +33,13 @@ public class Cube {
 
     public boolean isAlive(){return isAlive;}
 
-    public void setAlive(boolean b){this.isAlive = isAlive;}
+    public void setAlive(boolean b){this.isAlive = b;}
 
     public void setColor(String color){this.color = color;}
+
+    public String getColor() {
+        return color;
+    }
 
     public int[] getCoords() { return coords;}
 
@@ -46,6 +50,12 @@ public class Cube {
 
         int [] newCoords = cube.getCoords();
         return newCoords[0] == coords[0] && newCoords[1] == coords[1] && newCoords [2] == coords[2];
+
+    }
+
+    public Cube copy(){
+
+        return new Cube(this.color, this.coords);
 
     }
 }

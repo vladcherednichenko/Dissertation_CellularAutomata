@@ -26,7 +26,11 @@ public interface MainView {
 
     void hideControlsBar();
 
+    void hideLayersBar();
+
     void showControlsBar();
+
+    void showLayersBar();
 
     void hideToolbar();
 

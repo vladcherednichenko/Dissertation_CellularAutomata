@@ -262,6 +262,11 @@ public class RenderBuilder {
     //binds data to the VBOs
     public void bindAttributesData(){
 
+        if(howManyCells() <= 0){
+            Log.d(TAG, "No data to bind");
+            return;
+        }
+
         glDeleteBuffers(3, new int[]{vertexBufferPositionIdx, vertexBufferColorIdx, vertexBufferNormalIdx}, 0);
 
         final int buffers[] = new int[3];

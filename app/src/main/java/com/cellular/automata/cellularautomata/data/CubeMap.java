@@ -1,5 +1,6 @@
 package com.cellular.automata.cellularautomata.data;
 
+import com.cellular.automata.cellularautomata.Settings;
 import com.cellular.automata.cellularautomata.objects.RenderCube;
 
 import java.util.ArrayList;
@@ -28,6 +29,20 @@ public class CubeMap {
 
     // GETTERS
 
+    public static CubeMap fromList(ArrayList<Cube> list, int automataRadius){
+
+        CubeMap map = new CubeMap(automataRadius);
+        map.addAll(list);
+        return map;
+
+    }
+
+    public int automataRadius(){
+
+        return automataRadius;
+
+    }
+
     public ArrayList<Cube> toList() {
 
         cubeList.clear();
@@ -38,7 +53,29 @@ public class CubeMap {
                 }
             }
         }
-        return cubeList;
+
+        ArrayList<Cube> list = new ArrayList<>();
+        for(Cube cube: cubeList){
+
+            list.add(cube.copy());
+
+        }
+
+        return list;
+
+    }
+
+    public ArrayList<Cube> getAlive() {
+        ArrayList<Cube> result = new ArrayList<>();
+        ArrayList<Cube> all = toList();
+
+        for(Cube cube: all){
+            if(cube.isAlive()){
+                result.add(cube);
+            }
+        }
+
+        return result;
     }
 
     public int numberAllAlive(){
@@ -90,9 +127,15 @@ public class CubeMap {
 
     }
 
-    public boolean addAll(){
+    public boolean addAll(ArrayList<Cube> list){
 
-        // to do
+
+        for (Cube cube: list){
+
+            add(cube);
+
+        }
+
         return true;
 
     }
@@ -114,7 +157,9 @@ public class CubeMap {
         for(int i = 0; i< map.length; i++){
             for (int j = 0; j<map[0].length; j++){
                 for(int k = 0; k< map[0][0].length; k++){
-                    map[i][j][k] = new Cube();
+
+                    map[i][j][k] = new Cube(Settings.defaultCubeColor, new int[]{i - automataRadius +1, j - automataRadius +1, k - automataRadius +1});
+
                 }
             }
         }

@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.util.Log;
 
 import com.cellular.automata.cellularautomata.objects.RenderCube;
+import com.cellular.automata.cellularautomata.utils.CellColor;
 import com.cellular.automata.cellularautomata.utils.CubeCenter;
 
 import java.util.ArrayList;
@@ -93,11 +94,41 @@ public class RenderCubeMap {
 
         for(RenderCube cube: renderCubeList){
 
-            cubeMap.add(new Cube(cube.color.hexColor, new int[]{(int)cube.center.x, (int)cube.center.y, (int)cube.center.z}));
+            Cube newCube = new Cube(cube.color.hexColor, new int[]{(int)cube.center.x, (int)cube.center.y, (int)cube.center.z});
+            newCube.setAlive(true);
+            cubeMap.add(newCube);
 
         }
 
         return cubeMap;
+
+    }
+
+    // Converts CubeMap to RenderCubeMap
+    public static RenderCubeMap fromCubeMap(CubeMap map){
+
+        return fromCubeList(map.getAlive(), map.automataRadius());
+
+    }
+
+    public static RenderCubeMap fromCubeList(ArrayList<Cube> cubeList, int automataRadius){
+
+        RenderCubeMap newMap = new RenderCubeMap(automataRadius);
+
+        for (Cube cube: cubeList){
+
+            if(cube.isAlive()){
+
+                int [] coords = cube.getCoords();
+                RenderCube renderCube = new RenderCube(new CubeCenter((float) coords[0], (float)coords[1], (float)coords[2]), new CellColor(cube.getColor()), true);
+                newMap.add(renderCube);
+
+            }
+
+
+        }
+
+        return newMap;
 
     }
 
@@ -132,6 +163,7 @@ public class RenderCubeMap {
         }
 
     }
+
 
     public void remove(RenderCube renderCube){
 

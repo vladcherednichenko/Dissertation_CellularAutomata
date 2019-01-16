@@ -1,22 +1,18 @@
 package com.cellular.automata.cellularautomata;
 
 
-import android.util.Log;
-
 import com.cellular.automata.cellularautomata.core.RendererController;
 import com.cellular.automata.cellularautomata.core.LifeRule;
-import com.cellular.automata.cellularautomata.core.Rule;
 import com.cellular.automata.cellularautomata.data.Automata;
 import com.cellular.automata.cellularautomata.interfaces.ApplicationListener;
-import com.cellular.automata.cellularautomata.objects.RenderCube;
 import com.cellular.automata.cellularautomata.objects.Model;
 import com.cellular.automata.cellularautomata.objects.RenderBuilder;
 import com.cellular.automata.cellularautomata.utils.CellColor;
 import com.cellular.automata.cellularautomata.utils.FPSCounter;
 
-public class RendererManager implements ApplicationListener{
+public class GameInstance implements ApplicationListener{
 
-    private String TAG = "RendererManager";
+    private String TAG = "GameInstance";
 
     private RenderBuilder renderBuilder;
     private Automata automata;
@@ -24,11 +20,7 @@ public class RendererManager implements ApplicationListener{
     private RendererController rendererController;
     private FPSCounter fps = new FPSCounter();
 
-    private long startTime = 0;
-    private long delay = 500;
-    private boolean isGenerating = false;
-
-    private Rule rule;
+    private Model testModel;
 
     @Override
     public void create() {
@@ -37,12 +29,7 @@ public class RendererManager implements ApplicationListener{
         environment = new Environment();
         automata = new Automata();
 
-        CellColor colors[] = new CellColor[Settings.testAutomataCoords.length/3];
-        for(int i = 0; i< colors.length; i++){
-            colors[i] = new CellColor("#4286f4");
-        }
-
-        Model testModel = new Model(Settings.testAutomataCoords, colors);
+        testModel = Model.fromCoordsArray(Settings.testSimpleCube);
 
         automata.setModel(testModel);
         automata.setRule(new LifeRule());
@@ -61,7 +48,6 @@ public class RendererManager implements ApplicationListener{
             }
         });
 
-        rule = new Rule();
 
     }
 
@@ -87,13 +73,6 @@ public class RendererManager implements ApplicationListener{
             }
             case RendererController.RESET:{
 
-                isGenerating = false;
-                CellColor colors[] = new CellColor[Settings.testAutomataCoords.length/3];
-                for(int i = 0; i< colors.length; i++){
-                    colors[i] = new CellColor("#4286f4");
-                }
-                Model testModel = new Model(Settings.testAutomataCoords, colors);
-
                 automata.setModel(testModel);
                 GRFX.renderer.resetCam();
 
@@ -102,7 +81,7 @@ public class RendererManager implements ApplicationListener{
             }
             case RendererController.NEXT:{
 
-                automata.speedUp();
+                automata.next();
                 break;
 
             }

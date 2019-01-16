@@ -1,6 +1,7 @@
 package com.cellular.automata.cellularautomata.data;
 
 import com.cellular.automata.cellularautomata.GRFX;
+import com.cellular.automata.cellularautomata.Settings;
 import com.cellular.automata.cellularautomata.core.Rule;
 import com.cellular.automata.cellularautomata.objects.Model;
 import com.cellular.automata.cellularautomata.objects.RenderBuilder;
@@ -15,7 +16,7 @@ public class Automata {
 
     private String TAG = "AUTOMATA_BUILDER";
 
-    private int automataRadius = 30;
+    private int automataRadius = 10;
     private boolean generating = false;
 
     //temporary
@@ -81,7 +82,6 @@ public class Automata {
     public void start(){
 
         generating = true;
-        delay = 100;
 
     }
 
@@ -91,10 +91,29 @@ public class Automata {
 
     }
 
-    public void speedUp(){
 
-        generating = true;
-        delay = delay * 0.5f;
+    // MAIN METHOD NEXT
+    public void next(){
+
+        // Get the next iteration map
+        ArrayList<Cube> cubes = rule.nextIterations(map);
+        this.map = CubeMap.fromList(cubes, automataRadius);
+
+        // Convert CubeMap to RenderMap
+        RenderCubeMap renderMap = RenderCubeMap.fromCubeList(cubes, automataRadius);
+
+        // Apply RenderMap
+        renderBuilder.setRenderMap(renderMap);
+
+        // Build
+        renderBuilder.build();
+        renderBuilder.bindAttributesData();
+
+
+        // Log alive cubes
+        if(Settings.log_alive_number){
+            GRFX.activityListener.logTextTop("renderCubes: " + String.valueOf(map.numberAllAlive()));
+        }
 
     }
 
@@ -104,13 +123,8 @@ public class Automata {
         // if start is pressed
         if(generating){
 
-            ArrayList<Cube> cubes = rule.nextIterations(map);
-            //renderBuilder.setRenderMap();
 
 
-
-
-            GRFX.activityListener.logTextTop("renderCubes: " + String.valueOf(map.numberAllAlive()));
 
         }else{
 
@@ -120,14 +134,12 @@ public class Automata {
 
     }
 
-    // MAIN METHOD NEXT
-    public void next(){
-
-        ArrayList<Cube> cubes = rule.nextIterations(map);
 
 
 
-    }
+
+
+
 
     private void generateRandomCubes(){
 

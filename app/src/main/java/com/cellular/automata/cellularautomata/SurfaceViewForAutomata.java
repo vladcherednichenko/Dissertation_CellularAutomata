@@ -102,8 +102,8 @@ public class SurfaceViewForAutomata extends GLSurfaceView{
         //setEGLConfigChooser(new MyConfigChooser());
 
 
-        GRFX.appManager = new RendererManager();
-        this.renderer = new GraphicsRenderer(GRFX.appManager);
+        GRFX.gameInstance = new GameInstance();
+        this.renderer = new GraphicsRenderer(GRFX.gameInstance);
         GRFX.renderer = renderer;
 
         setRenderer(this.renderer);
@@ -117,8 +117,8 @@ public class SurfaceViewForAutomata extends GLSurfaceView{
         setEGLContextClientVersion(2);
         loadDefaultModel();
 
-        GRFX.appManager = new RendererManager();
-        this.renderer = new GraphicsRenderer(GRFX.appManager);
+        GRFX.gameInstance = new GameInstance();
+        this.renderer = new GraphicsRenderer(GRFX.gameInstance);
         GRFX.renderer = renderer;
 
 

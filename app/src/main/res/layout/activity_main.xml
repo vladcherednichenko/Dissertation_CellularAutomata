@@ -10,7 +10,8 @@
     <com.cellular.automata.cellularautomata.SurfaceViewForAutomata
         android:id="@+id/surfaceView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="354dp"
+        tools:layout_editor_absoluteY="5dp" />
 
     <FrameLayout
         android:id="@+id/fragment_frame"
@@ -82,7 +83,7 @@
             android:src="@drawable/play_icon" />
 
         <ImageView
-            android:id="@+id/speed_up_icon"
+            android:id="@+id/next_step_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -244,7 +245,34 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <LinearLayout
+        android:id="@+id/layers_navigation_toolbar"
+        android:visibility="invisible"
+        android:layout_width="44dp"
+        android:layout_height="97dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:padding="5dp"
+        android:background="@drawable/ui_background_right"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/controls_bar"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/layers_up"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/arrow_bold_up" />
+
+        <ImageView
+            android:id="@+id/layers_down"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/arrow_bold_down" />
+    </LinearLayout>
 
 
 </android.support.constraint.ConstraintLayout>

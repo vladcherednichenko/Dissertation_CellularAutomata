@@ -6,7 +6,7 @@ import com.cellular.automata.cellularautomata.interfaces.MainView;
 public class GRFX {
 
     public static GraphicsRenderer renderer;
-    public static RendererManager appManager;
+    public static GameInstance gameInstance;
     public static MainView activityListener;
     public static RendererController rendererController;
 

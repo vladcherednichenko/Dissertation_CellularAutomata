@@ -1,5 +1,6 @@
 package com.cellular.automata.cellularautomata.core;
 
+import android.util.Log;
 import android.util.SparseArray;
 
 import com.cellular.automata.cellularautomata.Settings;
@@ -9,8 +10,11 @@ import com.cellular.automata.cellularautomata.data.RenderCubeMap;
 import com.cellular.automata.cellularautomata.objects.RenderCube;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Rule {
+
+    private String Tag = "Rule";
 
     private int [] keepAliveNeighboursNumber = {1};
     private int [] reviveNeighboursNumber = {1};
@@ -26,10 +30,25 @@ public class Rule {
     //and return the list of cubes to render on screen
     public ArrayList<Cube> nextIterations(CubeMap map){
 
-        ArrayList<Cube> nextIteration = new ArrayList<>();
-        for (Cube cube : map.toList()){
+        ArrayList<Cube> nextIteration = map.toList();
+
+
+        int counter = 0;
+        for(Iterator<Cube> iterator = nextIteration.iterator(); iterator.hasNext();){
+
+            Cube cube = iterator.next();
+
+            counter++;
+
+            //Log.d(Tag, String.valueOf(counter));
 
             int neighboursAmount = getNeighboursAmount(cube, map);
+
+            if(neighboursAmount >= 1){
+
+                Log.d(Tag, "found a neighbour");
+
+            }
             if(inKeepAlive(neighboursAmount) || inRevive(neighboursAmount)){
                 cube.setAlive(true);
                 cube.setColor(Settings.defaultCubeColor);
@@ -39,6 +58,19 @@ public class Rule {
 
         }
 
+
+//        for (Cube cube : nextIteration){
+//
+//            int neighboursAmount = getNeighboursAmount(cube, map);
+//            if(inKeepAlive(neighboursAmount) || inRevive(neighboursAmount)){
+//                cube.setAlive(true);
+//                cube.setColor(Settings.defaultCubeColor);
+//            }else{
+//                cube.setAlive(false);
+//            }
+//
+//        }
+
         return nextIteration;
 
     }
@@ -47,8 +79,8 @@ public class Rule {
 
         ArrayList<Cube> result = new ArrayList<>();
 
-        if (map.numberAllAlive() == 0)
-            return result;
+//        if (map.numberAllAlive() == 0)
+//            return result;
 
         for (int x = cube.getCoords()[0]-1; x<= cube.getCoords()[0]+1; x++){
             for (int y = cube.getCoords()[1]-1; y<= cube.getCoords()[1]+1; y++){
