@@ -10,8 +10,9 @@
     <com.cellular.automata.cellularautomata.SurfaceViewForAutomata
         android:id="@+id/surfaceView"
         android:layout_width="match_parent"
-        android:layout_height="354dp"
-        tools:layout_editor_absoluteY="5dp" />
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
         android:id="@+id/fragment_frame"
@@ -51,6 +52,7 @@
 
     <LinearLayout
         android:id="@+id/controls_bar"
+        android:visibility="invisible"
         android:layout_width="37dp"
         android:layout_height="154dp"
         android:layout_margin="0dp"
@@ -132,16 +134,13 @@
         android:layout_width="wrap_content"
         android:layout_height="240dp"
         android:layout_margin="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/ui_background_left"
+        android:background="@drawable/ui_background_right"
         android:orientation="horizontal"
         android:padding="5dp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/txt_log_bottom"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_log_top"
-        app:layout_constraintVertical_bias="0.48">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/layers_navigation_toolbar"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -171,9 +170,9 @@
             android:id="@+id/close_color_bar"
             android:layout_width="50dp"
             android:layout_height="match_parent"
+            android:rotation="180"
             android:layout_gravity="center_vertical"
             android:background="@drawable/ui_background_left"
-            android:onClick="OnCloseColorBarClicked"
             android:padding="10dp"
             android:scaleType="centerInside"
             app:srcCompat="@drawable/hide_bar"
@@ -185,8 +184,8 @@
 
     <LinearLayout
         android:id="@+id/tool_bar"
-        android:layout_width="44dp"
-        android:layout_height="240dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="0dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
@@ -199,39 +198,39 @@
         app:layout_constraintTop_toBottomOf="@+id/txt_log_top">
 
         <ImageView
-            android:id="@+id/tool_color"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:id="@+id/tool_edit"
+            android:layout_width="@dimen/toolbar_icons_size"
+            android:layout_height="@dimen/toolbar_icons_size"
+            android:layout_marginBottom="5dp"
             android:layout_weight="1"
-            android:onClick="OnColorToolClicked"
-            app:srcCompat="@drawable/color_medium_round" />
+            app:srcCompat="@drawable/edit_icon" />
 
         <ImageView
             android:id="@+id/tool_layers"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/toolbar_icons_size"
+            android:layout_height="@dimen/toolbar_icons_size"
+            android:layout_marginBottom="5dp"
             android:layout_weight="1"
-            android:onClick="OnLayersButtonClicked"
             app:srcCompat="@drawable/open_layers"
             tools:layout_editor_absoluteX="94dp"
             tools:layout_editor_absoluteY="90dp" />
 
         <ImageView
             android:id="@+id/tool_load"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/toolbar_icons_size"
+            android:layout_height="@dimen/toolbar_icons_size"
+            android:layout_marginBottom="5dp"
             android:layout_weight="1"
-            android:onClick="OnLoadToolClicked"
             app:srcCompat="@drawable/load_medium"
             tools:layout_editor_absoluteX="432dp"
             tools:layout_editor_absoluteY="183dp" />
 
         <ImageView
             android:id="@+id/tool_save"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/toolbar_icons_size"
+            android:layout_height="@dimen/toolbar_icons_size"
+            android:layout_marginBottom="5dp"
             android:layout_weight="1"
-            android:onClick="OnSaveToolClicked"
             app:srcCompat="@drawable/save_medium"
             tools:layout_editor_absoluteX="200dp"
             tools:layout_editor_absoluteY="39dp" />
@@ -247,9 +246,9 @@
 
     <LinearLayout
         android:id="@+id/layers_navigation_toolbar"
-        android:visibility="invisible"
-        android:layout_width="44dp"
-        android:layout_height="97dp"
+        android:visibility="visible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:padding="5dp"
@@ -260,16 +259,40 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            android:id="@+id/add_cube"
+            android:layout_width="@dimen/edit_toolbar_icons_size"
+            android:layout_height="@dimen/edit_toolbar_icons_size"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/add_cube_icon" />
+
+        <ImageView
+            android:id="@+id/remove_cube"
+            android:layout_width="@dimen/edit_toolbar_icons_size"
+            android:layout_height="@dimen/edit_toolbar_icons_size"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/remove_cube_icon" />
+
+        <ImageView
+            android:id="@+id/paint_cube"
+            android:layout_width="@dimen/edit_toolbar_icons_size"
+            android:layout_height="@dimen/edit_toolbar_icons_size"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/paint_cube_icon" />
+
+        <ImageView
             android:id="@+id/layers_up"
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
+            android:layout_width="@dimen/edit_toolbar_icons_size"
+            android:layout_height="@dimen/edit_toolbar_icons_size"
             android:layout_weight="1"
             app:srcCompat="@drawable/arrow_bold_up" />
 
         <ImageView
             android:id="@+id/layers_down"
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
+            android:layout_width="@dimen/edit_toolbar_icons_size"
+            android:layout_height="@dimen/edit_toolbar_icons_size"
             android:layout_weight="1"
             app:srcCompat="@drawable/arrow_bold_down" />
     </LinearLayout>

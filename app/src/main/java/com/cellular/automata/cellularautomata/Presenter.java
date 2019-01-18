@@ -10,6 +10,7 @@ import com.cellular.automata.cellularautomata.objects.Model;
 public class Presenter {
 
     private MainView view;
+    private boolean isEditState = false;
 
     private RendererController rendererController = new RendererController();
 
@@ -133,5 +134,18 @@ public class Presenter {
 
     }
 
+    public void editPressed(){
+
+        view.hideControlsBar();
+        view.showEditBar();
+
+    }
+
+    public void closeEditPressed(){
+
+        view.hideEditBar();
+        view.showControlsBar();
+
+    }
 
 }
