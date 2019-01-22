@@ -4,7 +4,7 @@ import com.cellular.automata.cellularautomata.GRFX;
 import com.cellular.automata.cellularautomata.Settings;
 import com.cellular.automata.cellularautomata.core.Rule;
 import com.cellular.automata.cellularautomata.objects.Model;
-import com.cellular.automata.cellularautomata.objects.RenderBuilder;
+import com.cellular.automata.cellularautomata.objects.ModelRenderBuilder;
 import com.cellular.automata.cellularautomata.objects.RenderCube;
 import com.cellular.automata.cellularautomata.utils.CellColor;
 import com.cellular.automata.cellularautomata.utils.CubeCenter;
@@ -25,7 +25,7 @@ public class Automata {
     private long timePast;
     private float delay = 100;
 
-    private RenderBuilder renderBuilder;
+    private ModelRenderBuilder modelRenderBuilder;
     private CubeMap map;
 
     private Rule rule;
@@ -33,14 +33,14 @@ public class Automata {
     public Automata(){
 
         map = new CubeMap(automataRadius);
-        renderBuilder = new RenderBuilder(automataRadius);
+        modelRenderBuilder = new ModelRenderBuilder(automataRadius);
 
     }
 
     // GETTERS
 
-    public RenderBuilder getRenderBuilder(){
-        return renderBuilder;
+    public ModelRenderBuilder getModelRenderBuilder(){
+        return modelRenderBuilder;
     }
 
     // SETTERS
@@ -68,11 +68,11 @@ public class Automata {
 
         }
 
-        renderBuilder.setRenderMap(renderMap);
+        modelRenderBuilder.setRenderMap(renderMap);
         map = renderMap.toCubeMap();
 
-        renderBuilder.build();
-        renderBuilder.bindAttributesData();
+        modelRenderBuilder.build();
+        modelRenderBuilder.bindAttributesData();
 
     }
 
@@ -103,11 +103,11 @@ public class Automata {
         RenderCubeMap renderMap = RenderCubeMap.fromCubeList(cubes, automataRadius);
 
         // Apply RenderMap
-        renderBuilder.setRenderMap(renderMap);
+        modelRenderBuilder.setRenderMap(renderMap);
 
         // Build
-        renderBuilder.build();
-        renderBuilder.bindAttributesData();
+        modelRenderBuilder.build();
+        modelRenderBuilder.bindAttributesData();
 
 
         // Log alive cubes
@@ -143,17 +143,17 @@ public class Automata {
 
     private void generateRandomCubes(){
 
-        if(renderBuilder.getRenderMap().size() >= automataRadius*2 * automataRadius*2 * automataRadius*2 -1) return;
+        if(modelRenderBuilder.getRenderMap().size() >= automataRadius*2 * automataRadius*2 * automataRadius*2 -1) return;
 
         //generating random stuff
         timePast = System.currentTimeMillis() - time;
         if(timePast > delay){
             time = System.currentTimeMillis();
 
-            renderBuilder.addNewCube(generateCellPoint(),  new CellColor(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
+            modelRenderBuilder.addNewCube(generateCellPoint(),  new CellColor(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
             //Log.d("Timer", "half a second");
 
-            GRFX.activityListener.logTextTop("cubes: " + String.valueOf(renderBuilder.getRenderMap().size()));
+            GRFX.activityListener.logTextTop("cubes: " + String.valueOf(modelRenderBuilder.getRenderMap().size()));
         }
 
     }
@@ -161,7 +161,7 @@ public class Automata {
     CubeCenter generateCellPoint(){
 
         CubeCenter point =  new CubeCenter(random.nextInt(20)-9,random.nextInt(20)-9, random.nextInt(20)-9);
-        if(renderBuilder.cubeExists(point)){
+        if(modelRenderBuilder.cubeExists(point)){
             generateCellPoint();
         }else{
             return point;

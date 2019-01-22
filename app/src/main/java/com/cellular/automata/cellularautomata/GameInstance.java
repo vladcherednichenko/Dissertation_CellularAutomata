@@ -6,7 +6,7 @@ import com.cellular.automata.cellularautomata.core.LifeRule;
 import com.cellular.automata.cellularautomata.data.Automata;
 import com.cellular.automata.cellularautomata.interfaces.ApplicationListener;
 import com.cellular.automata.cellularautomata.objects.Model;
-import com.cellular.automata.cellularautomata.objects.RenderBuilder;
+import com.cellular.automata.cellularautomata.objects.ModelRenderBuilder;
 import com.cellular.automata.cellularautomata.utils.CellColor;
 import com.cellular.automata.cellularautomata.utils.FPSCounter;
 
@@ -14,7 +14,7 @@ public class GameInstance implements ApplicationListener{
 
     private String TAG = "GameInstance";
 
-    private RenderBuilder renderBuilder;
+    private ModelRenderBuilder modelRenderBuilder;
     private Automata automata;
     private Environment environment;
     private RendererController rendererController;
@@ -34,15 +34,15 @@ public class GameInstance implements ApplicationListener{
         automata.setModel(testModel);
         automata.setRule(new LifeRule());
 
-        renderBuilder = automata.getRenderBuilder();
-        environment.addBuilder(renderBuilder);
+        modelRenderBuilder = automata.getModelRenderBuilder();
+        environment.addBuilder(modelRenderBuilder);
 
-        renderBuilder.setOnTouchListener(new RenderBuilder.OnTouchListener() {
+        modelRenderBuilder.setOnTouchListener(new ModelRenderBuilder.OnTouchListener() {
             @Override
             public void onTouch() {
 
                 if(GRFX.activityListener!= null){
-                    //GRFX.activityListener.logText("nb: " + String.valueOf(rule.getNeighboursAmount(new RenderCube(renderBuilder.getTouchResult().touchedCubeCenter, null, false), renderBuilder.getRenderMap())));
+                    //GRFX.activityListener.logText("nb: " + String.valueOf(rule.getNeighboursAmount(new RenderCube(modelRenderBuilder.getTouchResult().touchedCubeCenter, null, false), modelRenderBuilder.getRenderMap())));
                 }
 
             }
@@ -89,19 +89,19 @@ public class GameInstance implements ApplicationListener{
             case RendererController.FIGURE_TOUCHED:{
 
                 //adding / painting / deleting a cube
-                if(renderBuilder.isTouched()){
+                if(modelRenderBuilder.isTouched()){
 
-                    //Log.d(TAG, String.valueOf(rule.getNeighboursAmount(new RenderCube(renderBuilder.getTouchResult().touchedCubeCenter, null, false), renderBuilder.getRenderMap())));
+                    //Log.d(TAG, String.valueOf(rule.getNeighboursAmount(new RenderCube(modelRenderBuilder.getTouchResult().touchedCubeCenter, null, false), modelRenderBuilder.getRenderMap())));
 
                     String color = Integer.toHexString(rendererController.currentColor);
 
                     if(color.length()>=6){
 
                         color = "#" + color.substring(2);
-                        renderBuilder.paintCube(renderBuilder.getTouchResult().touchedCubeCenter, new CellColor(color));
+                        modelRenderBuilder.paintCube(modelRenderBuilder.getTouchResult().touchedCubeCenter, new CellColor(color));
 
                     }
-                    //renderBuilder.addNewCube(renderBuilder.getTouchResult().newCubeCenter, new CellColor("#4286f4"));
+                    //modelRenderBuilder.addNewCube(modelRenderBuilder.getTouchResult().newCubeCenter, new CellColor("#4286f4"));
                 }
 
                 break;
@@ -110,13 +110,13 @@ public class GameInstance implements ApplicationListener{
 
             case RendererController.STRETCH:{
 
-                renderBuilder.stretch();
+                modelRenderBuilder.stretch();
                 break;
 
             }
             case RendererController.SQUEEZE:{
 
-                renderBuilder.squeeze();
+                modelRenderBuilder.squeeze();
                 break;
 
             }
@@ -126,7 +126,7 @@ public class GameInstance implements ApplicationListener{
         }
 
         automata.execute();
-        renderBuilder.draw();
+        modelRenderBuilder.draw();
 
         GRFX.activityListener.logFps(fps.frames());
 

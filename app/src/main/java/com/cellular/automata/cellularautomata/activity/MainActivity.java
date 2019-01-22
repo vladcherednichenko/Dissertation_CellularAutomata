@@ -458,9 +458,15 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
                     if(editIconPressed){
 
+                        showEditBar();
+
+                    }else{
+
                         showControlsBar();
 
                     }
+
+
 
                 }
 

@@ -30,7 +30,7 @@ import static com.cellular.automata.cellularautomata.Constants.COLOR_COMPONENT_C
 import static com.cellular.automata.cellularautomata.Constants.NORMAL_COMPONENT_COUNT;
 import static com.cellular.automata.cellularautomata.Constants.POSITION_COMPONENT_COUNT;
 
-public class RenderBuilder {
+public class ModelRenderBuilder {
 
     private String TAG = "RENDER_BUILDER";
 
@@ -71,7 +71,7 @@ public class RenderBuilder {
 
     }
 
-    public RenderBuilder(int automataRadius){
+    public ModelRenderBuilder(int automataRadius){
 
         this.renderMap = new RenderCubeMap(automataRadius);
 

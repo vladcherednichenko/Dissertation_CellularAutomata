@@ -1,7 +1,7 @@
 package com.cellular.automata.cellularautomata;
 
 import com.cellular.automata.cellularautomata.interfaces.EnvironmentListener;
-import com.cellular.automata.cellularautomata.objects.RenderBuilder;
+import com.cellular.automata.cellularautomata.objects.ModelRenderBuilder;
 import com.cellular.automata.cellularautomata.utils.ObjectSelectHelper;
 
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ public class Environment implements EnvironmentListener{
 
     //class keeps track of all the actions on the scene
 
-    private ArrayList<RenderBuilder> buildersList;
+    private ArrayList<ModelRenderBuilder> buildersList;
 
 
     public Environment(){
@@ -20,10 +20,10 @@ public class Environment implements EnvironmentListener{
     }
 
 
-    public void addBuilder(RenderBuilder builder){
+    public void addBuilder(ModelRenderBuilder builder){
 
         if(builder == null) return;
-        if(buildersList == null) buildersList = new ArrayList<RenderBuilder>();
+        if(buildersList == null) buildersList = new ArrayList<ModelRenderBuilder>();
 
         buildersList.add(builder);
 
@@ -35,7 +35,7 @@ public class Environment implements EnvironmentListener{
 
         if(buildersList == null || buildersList.size() == 0) return;
 
-        for(RenderBuilder builder: buildersList){
+        for(ModelRenderBuilder builder: buildersList){
 
             ObjectSelectHelper.TouchResult touchResult = GRFX.renderer.getTouchedResult(normalizedX, normalizedY, builder.getCellCentersList());
             if(touchResult.cubeTouched){
@@ -49,7 +49,7 @@ public class Environment implements EnvironmentListener{
 
     public void draw(){
 
-        for(RenderBuilder builder: buildersList){
+        for(ModelRenderBuilder builder: buildersList){
             builder.draw();
         }
 
