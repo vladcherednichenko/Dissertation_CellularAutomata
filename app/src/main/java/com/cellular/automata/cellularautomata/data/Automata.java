@@ -43,6 +43,10 @@ public class Automata {
         return modelRenderBuilder;
     }
 
+    public int getAutomataRadius(){
+        return automataRadius;
+    }
+
     // SETTERS
 
     public void setRule(Rule rule){

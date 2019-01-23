@@ -10,6 +10,7 @@ import com.cellular.automata.cellularautomata.interfaces.ApplicationListener;
 import com.cellular.automata.cellularautomata.interfaces.EnvironmentListener;
 import com.cellular.automata.cellularautomata.interfaces.ScreenshotListener;
 import com.cellular.automata.cellularautomata.shaders.FigureShader;
+import com.cellular.automata.cellularautomata.shaders.GridShader;
 import com.cellular.automata.cellularautomata.utils.CellColor;
 import com.cellular.automata.cellularautomata.utils.CubeCenter;
 import com.cellular.automata.cellularautomata.utils.ObjectSelectHelper;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import static android.opengl.GLES20.glEnableVertexAttribArray;
 import static android.opengl.GLES20.glReadPixels;
 import static android.opengl.Matrix.invertM;
 import static android.opengl.Matrix.multiplyMM;
@@ -37,8 +39,9 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
     //shaders
     private FigureShader figureShader;
+    private GridShader gridShader;
 
-    private volatile float xAngle = -45f;
+    private volatile float xAngle = 0f;
     private volatile float yAngle = 10f;
 
     //moving figure left-right, up-down
@@ -54,6 +57,8 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
     //other
     private boolean screenshot = false;
+    private boolean figureVisible = true;
+    private boolean gridVisible = false;
 
     //mvp matrices
     private float[] viewMatrix = new float[16];
@@ -92,17 +97,22 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
     private final float[] bottomLightPosInEyeSpace = new float[4];
 
     public FigureShader getShader(){return figureShader;}
+    public GridShader getGridShader(){return gridShader;}
 
     public void setScaleFactor(float scaleFactor) {this.scaleFactor = scaleFactor; }
     public float getScaleFactor() {return scaleFactor;}
 
-    public void setStride(float strideX, float strideY){this.strideX = strideX; this.strideY = strideY; }
+    public void setStride(float strideX, float strideY){this.strideX += strideX; this.strideY = strideY; }
     public float getStrideX(){return strideX;}
     public float getStrideY(){return strideY;}
     public void setXAngle(float xAngle) { this.xAngle = xAngle; }
     public void setYAngle(float yAngle) { this.yAngle = yAngle > 360? yAngle - 360: yAngle; }
     public float getXAngle() {return this.xAngle; }
     public float getYAngle() { return this.yAngle; }
+    public void showGrid(){gridVisible = true;}
+    public void hideGrid(){gridVisible = false;}
+    public void showFigure(){figureVisible = true;}
+    public void hideFigure(){figureVisible = false;}
 
     public void screenshot(ScreenshotListener listener){this.screenshotListener = listener; this.screenshot = true;}
 
@@ -181,6 +191,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
         Matrix.setLookAtM(viewMatrix, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ);
 
         figureShader = new FigureShader(activityListener);
+        gridShader = new GridShader(activityListener);
 
 
         if ( applicationListener == null) return;
@@ -239,19 +250,77 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
     }
 
+    float previousStrideX = 0f;
+    float dx =0f, dz = 0f;
+
     private void calculateModelMatrix(){
 
         //manipulations with the cubes model matrix
         //push figure to the distance
         Matrix.setIdentityM(modelMatrix, 0);
-        Matrix.translateM(modelMatrix, 0, 0f, 0f, -7.0f);
+        //Matrix.translateM(modelMatrix, 0, 0f, 0f, -7.0f);
 
-        //set user made stride
-        Matrix.translateM(modelMatrix, 0, strideX/scaleFactor, -strideY/scaleFactor, 0.0f);
+//        //set user made stride
+//        Matrix.translateM(modelMatrix, 0, strideX/scaleFactor, -strideY/scaleFactor, 0.0f);
+//
+//        //set user made rotation
+//        rotateM(modelMatrix, 0, yAngle, 1f, 0f, 0f);
+//        rotateM(modelMatrix, 0, xAngle, 0f, 1f, 0f);
+//
+//        float dx, dz;
+//        dx = (float)(strideX/scaleFactor * Math.cos(Math.toRadians((double)xAngle)));
+//        dz = (float)(strideX/scaleFactor * Math.sin(Math.toRadians((double)xAngle)));
+//
+//
+//        GRFX.activityListener.logText("angle: " + String.valueOf(xAngle) +  ", dx = " + String.valueOf(dx) + ", dz = " + String.valueOf(dz));
+//
+//        //set user made stride
+//        Matrix.translateM(modelMatrix, 0, dz, -strideY/scaleFactor, dx);
 
-        //set user made rotation
-        rotateM(modelMatrix, 0, yAngle, 1f, 0f, 0f);
-        rotateM(modelMatrix, 0, xAngle, 0f, 1f, 0f);
+
+        // Position the eye in front of the origin.
+        float eyeX = 0.0f;
+        float eyeY = 0.0f;
+        float eyeZ = -0.5f;
+
+        // We are looking toward the distance
+        float lookX = 0.0f;
+        float lookY = 0.0f;
+        float lookZ = -5.0f;
+
+        // Set our up vector. This is where our head would be pointing were we holding the camera.
+        final float upX = 0.0f;
+        final float upY = 1.0f;
+        final float upZ = 0.0f;
+
+
+        // Set the view matrix. This matrix can be said to represent the camera position.
+        // NOTE: In OpenGL 1, a ModelView matrix is used, which is a combination of a model and
+        // view matrix. In OpenGL 2, we can keep track of these matrices separately if we choose.
+        Matrix.setLookAtM(viewMatrix, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ);
+
+        rotateM(viewMatrix, 0, yAngle, 1f, 0f, 0f);
+        rotateM(viewMatrix, 0, xAngle, 0f, 1f, 0f);
+
+
+        if(strideX != 0){
+
+            previousStrideX = strideX;
+
+            dx += (float)(strideX/scaleFactor * Math.cos(Math.toRadians((double)xAngle)));
+            dz += (float)(strideX/scaleFactor * Math.sin(Math.toRadians((double)xAngle)));
+
+            strideX = 0;
+
+        }
+
+
+        //if(cos)
+
+        GRFX.activityListener.logText("angle: " + String.valueOf(xAngle) +  ", dx = " + String.valueOf(dx) + ", dz = " + String.valueOf(dz));
+
+        Matrix.translateM(viewMatrix, 0, dx, -strideY/scaleFactor, dz);
+
 
 
     }
@@ -301,6 +370,7 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
     }
 
     private void setUniforms(){
+
         // Set our per-vertex lighting gridShader.
         figureShader.useProgram();
         figureShader.setUniforms(modelMatrix, viewMatrix, projectionMatrix,
@@ -310,10 +380,23 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
                     rightLightPosInEyeSpace,
                     topLightPosInEyeSpace,
                     bottomLightPosInEyeSpace);
+
+        if(gridVisible){
+
+            gridShader.useProgram();
+            gridShader.setUniforms(modelMatrix, viewMatrix, projectionMatrix);
+
+        }
     }
 
     private void setScaleFactor(){
         figureShader.setScaleFactor(scaleFactor);
+        if(gridVisible){
+
+            gridShader.setScaleFactor(scaleFactor);
+
+        }
+
     }
 
     //UTILS

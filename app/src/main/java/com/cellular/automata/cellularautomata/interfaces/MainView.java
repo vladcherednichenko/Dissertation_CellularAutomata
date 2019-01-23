@@ -8,6 +8,8 @@ import com.cellular.automata.cellularautomata.objects.Model;
 
 public interface MainView {
 
+    // text view
+
     void logGesture(String text);
 
     void logText(String text);
@@ -16,13 +18,21 @@ public interface MainView {
 
     void logFps (int fps);
 
-    void hideInterface();
+
+
+    // fragment view
 
     void openSaveFragment(Model model, Bitmap screenShot);
 
     void openLoadFragment();
 
     void removeFragments();
+
+
+
+    // Animation view
+
+    void hideInterface();
 
     void hideControlsBar();
 
@@ -36,12 +46,10 @@ public interface MainView {
 
     void showToolbar();
 
-
-
-
     void showProgressBar();
 
     void hideProgressBar();
+
 
 
     //getters

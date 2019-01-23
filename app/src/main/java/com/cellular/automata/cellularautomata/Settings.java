@@ -9,7 +9,20 @@ public class Settings {
     public static boolean debugTextViewEnabled = false;
     public static boolean antialiasing = false;
 
-    //figure
+    // Grid
+    public static String gridColor = "#828282";
+    public static boolean highLightedCentralLines = false;
+    public static String highlightedGridColor = "#a142f4";
+    public static float gridHeight = -0.5f;
+    public static boolean unlimitedGrid = false;
+    public static int unlimitedGridSize = 1000;
+    public static int maximumGridSize = 200;
+    public static int minimumGridSize = 10;
+    public static float gridOffsetX = 0.0f;
+    public static float gridOffsetZ = 0.0f;
+
+
+    // Figure
     public static float minimumFigureScale = 0.1f;
     public static float maximumFigureScale = 6.0f;
 
@@ -36,7 +49,7 @@ public class Settings {
             3, 3, 3
     };
 
-    //GLOBAL SETTINGS
+    // GLOBAL SETTINGS
     public static boolean log_fps_counter = true;
     public static boolean log_top = true;
     public static boolean log_down = true;

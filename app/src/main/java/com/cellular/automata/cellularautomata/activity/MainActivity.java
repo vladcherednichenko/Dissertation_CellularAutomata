@@ -17,7 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.cellular.automata.cellularautomata.Presenter;
+import com.cellular.automata.cellularautomata.presenters.Presenter;
 import com.cellular.automata.cellularautomata.Settings;
 import com.cellular.automata.cellularautomata.fragments.FragmentLoad;
 import com.cellular.automata.cellularautomata.fragments.FragmentSave;
@@ -107,8 +107,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
 
 
-
-
+    // Toolbar listeners
     private View.OnClickListener editButtonListener = new android.view.View.OnClickListener() {
         @Override
         public void onClick(android.view.View view) {
@@ -117,12 +116,17 @@ public class MainActivity extends AppCompatActivity implements MainView {
             if (editIconPressed){
 
                 editButton.setImageDrawable(getResources().getDrawable(R.drawable.edit_icon_cross));
+                switchToolbarToEditMode(true);
                 presenter.editPressed();
 
 
             }else{
 
                 editButton.setImageDrawable(getResources().getDrawable(R.drawable.edit_icon));
+                switchToolbarToEditMode(false);
+                if(colorBarOpened){
+                    hideColorPicker();
+                }
                 presenter.closeEditPressed();
 
             }
@@ -174,8 +178,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private View.OnClickListener removeCubeListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            hideToolbar();
-            showColorPicker();
+//            hideToolbar();
+//            showColorPicker();
         }
     };
 
@@ -384,6 +388,27 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
 
     // View for presenter
+
+    public void switchToolbarToEditMode(boolean isEditMode){
+
+        if(isEditMode){
+
+            int childAmount = toolBar.getChildCount();
+
+            if(childAmount <= 1) return;
+
+            toolBar.removeAllViews();
+            toolBar.addView(editButton);
+
+        }else{
+
+            toolBar.addView(stretchButton);
+            toolBar.addView(loadButton);
+            toolBar.addView(saveButton);
+
+        }
+
+    }
 
     public void hideEditBar(){
 

@@ -1,7 +1,9 @@
-package com.cellular.automata.cellularautomata;
+package com.cellular.automata.cellularautomata.presenters;
 
 import android.graphics.Bitmap;
 
+import com.cellular.automata.cellularautomata.GRFX;
+import com.cellular.automata.cellularautomata.Settings;
 import com.cellular.automata.cellularautomata.core.RendererController;
 import com.cellular.automata.cellularautomata.interfaces.MainView;
 import com.cellular.automata.cellularautomata.interfaces.ScreenshotListener;
@@ -136,13 +138,16 @@ public class Presenter {
 
     public void editPressed(){
 
+        rendererController.editModePressed();
         view.hideControlsBar();
         view.showEditBar();
+
 
     }
 
     public void closeEditPressed(){
 
+        rendererController.vewModePressed();
         view.hideEditBar();
         view.showControlsBar();
 

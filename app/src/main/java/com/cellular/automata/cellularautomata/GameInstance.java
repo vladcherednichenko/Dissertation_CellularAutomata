@@ -5,6 +5,7 @@ import com.cellular.automata.cellularautomata.core.RendererController;
 import com.cellular.automata.cellularautomata.core.LifeRule;
 import com.cellular.automata.cellularautomata.data.Automata;
 import com.cellular.automata.cellularautomata.interfaces.ApplicationListener;
+import com.cellular.automata.cellularautomata.objects.GridRenderBuilder;
 import com.cellular.automata.cellularautomata.objects.Model;
 import com.cellular.automata.cellularautomata.objects.ModelRenderBuilder;
 import com.cellular.automata.cellularautomata.utils.CellColor;
@@ -15,6 +16,7 @@ public class GameInstance implements ApplicationListener{
     private String TAG = "GameInstance";
 
     private ModelRenderBuilder modelRenderBuilder;
+    private GridRenderBuilder gridRenderBuilder;
     private Automata automata;
     private Environment environment;
     private RendererController rendererController;
@@ -120,13 +122,38 @@ public class GameInstance implements ApplicationListener{
                 break;
 
             }
+            case RendererController.EDIT_MODE:{
+
+                // do sth with this
+                // in the main Activity
+
+                modelRenderBuilder.squeeze();
+
+                if(gridRenderBuilder == null){
+                    gridRenderBuilder = new GridRenderBuilder(automata.getAutomataRadius());
+                }
+
+                gridRenderBuilder.build();
+                gridRenderBuilder.bindAttributesData();
+
+                environment.addGrid(gridRenderBuilder);
+
+                break;
+
+            }
+            case RendererController.VIEW_MODE:{
+
+                environment.removeGrids();
+                break;
+            }
 
 
 
         }
 
         automata.execute();
-        modelRenderBuilder.draw();
+        environment.draw();
+
 
         GRFX.activityListener.logFps(fps.frames());
 
