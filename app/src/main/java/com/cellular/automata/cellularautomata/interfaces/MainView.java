@@ -50,6 +50,10 @@ public interface MainView {
 
     void hideProgressBar();
 
+    void resetInterfaceToEdit();
+
+    void resetInterfaceToView();
+
 
 
     //getters

@@ -138,18 +138,18 @@ public class Presenter {
 
     public void editPressed(){
 
+        isEditState = true;
         rendererController.editModePressed();
-        view.hideControlsBar();
-        view.showEditBar();
+        view.resetInterfaceToEdit();
 
 
     }
 
     public void closeEditPressed(){
 
+        isEditState = false;
         rendererController.vewModePressed();
-        view.hideEditBar();
-        view.showControlsBar();
+        view.resetInterfaceToView();
 
     }
 

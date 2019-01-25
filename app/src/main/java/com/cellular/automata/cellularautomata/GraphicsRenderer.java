@@ -314,7 +314,6 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
         }
 
-
         //if(cos)
 
         GRFX.activityListener.logText("angle: " + String.valueOf(xAngle) +  ", dx = " + String.valueOf(dx) + ", dz = " + String.valueOf(dz));
@@ -334,8 +333,8 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
         //count all the light source position
         float lightDistance = Settings.lightDistance;
 
-        rotateM(frontLightModelMatrix, 0, yAngle, 1f, 0f, 0f);
-        rotateM(frontLightModelMatrix, 0, xAngle, 0f, 1f, 0f);
+//        rotateM(frontLightModelMatrix, 0, yAngle, 1f, 0f, 0f);
+//        rotateM(frontLightModelMatrix, 0, xAngle, 0f, 1f, 0f);
 
         System.arraycopy(frontLightModelMatrix ,0, backLightModelMatrix, 0, frontLightModelMatrix.length);
         System.arraycopy(frontLightModelMatrix ,0, rightLightModelMatrix, 0, frontLightModelMatrix.length);

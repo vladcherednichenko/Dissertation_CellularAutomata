@@ -37,9 +37,16 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private SurfaceViewForAutomata surfaceView;
     boolean isPlay = false;
-    boolean colorBarOpened = false;
+
+    boolean colorPickerOpened = false;
     boolean editIconPressed = false;
-    boolean stretchIconIsStretched = false;
+    boolean stretchButtonPressed = false;
+
+    // keep track of all the bars
+    boolean toolbarVisible = true;
+    boolean controlsBarVisible = true;
+    boolean editBarVisible = false;
+
 
     private LinearLayout toolBar, colorBar, controlsBar, layersToolbar;
     private ImageView
@@ -115,16 +122,12 @@ public class MainActivity extends AppCompatActivity implements MainView {
             editIconPressed = !editIconPressed;
             if (editIconPressed){
 
-                editButton.setImageDrawable(getResources().getDrawable(R.drawable.edit_icon_cross));
-                switchToolbarToEditMode(true);
                 presenter.editPressed();
 
 
             }else{
 
-                editButton.setImageDrawable(getResources().getDrawable(R.drawable.edit_icon));
-                switchToolbarToEditMode(false);
-                if(colorBarOpened){
+                if(colorPickerOpened){
                     hideColorPicker();
                 }
                 presenter.closeEditPressed();
@@ -137,18 +140,21 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private View.OnClickListener stretchButtonListener = new android.view.View.OnClickListener() {
         @Override
         public void onClick(android.view.View view) {
-            stretchIconIsStretched = !stretchIconIsStretched;
-            if(stretchIconIsStretched){
 
-                stretchButton.setImageDrawable(getResources().getDrawable(R.drawable.close_layers));
+            stretchButtonPressed = !stretchButtonPressed;
+
+            if(stretchButtonPressed){
+
                 presenter.stretchPressed();
 
             }else{
 
-                stretchButton.setImageDrawable(getResources().getDrawable(R.drawable.open_layers));
                 presenter.squeezePressed();
 
             }
+
+            switchStretchButtonToStretchMode(stretchButtonPressed);
+
         }
     };
 
@@ -322,17 +328,19 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private void showColorPicker(){
 
+        if(colorPickerOpened) return;
         colorBar.setVisibility(android.view.View.VISIBLE);
         colorBar.startAnimation(getRightSideSlideLeftAnimation());
-        colorBarOpened = true;
+        colorPickerOpened = true;
 
     }
 
     private void hideColorPicker(){
 
+        if(!colorPickerOpened) return;
         colorBar.startAnimation(getRightSideSlideRightAnimation());
         colorBar.setVisibility(android.view.View.INVISIBLE);
-        colorBarOpened = false;
+        colorPickerOpened = false;
 
     }
 
@@ -410,17 +418,31 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     }
 
-    public void hideEditBar(){
+    public void switchEditButtonToEditMode(boolean isEdit){
 
-        layersToolbar.startAnimation(getRightSideSlideRightAnimation());
-        layersToolbar.setVisibility(android.view.View.INVISIBLE);
+        if (isEdit){
+
+            editButton.setImageDrawable(getResources().getDrawable(R.drawable.edit_icon_cross));
+
+        }else{
+
+            editButton.setImageDrawable(getResources().getDrawable(R.drawable.edit_icon));
+
+        }
 
     }
 
-    public void showEditBar(){
+    public void switchStretchButtonToStretchMode(boolean isStretch){
 
-        layersToolbar.setVisibility(android.view.View.VISIBLE);
-        layersToolbar.startAnimation(getRightSideSlideLeftAnimation());
+        if(isStretch){
+
+            stretchButton.setImageDrawable(getResources().getDrawable(R.drawable.close_layers));
+
+        }else{
+
+            stretchButton.setImageDrawable(getResources().getDrawable(R.drawable.open_layers));
+
+        }
 
     }
 
@@ -477,7 +499,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if(colorBarOpened){
+                if(colorPickerOpened){
 
                     hideColorPicker();
 
@@ -554,9 +576,15 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     }
 
+
+
+
+
+    // ANIMATIONS
     @Override
     public void hideControlsBar(){
 
+        if(!controlsBarVisible) return;
         controlsBar.startAnimation(getRightSideSlideRightAnimation());
         controlsBar.setVisibility(android.view.View.INVISIBLE);
 
@@ -565,22 +593,46 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @Override
     public void showControlsBar(){
 
+        if(controlsBarVisible) return;
         controlsBar.setVisibility(android.view.View.VISIBLE);
         controlsBar.startAnimation(getRightSideSlideLeftAnimation());
+        controlsBarVisible = true;
 
     }
 
     public void hideToolbar(){
 
+        if(!toolbarVisible) return;
         toolBar.startAnimation(getLeftSideSlideLeftAnimation());
         toolBar.setVisibility(android.view.View.INVISIBLE);
+        toolbarVisible = false;
 
     }
 
     public void showToolbar(){
 
+        if(toolbarVisible) return;
         toolBar.setVisibility(android.view.View.VISIBLE);
         toolBar.startAnimation(getLeftSideSlideRightAnimation());
+        toolbarVisible = true;
+
+    }
+
+    public void hideEditBar(){
+
+        if(!editBarVisible) return;
+        layersToolbar.startAnimation(getRightSideSlideRightAnimation());
+        layersToolbar.setVisibility(android.view.View.INVISIBLE);
+        editBarVisible = false;
+
+    }
+
+    public void showEditBar(){
+
+        if(editBarVisible) return;
+        layersToolbar.setVisibility(android.view.View.VISIBLE);
+        layersToolbar.startAnimation(getRightSideSlideLeftAnimation());
+        editBarVisible = true;
 
     }
 
@@ -608,6 +660,49 @@ public class MainActivity extends AppCompatActivity implements MainView {
         });
 
     }
+
+
+
+
+    // RESET INTERFACE
+
+    public void resetInterfaceToEdit(){
+
+        editIconPressed = true;
+        stretchButtonPressed = false;
+
+        hideColorPicker();
+        hideControlsBar();
+        hideColorPicker();
+
+        showEditBar();
+        showToolbar();
+
+        switchToolbarToEditMode(editIconPressed);
+        switchEditButtonToEditMode(editIconPressed);
+        switchStretchButtonToStretchMode(stretchButtonPressed);
+
+    }
+
+    public void resetInterfaceToView(){
+
+        editIconPressed = false;
+        stretchButtonPressed = false;
+
+        hideColorPicker();
+        hideEditBar();
+
+        showToolbar();
+        showControlsBar();
+        showToolbar();
+
+        switchToolbarToEditMode(editIconPressed);
+        switchEditButtonToEditMode(editIconPressed);
+        switchStretchButtonToStretchMode(stretchButtonPressed);
+
+    }
+
+
 
 
 
