@@ -177,6 +177,38 @@ public class GridRenderBuilder {
 
     }
 
+    private void buildGrid(CubeCenter center, int gridSize){
+
+        int linesInRow = gridSize * 2-1;
+
+        vertexPositionData = new float[(linesInRow) * 4 * POSITION_COMPONENT_COUNT];
+        vertexColorData = new float[(linesInRow) * 4 * COLOR_COORDINATES_COMPONENT_COUNT];
+
+        resetOffsets();
+
+        CellColor color = new CellColor(Settings.gridColor);
+
+        grid = new ArrayList<>();
+
+        // Along X-axis
+        CubeCenter defaultXLineStartPoint = new CubeCenter(center.x - gridSize + Settings.renderCubeSize, center.y - Settings.renderCubeSize / 2, center.z - gridSize + Settings.renderCubeSize);
+        CubeCenter defaultXLineEndPoint = new CubeCenter(center.x - gridSize + Settings.renderCubeSize, center.y - Settings.renderCubeSize / 2, center.z + gridSize - Settings.renderCubeSize);
+
+        // Along Z-axis
+        CubeCenter defaultZLineStartPoint = new CubeCenter(center.x - gridSize + Settings.renderCubeSize, center.y - Settings.renderCubeSize / 2, center.z - gridSize + Settings.renderCubeSize);
+        CubeCenter defaultZLineEndPoint = new CubeCenter(center.x + gridSize - Settings.renderCubeSize, center.y - Settings.renderCubeSize / 2, center.z - gridSize + Settings.renderCubeSize);
+
+        // Create lines along X-axis
+        for (int i = 0; i< linesInRow; i++){
+
+            appendLine(new Line(defaultXLineStartPoint, defaultXLineEndPoint, highLightColor));
+
+        }
+
+        // Create lines along Z-axis
+
+
+    }
 
     private void buildGrid(CubeCenter center, int minX, int maxX, int minZ, int maxZ){
 

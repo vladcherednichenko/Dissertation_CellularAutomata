@@ -587,6 +587,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         if(!controlsBarVisible) return;
         controlsBar.startAnimation(getRightSideSlideRightAnimation());
         controlsBar.setVisibility(android.view.View.INVISIBLE);
+        controlsBarVisible = false;
 
     }
 
@@ -694,7 +695,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         showToolbar();
         showControlsBar();
-        showToolbar();
 
         switchToolbarToEditMode(editIconPressed);
         switchEditButtonToEditMode(editIconPressed);
