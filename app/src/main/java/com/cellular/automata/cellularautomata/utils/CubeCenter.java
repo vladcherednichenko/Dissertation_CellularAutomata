@@ -17,11 +17,16 @@ public class CubeCenter {
     public void translateY(float dy){this.y+=dy; }
     public void translateZ(float dz){this.z+=dz; }
 
+    public CubeCenter translateX_(float dx){this.x+=dx; return this;}
+    public CubeCenter translateY_(float dy){this.y+=dy; return this;}
+    public CubeCenter translateZ_(float dz){this.z+=dz; return this;}
+
     public void translate(Geometry.Vector vector){
         x += vector.x;
         y += vector.y;
         z += vector.z;
     }
+
 
     public CubeCenter translateAndCopy(Geometry.Vector vector) {
         return new CubeCenter(

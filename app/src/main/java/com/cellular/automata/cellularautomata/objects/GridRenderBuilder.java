@@ -6,19 +6,21 @@ import com.cellular.automata.cellularautomata.GRFX;
 import com.cellular.automata.cellularautomata.GraphicsRenderer;
 import com.cellular.automata.cellularautomata.Settings;
 import com.cellular.automata.cellularautomata.data.VertexArray;
-import com.cellular.automata.cellularautomata.shaders.GridShader;
 import com.cellular.automata.cellularautomata.utils.CellColor;
 import com.cellular.automata.cellularautomata.utils.CubeCenter;
 
 import java.util.ArrayList;
 
+import static android.opengl.GLES10.GL_LINE_SMOOTH;
 import static android.opengl.GLES20.GL_ARRAY_BUFFER;
 import static android.opengl.GLES20.GL_LINES;
 import static android.opengl.GLES20.glBindBuffer;
 import static android.opengl.GLES20.glDeleteBuffers;
 import static android.opengl.GLES20.glDrawArrays;
+import static android.opengl.GLES20.glEnable;
 import static android.opengl.GLES20.glEnableVertexAttribArray;
 import static android.opengl.GLES20.glGenBuffers;
+import static android.opengl.GLES20.glLineWidth;
 import static android.opengl.GLES20.glVertexAttribPointer;
 
 public class GridRenderBuilder {
@@ -29,22 +31,13 @@ public class GridRenderBuilder {
     private float cubeSize = 1f;
 
     private int dimensionsNumber = 4;
-    private float[] gridDimensions = new float[dimensionsNumber];
 
-    private final int gridMinX = 0;
-    private final int gridMaxX = 1;
-
-    private final int gridMinZ = 2;
-    private final int gridMaxZ = 3;
-
-    public int maxGridSize = Settings.unlimitedGrid ? Settings.unlimitedGridSize : Settings.maximumGridSize;
-    public int minGridSize = Settings.minimumGridSize;
-    public int gridSize = minGridSize;
+    public int gridRadius;
 
     private CubeCenter gridCenter = new CubeCenter(Settings.gridOffsetX, Settings.gridHeight, Settings.gridOffsetZ);
     private int vertexNumber;
 
-    private VertexArray vertexPosArray;
+    private VertexArray gridVertexPosArray;
     private VertexArray vertexColorArray;
 
     private float[] vertexPositionData;
@@ -59,304 +52,106 @@ public class GridRenderBuilder {
 
     private ArrayList<CubeCenter> tileCenters;
     private ArrayList<Line> grid;
+    private Square square;
 
+    // Getters
 
     public ArrayList<CubeCenter> getTileCenters(){return tileCenters; }
-    public boolean isGridMinimumSize(){return gridSize == minGridSize;}
-    public boolean isGridMaximumSize(){return gridSize == maxGridSize;}
 
 
-    public GridRenderBuilder(){
 
-        gridDimensions[gridMinX] = -minGridSize/2;
-        gridDimensions[gridMaxX] = minGridSize/2;
-        gridDimensions[gridMinZ] = -minGridSize/2;
-        gridDimensions[gridMaxZ] = minGridSize/2;
+    // Main
 
-    }
+    public GridRenderBuilder(int automataRadius) {
 
-    public GridRenderBuilder(int automataRadius){
-
-        this.minGridSize = automataRadius;
-        gridDimensions[gridMinX] = -minGridSize/2;
-        gridDimensions[gridMaxX] = minGridSize/2;
-        gridDimensions[gridMinZ] = -minGridSize/2;
-        gridDimensions[gridMaxZ] = minGridSize/2;
-    }
-
-    public float getMaxGridXYSize(){
-        return Math.max(
-                gridDimensions[gridMaxX] - gridDimensions[gridMinX],
-                gridDimensions[gridMaxZ] - gridDimensions[gridMinZ]);
-    }
-
-    public void updateGrid(float minX, float maxX, float minZ, float maxZ){
-
-        if(minX == gridDimensions[gridMinX] || maxX == gridDimensions[gridMaxX] || minZ == gridDimensions[gridMinZ] || maxZ == gridDimensions[gridMaxZ]){
-
-            if(gridSize >=maxGridSize){
-
-                gridSize = maxGridSize;
-
-
-            }else{
-
-                gridSize+=2;
-                buildGrid(gridSize, gridCenter);
-                buildTiles(gridSize, gridCenter);
-                bindAttributesData();
-
-            }
-
-        }
+        this.gridRadius = automataRadius;
+        this.square = new Square(gridCenter, automataRadius * 2 - 1);
 
     }
 
+    public void updateGridSize(int size){
 
-    public void setGridSize(int size){
+        gridRadius = size;
 
-        if(size > maxGridSize) size = maxGridSize;
-        if(size < minGridSize) size = minGridSize;
-
-        gridSize = size;
-
-        buildGrid(gridSize, gridCenter);
-        buildTiles(gridSize, gridCenter);
+        buildGrid(gridCenter, gridRadius);
+        buildTiles(gridCenter, gridRadius);
         bindAttributesData();
 
     }
-
-    public void setGridSize(float figureMinX, float figureMaxX, float figureMinZ, float figureMaxZ){
-
-        gridDimensions[gridMinX] = figureMinX <= (-1 * minGridSize /2)? figureMinX - 1: - minGridSize /2;
-        gridDimensions[gridMaxX] = figureMaxX >= minGridSize /2?  figureMaxX + 1: minGridSize /2 ;
-
-        gridDimensions[gridMinZ] = figureMinZ <= (-1* minGridSize /2)? figureMinZ - 1 : - minGridSize /2;
-        gridDimensions[gridMaxZ] = figureMaxZ >= minGridSize /2? figureMaxZ + 1 : minGridSize /2;
-
-
-        buildGrid(
-                gridCenter,
-                Math.round(gridDimensions[gridMinX]),
-                Math.round(gridDimensions[gridMaxX]),
-                Math.round(gridDimensions[gridMinZ]),
-                Math.round(gridDimensions[gridMaxZ])
-        );
-
-        buildTiles(
-                gridCenter,
-                Math.round(gridDimensions[gridMinX]),
-                Math.round(gridDimensions[gridMaxX]),
-                Math.round(gridDimensions[gridMinZ]),
-                Math.round(gridDimensions[gridMaxZ])
-        );
-
-        bindAttributesData();
-
-
-    }
-
 
     public void build(){
 
-        buildGrid(
-                gridCenter,
-                Math.round(gridDimensions[gridMinX]),
-                Math.round(gridDimensions[gridMaxX]),
-                Math.round(gridDimensions[gridMinZ]),
-                Math.round(gridDimensions[gridMaxZ])
-        );
-
-        buildTiles(
-                gridCenter,
-                Math.round(gridDimensions[gridMinX]),
-                Math.round(gridDimensions[gridMaxX]),
-                Math.round(gridDimensions[gridMinZ]),
-                Math.round(gridDimensions[gridMaxZ])
-        );
+        buildGrid(gridCenter, gridRadius);
+        square.build();
+        bindAttributesData();
 
     }
 
     private void buildGrid(CubeCenter center, int gridSize){
 
-        int linesInRow = gridSize * 2-1;
+        int linesInRow = gridSize * 2;
 
         vertexPositionData = new float[(linesInRow) * 4 * POSITION_COMPONENT_COUNT];
         vertexColorData = new float[(linesInRow) * 4 * COLOR_COORDINATES_COMPONENT_COUNT];
 
         resetOffsets();
 
-        CellColor color = new CellColor(Settings.gridColor);
+        CellColor lineColor = new CellColor(Settings.gridColor);
 
         grid = new ArrayList<>();
 
         // Along X-axis
-        CubeCenter defaultXLineStartPoint = new CubeCenter(center.x - gridSize + Settings.renderCubeSize, center.y - Settings.renderCubeSize / 2, center.z - gridSize + Settings.renderCubeSize);
-        CubeCenter defaultXLineEndPoint = new CubeCenter(center.x - gridSize + Settings.renderCubeSize, center.y - Settings.renderCubeSize / 2, center.z + gridSize - Settings.renderCubeSize);
+        CubeCenter defaultXLineStartPoint = new CubeCenter(center.x - gridSize + Settings.renderCubeSize / 2, center.y, center.z - gridSize + Settings.renderCubeSize/2);
+        CubeCenter defaultXLineEndPoint = new CubeCenter(center.x - gridSize + Settings.renderCubeSize / 2, center.y , center.z + gridSize - Settings.renderCubeSize/2);
 
         // Along Z-axis
-        CubeCenter defaultZLineStartPoint = new CubeCenter(center.x - gridSize + Settings.renderCubeSize, center.y - Settings.renderCubeSize / 2, center.z - gridSize + Settings.renderCubeSize);
-        CubeCenter defaultZLineEndPoint = new CubeCenter(center.x + gridSize - Settings.renderCubeSize, center.y - Settings.renderCubeSize / 2, center.z - gridSize + Settings.renderCubeSize);
+        CubeCenter defaultZLineStartPoint = new CubeCenter(center.x - gridSize + Settings.renderCubeSize / 2, center.y , center.z - gridSize + Settings.renderCubeSize/2);
+        CubeCenter defaultZLineEndPoint = new CubeCenter(center.x + gridSize - Settings.renderCubeSize / 2, center.y , center.z - gridSize + Settings.renderCubeSize/2);
 
         // Create lines along X-axis
         for (int i = 0; i< linesInRow; i++){
 
-            appendLine(new Line(defaultXLineStartPoint, defaultXLineEndPoint, highLightColor));
+            appendLine(new Line(defaultXLineStartPoint, defaultXLineEndPoint, lineColor));
+
+            defaultXLineStartPoint.translateX(1f);
+            defaultXLineEndPoint.translateX(1f);
 
         }
 
         // Create lines along Z-axis
+        for (int i = 0; i< linesInRow; i++){
 
+            appendLine(new Line(defaultZLineStartPoint, defaultZLineEndPoint, lineColor));
 
-    }
-
-    private void buildGrid(CubeCenter center, int minX, int maxX, int minZ, int maxZ){
-
-        int size = (maxX - minX) + (maxZ - minZ) + 2;
-
-        vertexPositionData = new float[(size+1) * 4 * POSITION_COMPONENT_COUNT];
-        vertexColorData = new float[(size+1) * 4 * COLOR_COORDINATES_COMPONENT_COUNT];
-
-        resetOffsets();
-
-        CellColor color = new CellColor(Settings.gridColor);
-        CellColor highLightColor = new CellColor(Settings.highlightedGridColor);
-
-        CubeCenter defaultVerticalLineStartPoint = new CubeCenter(center.x + minX, center.y, center.z + minZ);
-        CubeCenter defaultVerticalLineEndPoint = new CubeCenter(center.x + minX, center.y, center.z + maxZ);
-
-        CubeCenter defaultHorizontalLineStartPoint = new CubeCenter(center.x + minX, center.y, center.z + minZ);
-        CubeCenter defaultHorizontalLineEndPoint = new CubeCenter(center.x + maxX, center.y, center.z + minZ);
-
-        grid = new ArrayList<>();
-        int linesInOneRow = (size+1);
-
-        for(int i = minX; i<= maxX; i++){
-
-            //create vertical lines
-            if(Settings.highLightedCentralLines && i == 0){
-                appendLine(new Line(defaultVerticalLineStartPoint, defaultVerticalLineEndPoint, highLightColor));
-            }else{
-                appendLine(new Line(defaultVerticalLineStartPoint, defaultVerticalLineEndPoint, color));
-            }
-            defaultVerticalLineStartPoint.translateX(1f);
-            defaultVerticalLineEndPoint.translateX(1f);
-
-        }
-
-        for(int i = minZ; i<= maxZ; i++){
-
-            //create horizontal lines
-            if(Settings.highLightedCentralLines && i == 0){
-                appendLine(new Line(defaultHorizontalLineStartPoint, defaultHorizontalLineEndPoint, highLightColor));
-            }else{
-                appendLine(new Line(defaultHorizontalLineStartPoint, defaultHorizontalLineEndPoint, color));
-            }
-            defaultHorizontalLineStartPoint.translateZ(1f);
-            defaultHorizontalLineEndPoint.translateZ(1f);
+            defaultZLineStartPoint.translateZ(1f);
+            defaultZLineEndPoint.translateZ(1f);
 
         }
 
         vertexNumber = vertexPositionData.length / POSITION_COMPONENT_COUNT;
 
-        vertexPosArray = new VertexArray(vertexPositionData);
+        gridVertexPosArray = new VertexArray(vertexPositionData);
         vertexColorArray = new VertexArray(vertexColorData);
 
         vertexColorData = null;
         vertexPositionData = null;
 
-    }
-
-    private void buildGrid(int size, CubeCenter center){
-
-        vertexPositionData = new float[(size+1) * 4 * POSITION_COMPONENT_COUNT];
-        vertexColorData = new float[(size+1) * 4 * COLOR_COORDINATES_COMPONENT_COUNT];
-
-        resetOffsets();
-
-        CellColor color = new CellColor(Settings.gridColor);
-
-        CubeCenter defaultHorizontalStartPoint = new CubeCenter(center.x - size/2, center.y, center.z - size / 2f);
-        CubeCenter defaultHorizontalEndPoint = new CubeCenter(center.x - size/2, center.y, center.z + size / 2f);
-
-        CubeCenter defaultVerticalStartPoint = new CubeCenter(center.x -size / 2f, center.y, center.z - size/2);
-        CubeCenter defaultVerticalEndPoint = new CubeCenter(center.x + size / 2f, center.y, center.z - size/2);
-
-
-
-        grid = new ArrayList<>();
-        int linesInOneRow = (size+1);
-
-
-        for (int i = 0; i< linesInOneRow; i++){
-
-            //create horizontal lines
-            appendLine(new Line(defaultHorizontalStartPoint.clone(), defaultHorizontalEndPoint.clone(), color));
-            defaultHorizontalEndPoint.translateX(1f);
-            defaultHorizontalStartPoint.translateX(1f);
-
-            //create vertical lines
-            appendLine(new Line(defaultVerticalStartPoint, defaultVerticalEndPoint, color));
-            defaultVerticalEndPoint.translateZ(1f);
-            defaultVerticalStartPoint.translateZ(1f);
-        }
-
-
-        vertexNumber = vertexPositionData.length / POSITION_COMPONENT_COUNT;
-
-        vertexPosArray = new VertexArray(vertexPositionData);
-        vertexColorArray = new VertexArray(vertexColorData);
-
-        vertexColorData = null;
-        vertexPositionData = null;
 
     }
 
-    private void buildTiles(CubeCenter gridCenter, int minX, int maxX, int minZ, int maxZ){
+    private void buildTiles(CubeCenter gridCenter, float gridRadius) {
 
         tileCenters = new ArrayList<>();
 
-        CubeCenter defaultTilePosition = new CubeCenter( gridCenter.x + minX + cubeSize/2, gridCenter.y - cubeSize / 2, gridCenter.z + minZ + cubeSize/2);
+        // in the corner
+        CubeCenter defaultTilePosition = new CubeCenter( gridCenter.x - gridRadius - 1, gridCenter.y - Settings.renderCubeSize / 2, gridCenter.z - gridRadius - 1);
 
+        for (int i = 0; i < gridRadius * 2 - 1; i++){
 
-        for (int i = 0; i<= maxZ - minZ; i++){
-            for (int j = 0; j<= maxX - minX; j++){
-
-                CubeCenter center = defaultTilePosition.clone();
-                center.translateX(cubeSize * j);
-
-                tileCenters.add(center);
-
-
-            }
-
-            defaultTilePosition.translateZ(cubeSize);
-
-        }
-
-    }
-
-    private void buildTiles(float gridSize, CubeCenter gridCenter){
-
-        tileCenters = new ArrayList<>();
-
-        CubeCenter defaultTilePosition = new CubeCenter( gridCenter.x - gridSize/2 + cubeSize/2, gridCenter.y - cubeSize / 2, gridCenter.z-gridSize/2 + cubeSize/2);
-
-        gridDimensions[gridMinX] = defaultTilePosition.x;
-        gridDimensions[gridMinZ] = defaultTilePosition.z;
-
-        for (int i = 0; i< gridSize; i++){
-
-
-            for (int j = 0; j< gridSize; j++){
+            for (int j = 0; j < gridRadius * 2 - 1; j++){
 
                 CubeCenter center = defaultTilePosition.clone();
                 center.translateX(cubeSize * j);
-
-                tileCenters.add(center);
-
-                gridDimensions[gridMaxX] = center.x;
-                gridDimensions[gridMaxZ] = center.z;
 
             }
 
@@ -369,7 +164,7 @@ public class GridRenderBuilder {
 
     public void bindAttributesData(){
 
-        if(vertexPosArray == null || vertexColorArray == null) return;
+        if(gridVertexPosArray == null || vertexColorArray == null) return;
 
         glDeleteBuffers(2, new int[]{vertexBufferPositionIdx, vertexBufferColorIdx}, 0);
 
@@ -379,18 +174,21 @@ public class GridRenderBuilder {
         vertexBufferPositionIdx = buffers[0];
         vertexBufferColorIdx = buffers[1];
 
-        vertexPosArray.bindBufferToVBO(vertexBufferPositionIdx);
+        gridVertexPosArray.bindBufferToVBO(vertexBufferPositionIdx);
         vertexColorArray.bindBufferToVBO(vertexBufferColorIdx);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-        vertexPosArray = null;
+        gridVertexPosArray = null;
         vertexColorArray = null;
 
+        square.bindAttributesData();
 
     }
 
     public void draw(){
+
+        square.draw();
 
         GraphicsRenderer renderer = GRFX.renderer;
 
@@ -404,7 +202,9 @@ public class GridRenderBuilder {
         glEnableVertexAttribArray(renderer.getGridShader().getColorAttributeLocation());
         glVertexAttribPointer(renderer.getGridShader().getColorAttributeLocation(), COLOR_COORDINATES_COMPONENT_COUNT, GLES20.GL_FLOAT, false, 0, 0);
 
+        glEnable(GL_LINE_SMOOTH);
         glDrawArrays(GL_LINES, 0, vertexNumber);
+
 
     }
 
