@@ -13,6 +13,7 @@ public class Settings {
 
     // Automata
     public static int defaultAutomataRadius = 10;
+    public static float sliceHeight = 5f;
 
     // Cube
     public static String defaultCubeColor = "#ff0000";

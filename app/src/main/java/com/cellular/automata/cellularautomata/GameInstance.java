@@ -22,6 +22,10 @@ public class GameInstance implements ApplicationListener{
     private RendererController rendererController;
     private FPSCounter fps = new FPSCounter();
 
+    private int actionWithCube = 0;
+
+    private boolean gridIsVisible = false;
+
     private Model testModel;
 
     @Override
@@ -60,6 +64,12 @@ public class GameInstance implements ApplicationListener{
 
         switch (command){
 
+            case -1:{
+
+                break;
+
+            }
+
             //MAIN CONTROLS
             case RendererController.START:{
 
@@ -93,17 +103,30 @@ public class GameInstance implements ApplicationListener{
                 //adding / painting / deleting a cube
                 if(modelRenderBuilder.isTouched()){
 
-                    //Log.d(TAG, String.valueOf(rule.getNeighboursAmount(new RenderCube(modelRenderBuilder.getTouchResult().touchedCubeCenter, null, false), modelRenderBuilder.getRenderMap())));
-
                     String color = Integer.toHexString(rendererController.currentColor);
 
-                    if(color.length()>=6){
+                    //Log.d(TAG, String.valueOf(rule.getNeighboursAmount(new RenderCube(modelRenderBuilder.getTouchResult().touchedCubeCenter, null, false), modelRenderBuilder.getRenderMap())));
 
-                        color = "#" + color.substring(2);
-                        modelRenderBuilder.paintCube(modelRenderBuilder.getTouchResult().touchedCubeCenter, new CellColor(color));
+                    if(actionWithCube == RendererController.ADD_CUBE){
+
+                        modelRenderBuilder.addNewCube(modelRenderBuilder.getTouchResult().newCubeCenter, new CellColor(color));
 
                     }
-                    //modelRenderBuilder.addNewCube(modelRenderBuilder.getTouchResult().newCubeCenter, new CellColor("#4286f4"));
+                    if(actionWithCube == RendererController.REMOVE_CUBE){
+
+                        modelRenderBuilder.deleteCube(modelRenderBuilder.getTouchResult().touchedCubeCenter);
+
+                    }
+                    if(actionWithCube == RendererController.PAINT_CUBE){
+
+                        if(color.length()>=6){
+
+                            color = "#" + color.substring(2);
+                            modelRenderBuilder.paintCube(modelRenderBuilder.getTouchResult().touchedCubeCenter, new CellColor(color));
+
+                        }
+                    }
+
                 }
 
                 break;
@@ -126,8 +149,8 @@ public class GameInstance implements ApplicationListener{
 
                 // do sth with this
                 // in the main Activity
-
                 modelRenderBuilder.squeeze();
+                modelRenderBuilder.setViewMode(false);
 
                 if(gridRenderBuilder == null){
                     gridRenderBuilder = new GridRenderBuilder(automata.getAutomataRadius());
@@ -143,17 +166,74 @@ public class GameInstance implements ApplicationListener{
             }
             case RendererController.VIEW_MODE:{
 
+                modelRenderBuilder.setViewMode(true);
+                gridIsVisible = false;
                 environment.removeGrids();
+                GRFX.renderer.resetAdditionalStride();
+                break;
+            }
+            case RendererController.LAYER_UP:{
+
+                GRFX.renderer.translateFigureVertical(-Settings.renderCubeSize);
+                modelRenderBuilder.layerUp();
                 break;
             }
 
+            case RendererController.LAYER_DOWN:{
+
+                GRFX.renderer.translateFigureVertical(Settings.renderCubeSize);
+                modelRenderBuilder.layerDown();
+
+                break;
+            }
+
+            case RendererController.SHOW_GRID:{
+
+                gridIsVisible = true;
+                modelRenderBuilder.setSliced(true);
+                break;
+            }
+            case RendererController.HIDE_GRID:{
+
+                gridIsVisible = false;
+                modelRenderBuilder.setSliced(false);
+                break;
+            }
+            case RendererController.PAINT_CUBE:{
+
+                actionWithCube = RendererController.PAINT_CUBE;
+                break;
+
+            }
+            case RendererController.ADD_CUBE:{
+
+                actionWithCube = RendererController.ADD_CUBE;
+                break;
+
+            }
+            case RendererController.REMOVE_CUBE:{
+
+                actionWithCube = RendererController.REMOVE_CUBE;
+                break;
+
+            }
 
 
         }
 
-        automata.execute();
-        environment.draw();
+        GRFX.renderer.setFigureUniforms();
+        GRFX.renderer.setFigureScaleFactor();
 
+        automata.execute();
+        modelRenderBuilder.draw();
+
+        if(gridIsVisible){
+
+            GRFX.renderer.setGridUniforms();
+            GRFX.renderer.setGridScaleFactor();
+
+            gridRenderBuilder.draw();
+        }
 
         GRFX.activityListener.logFps(fps.frames());
 
@@ -166,5 +246,6 @@ public class GameInstance implements ApplicationListener{
         //not needed
 
     }
+
 
 }

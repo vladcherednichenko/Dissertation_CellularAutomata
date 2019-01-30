@@ -2,6 +2,7 @@ package com.cellular.automata.cellularautomata.animation;
 
 import android.opengl.GLES20;
 
+import com.cellular.automata.cellularautomata.Settings;
 import com.cellular.automata.cellularautomata.data.CubeDataHolder;
 import com.cellular.automata.cellularautomata.objects.RenderCube;
 import com.cellular.automata.cellularautomata.shaders.FigureShader;
@@ -12,9 +13,9 @@ import static android.opengl.GLES20.glDrawArrays;
 
 public class Animator {
 
-    private float animationDuration = 500;
+    private float fullSstretchDuration = 500;
     private int animationFramesAmount = 60;
-    private float framesPerMS = (float)animationFramesAmount / animationDuration;
+    private float framesPerMS = (float)animationFramesAmount / fullSstretchDuration;
     private long animationStartTime;
     private int framesDrawn = -1;
 
@@ -27,6 +28,8 @@ public class Animator {
 
     private float[] scatterVector = {0.0f, 0.0f, 0.0f};
     private float[] resetScatterVector = {0.0f, 0.0f, 0.0f};
+    private float[] sliceVector = {0.0f, 0.0f, 0.0f};
+    private float[] resetSliceVector = {0.0f, 0.0f, 0.0f};
 
     private final int cubeNumber;
     private final int objectHeight;
@@ -41,7 +44,7 @@ public class Animator {
     }
 
 
-    public void drawOpenedFigure(FigureShader shader){
+    public void drawFullStretchedFigure(FigureShader shader){
 
         if(animationSqueezeIsRunning){
             drawClosedFigure(shader);
@@ -80,7 +83,7 @@ public class Animator {
     public void drawClosedFigure(FigureShader shader){
 
         if (animationStretchIsRunning){
-            drawOpenedFigure(shader);
+            drawFullStretchedFigure(shader);
             return;
         }
 
@@ -92,7 +95,44 @@ public class Animator {
         }
 
 
-    };
+    }
+
+    public void animateSlice(int layerToSlice, FigureShader shader){
+
+
+
+    }
+
+    public void animateAssemble(){
+
+
+
+    }
+
+    public void drawSlicedFigure(int layerToSlice, FigureShader shader){
+
+        sliceVector = new float[]{0.0f, Settings.sliceHeight, 0.0f};
+
+        int cubesDrawDown = cubeNumber;
+
+        for (int i = 0; i< renderCubes.size(); i++){
+
+            RenderCube renderCube = renderCubes.get(i);
+
+            if (renderCube.center.y >layerToSlice ){
+
+                cubesDrawDown = i;
+                break;
+
+            }
+        }
+
+        shader.setScatter(resetSliceVector);
+        glDrawArrays(GLES20.GL_TRIANGLES, 0, CubeDataHolder.getInstance().sizeInVertex * cubesDrawDown);
+        shader.setScatter(sliceVector);
+        glDrawArrays(GLES20.GL_TRIANGLES, CubeDataHolder.getInstance().sizeInVertex * cubesDrawDown , CubeDataHolder.getInstance().sizeInVertex * (cubeNumber - cubesDrawDown));
+
+    }
 
     public void animateStretch(FigureShader shader){
 
@@ -116,7 +156,7 @@ public class Animator {
             animationStretchIsRunning = false;
             figureIsOpened = true;
             framesDrawn = -1;
-            drawOpenedFigure(shader);
+            drawFullStretchedFigure(shader);
             return;
         }
 

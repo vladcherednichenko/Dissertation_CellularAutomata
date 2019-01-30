@@ -211,9 +211,7 @@
             android:layout_height="@dimen/toolbar_icons_size"
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
-            app:srcCompat="@drawable/open_layers"
-            tools:layout_editor_absoluteX="94dp"
-            tools:layout_editor_absoluteY="90dp" />
+            app:srcCompat="@drawable/open_layers" />
 
         <ImageView
             android:id="@+id/tool_load"
@@ -221,9 +219,7 @@
             android:layout_height="@dimen/toolbar_icons_size"
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
-            app:srcCompat="@drawable/load_medium"
-            tools:layout_editor_absoluteX="432dp"
-            tools:layout_editor_absoluteY="183dp" />
+            app:srcCompat="@drawable/load_medium" />
 
         <ImageView
             android:id="@+id/tool_save"
@@ -231,9 +227,17 @@
             android:layout_height="@dimen/toolbar_icons_size"
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
-            app:srcCompat="@drawable/save_medium"
-            tools:layout_editor_absoluteX="200dp"
-            tools:layout_editor_absoluteY="39dp" />
+            app:srcCompat="@drawable/save_medium" />
+
+        <ImageView
+            android:id="@+id/tool_grid"
+            android:layout_width="@dimen/toolbar_icons_size"
+            android:layout_height="@dimen/toolbar_icons_size"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/grid_icon" />
+
+
     </LinearLayout>
 
     <TextView

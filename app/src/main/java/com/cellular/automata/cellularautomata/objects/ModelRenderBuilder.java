@@ -5,10 +5,9 @@ import android.util.Log;
 
 import com.cellular.automata.cellularautomata.GRFX;
 import com.cellular.automata.cellularautomata.GraphicsRenderer;
+import com.cellular.automata.cellularautomata.Settings;
 import com.cellular.automata.cellularautomata.animation.Animator;
-import com.cellular.automata.cellularautomata.core.Rule;
 import com.cellular.automata.cellularautomata.data.CubeDataHolder;
-import com.cellular.automata.cellularautomata.data.CubeMap;
 import com.cellular.automata.cellularautomata.data.RenderCubeMap;
 import com.cellular.automata.cellularautomata.data.VertexArray;
 import com.cellular.automata.cellularautomata.interfaces.CellSelectListener;
@@ -17,7 +16,6 @@ import com.cellular.automata.cellularautomata.utils.CubeCenter;
 import com.cellular.automata.cellularautomata.utils.ObjectSelectHelper;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import static android.opengl.GLES20.GL_ARRAY_BUFFER;
 import static android.opengl.GLES20.glBindBuffer;
@@ -57,7 +55,9 @@ public class ModelRenderBuilder {
     private CellSelectListener selectListener;
     private boolean isTouched = false;
     private boolean isStretched = false;
-    private boolean viewMode = false;
+    private boolean isSliced = false;
+    private boolean viewMode = true;
+    private int currentLayerOpened = 0;
 
     private ObjectSelectHelper.TouchResult touchResult;
 
@@ -145,13 +145,44 @@ public class ModelRenderBuilder {
 
     }
 
+    public void setViewMode(boolean isViewMode){
+
+        this.viewMode = isViewMode;
+        isSliced = false;
+        resetCurrentLayer();
+
+    }
+
+    public void setSliced(boolean isSliced){
+
+        this.isSliced = isSliced;
+
+    }
+
+    public void layerUp(){
+
+        this.currentLayerOpened += 1;
+
+    }
+
+    public void layerDown(){
+
+        this.currentLayerOpened -= 1;
+
+    }
+
+
+
+    private void resetCurrentLayer(){
+        this.currentLayerOpened = 0;
+    }
+
     public void stretch(){
 
         if(isStretched) return;
 
         animator = new Animator(renderMap.size(), renderMap.height(), renderMap.sort());
         isStretched = true;
-        viewMode = true;
 
     }
 
@@ -202,6 +233,7 @@ public class ModelRenderBuilder {
     //general function is called first when we want to delete the cube
     public void deleteCube(CubeCenter center){
 
+        renderMap.remove(new RenderCube(center, new CellColor ("#ffffff")));
 
 
     }
@@ -314,21 +346,30 @@ public class ModelRenderBuilder {
 
             if(isStretched){
 
-                animator.drawOpenedFigure(renderer.getShader());
+                animator.drawFullStretchedFigure(renderer.getShader());
 
             }else{
 
                 animator.drawClosedFigure(renderer.getShader());
-                if(!animator.animationIsRunning())
-                    viewMode = false;
 
             }
 
         }else{
 
-            float[] resetScatterVector = {0.0f, 0.0f, 0.0f};
-            renderer.getShader().setScatter(resetScatterVector);
-            glDrawArrays(GLES20.GL_TRIANGLES, 0, CubeDataHolder.getInstance().sizeInVertex * howManyCells());
+
+            if(isSliced){
+
+                animator.drawSlicedFigure(currentLayerOpened, renderer.getShader());
+
+            }else{
+
+                float[] resetScatterVector = {0.0f, 0.0f, 0.0f};
+                renderer.getShader().setScatter(resetScatterVector);
+                glDrawArrays(GLES20.GL_TRIANGLES, 0, CubeDataHolder.getInstance().sizeInVertex * howManyCells());
+
+            }
+
+
 
         }
 

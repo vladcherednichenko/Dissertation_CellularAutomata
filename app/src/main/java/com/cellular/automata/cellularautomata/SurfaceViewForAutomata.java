@@ -307,7 +307,7 @@ public class SurfaceViewForAutomata extends GLSurfaceView{
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
 
-            renderer.setScaleFactor(
+            renderer.setFigureScaleFactor(
                     Math.max(
                             Settings.minimumFigureScale,
                             Math.min(

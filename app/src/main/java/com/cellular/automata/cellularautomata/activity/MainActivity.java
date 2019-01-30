@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
     boolean colorPickerOpened = false;
     boolean editIconPressed = false;
     boolean stretchButtonPressed = false;
+    boolean gridButtonPressed = false;
 
     // keep track of all the bars
     boolean toolbarVisible = true;
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private LinearLayout toolBar, colorBar, controlsBar, layersToolbar;
     private ImageView
             goButton, resetButton, nextStepButton,  // Control bar
-            stretchButton, editButton, saveButton, loadButton,  // Main toolbar
+            stretchButton, editButton, saveButton, loadButton, gridButton,  // Main toolbar
             addCubeButton, removeCubeButton, paintButton,layerUpButton, layerDownButton, // Edit toolbar
             closeColorPickerButton;
     private TextView txtLogDown, txtLogTop, txtFpsCounter;
@@ -124,7 +125,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
                 presenter.editPressed();
 
-
             }else{
 
                 if(colorPickerOpened){
@@ -172,11 +172,22 @@ public class MainActivity extends AppCompatActivity implements MainView {
         }
     };
 
+    private View.OnClickListener gridButtonListener = new android.view.View.OnClickListener() {
+        @Override
+        public void onClick(android.view.View view) {
+            gridButtonPressed = !gridButtonPressed;
+            presenter.gridButtonPressed(gridButtonPressed);
+            switchGridButtonToGridMode(gridButtonPressed);
+        }
+    };
+
 
     // Edit bar listeners
     private View.OnClickListener addCubeListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+
+            presenter.addCubePressed();
 
         }
     };
@@ -184,14 +195,16 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private View.OnClickListener removeCubeListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-//            hideToolbar();
-//            showColorPicker();
+
+        presenter.removeCubePressed();
+
         }
     };
 
     private View.OnClickListener paintButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            presenter.paintCubePressed();
             hideEditBar();
             showColorPicker();
         }
@@ -200,14 +213,14 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private View.OnClickListener layerUpListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
+            presenter.layerUpPressed();
         }
     };
 
     private View.OnClickListener layerDownListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
+            presenter.layerDownPressed();
         }
     };
 
@@ -277,6 +290,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         stretchButton = findViewById(R.id.tool_layers);
         loadButton = findViewById(R.id.tool_load);
         saveButton= findViewById(R.id.tool_save);
+        gridButton = findViewById(R.id.tool_grid);
         // Other
         progressBar = findViewById(R.id.progress_bar);
         closeColorPickerButton = findViewById(R.id.close_color_bar);
@@ -291,6 +305,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         stretchButton.setOnClickListener(stretchButtonListener);
         loadButton.setOnClickListener(loadButtonListener);
         saveButton.setOnClickListener(saveButtonListener);
+        gridButton.setOnClickListener(gridButtonListener);
         // Edit bar
         addCubeButton.setOnClickListener(addCubeListener);
         removeCubeButton.setOnClickListener(removeCubeListener);
@@ -318,6 +333,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         fragmentManager = getSupportFragmentManager();
         presenter = new Presenter();
         presenter.attachView(this);
+        switchToolbarToEditMode(false);
 
     }
 
@@ -399,14 +415,13 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     public void switchToolbarToEditMode(boolean isEditMode){
 
+        toolBar.removeAllViews();
+        toolBar.addView(editButton);
+
         if(isEditMode){
 
             int childAmount = toolBar.getChildCount();
-
-            if(childAmount <= 1) return;
-
-            toolBar.removeAllViews();
-            toolBar.addView(editButton);
+            toolBar.addView(gridButton);
 
         }else{
 
@@ -445,6 +460,22 @@ public class MainActivity extends AppCompatActivity implements MainView {
         }
 
     }
+
+    public void switchGridButtonToGridMode(boolean isGrid){
+
+        if(isGrid){
+
+            gridButton.setImageDrawable(getResources().getDrawable(R.drawable.grid_icon_cross));
+
+        }else{
+
+            gridButton.setImageDrawable(getResources().getDrawable(R.drawable.grid_icon));
+
+        }
+
+    }
+
+
 
     @Override
     public Context getContext() {
@@ -671,6 +702,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         editIconPressed = true;
         stretchButtonPressed = false;
+        gridButtonPressed = false;
 
         hideColorPicker();
         hideControlsBar();
@@ -681,7 +713,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         switchToolbarToEditMode(editIconPressed);
         switchEditButtonToEditMode(editIconPressed);
-        switchStretchButtonToStretchMode(stretchButtonPressed);
+        switchGridButtonToGridMode(gridButtonPressed);
 
     }
 

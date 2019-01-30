@@ -52,7 +52,6 @@ public class GridRenderBuilder {
 
     private ArrayList<CubeCenter> tileCenters;
     private ArrayList<Line> grid;
-    private Square square;
 
     // Getters
 
@@ -65,7 +64,6 @@ public class GridRenderBuilder {
     public GridRenderBuilder(int automataRadius) {
 
         this.gridRadius = automataRadius;
-        this.square = new Square(gridCenter, automataRadius * 2 - 1);
 
     }
 
@@ -82,7 +80,6 @@ public class GridRenderBuilder {
     public void build(){
 
         buildGrid(gridCenter, gridRadius);
-        square.build();
         bindAttributesData();
 
     }
@@ -182,13 +179,11 @@ public class GridRenderBuilder {
         gridVertexPosArray = null;
         vertexColorArray = null;
 
-        square.bindAttributesData();
+        //square.bindAttributesData();
 
     }
 
     public void draw(){
-
-        square.draw();
 
         GraphicsRenderer renderer = GRFX.renderer;
 

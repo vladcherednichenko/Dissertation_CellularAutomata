@@ -19,11 +19,22 @@ public class RendererController {
     public static final int STRETCH = 7;
     public static final int SQUEEZE = 8;
 
+    public static final int SCREEN_TOUCHED = 9;
+    public static final int FIGURE_TOUCHED = 10;
+
     public static final int SAVE = 11;
     public static final int LOAD = 12;
 
-    public static final int SCREEN_TOUCHED = 9;
-    public static final int FIGURE_TOUCHED = 10;
+    public static final int LAYER_UP = 13;
+    public static final int LAYER_DOWN = 14;
+
+    public static final int SHOW_GRID = 15;
+    public static final int HIDE_GRID = 16;
+
+    public static final int ADD_CUBE = 20;
+    public static final int REMOVE_CUBE = 21;
+    public static final int PAINT_CUBE = 22;
+
 
     public static final int NULL = -1;
 
@@ -115,6 +126,50 @@ public class RendererController {
         currentCommand = FIGURE_TOUCHED;
 
     }
+
+    public void layerUp(){
+
+        currentCommand = LAYER_UP;
+
+    }
+
+    public void layerDown(){
+
+        currentCommand = LAYER_DOWN;
+
+    }
+
+    public void showGrid(){
+
+        currentCommand = SHOW_GRID;
+
+    }
+
+    public void hideGrid(){
+
+        currentCommand = HIDE_GRID;
+
+    }
+
+    public void addCubePressed(){
+
+        currentCommand = ADD_CUBE;
+
+    }
+
+    public void removeCsubePressed(){
+
+        currentCommand = REMOVE_CUBE;
+
+    }
+
+    public void paintCubePressed(){
+
+        currentCommand = PAINT_CUBE;
+
+    }
+
+
 
 
 

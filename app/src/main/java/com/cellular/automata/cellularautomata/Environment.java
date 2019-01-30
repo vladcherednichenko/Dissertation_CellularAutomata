@@ -3,6 +3,8 @@ package com.cellular.automata.cellularautomata;
 import com.cellular.automata.cellularautomata.interfaces.EnvironmentListener;
 import com.cellular.automata.cellularautomata.objects.GridRenderBuilder;
 import com.cellular.automata.cellularautomata.objects.ModelRenderBuilder;
+import com.cellular.automata.cellularautomata.utils.CellColor;
+import com.cellular.automata.cellularautomata.utils.CubeCenter;
 import com.cellular.automata.cellularautomata.utils.ObjectSelectHelper;
 
 import java.util.ArrayList;
@@ -59,8 +61,12 @@ public class Environment implements EnvironmentListener{
 
         for(ModelRenderBuilder builder: buildersList){
 
+
             // touch result from figure
-            ObjectSelectHelper.TouchResult touchResult = GRFX.renderer.getTouchedResult(normalizedX, normalizedY, builder.getCellCentersList());
+
+            ArrayList<CubeCenter> cubeCenters = builder.getCellCentersList();
+
+            ObjectSelectHelper.TouchResult touchResult = GRFX.renderer.getTouchedResult(normalizedX, normalizedY, cubeCenters);
 
 
             if(touchResult.cubeTouched){

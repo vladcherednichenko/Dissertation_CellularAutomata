@@ -13,6 +13,7 @@ public class Presenter {
 
     private MainView view;
     private boolean isEditState = false;
+    private boolean isGridVisible = false;
 
     private RendererController rendererController = new RendererController();
 
@@ -92,6 +93,18 @@ public class Presenter {
 
     }
 
+    public void layerUpPressed(){
+
+        rendererController.layerUp();
+
+    }
+
+    public void layerDownPressed(){
+
+        rendererController.layerDown();
+
+    }
+
     public void savePressed(){
 
         view.hideControlsBar();
@@ -139,6 +152,7 @@ public class Presenter {
     public void editPressed(){
 
         isEditState = true;
+        isGridVisible = false;
         rendererController.editModePressed();
         view.resetInterfaceToEdit();
 
@@ -148,8 +162,39 @@ public class Presenter {
     public void closeEditPressed(){
 
         isEditState = false;
+        isGridVisible = false;
         rendererController.vewModePressed();
         view.resetInterfaceToView();
+
+    }
+
+    public void gridButtonPressed(boolean gridVisible){
+
+        isGridVisible = gridVisible;
+        if(isGridVisible){
+            rendererController.showGrid();
+        }else{
+            rendererController.hideGrid();
+        }
+
+
+    }
+
+    public void addCubePressed(){
+
+        rendererController.addCubePressed();
+
+    }
+
+    public void removeCubePressed(){
+
+        rendererController.removeCsubePressed();
+
+    }
+
+    public void paintCubePressed(){
+
+        rendererController.paintCubePressed();
 
     }
 
