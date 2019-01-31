@@ -38,7 +38,7 @@ public class RendererController {
 
     public static final int NULL = -1;
 
-    public int currentColor = 0;
+    public int currentColor = -131587;
 
     public int readCommand(){
 

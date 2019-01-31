@@ -55,7 +55,10 @@ public class Cube {
 
     public Cube copy(){
 
-        return new Cube(this.color, this.coords);
+        Cube cube = new Cube (this.color, this.coords);
+        cube.setAlive(this.isAlive);
+
+        return cube;
 
     }
 }

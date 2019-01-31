@@ -59,20 +59,34 @@ public class Environment implements EnvironmentListener{
 
         if(buildersList == null || buildersList.size() == 0) return;
 
-        for(ModelRenderBuilder builder: buildersList){
+        // first check the touch result from figure
 
+        ModelRenderBuilder builder = buildersList.get(0);
 
-            // touch result from figure
+        ArrayList<CubeCenter> cubeCenters = builder.getCellCentersList();
 
-            ArrayList<CubeCenter> cubeCenters = builder.getCellCentersList();
+        ObjectSelectHelper.TouchResult touchResult = GRFX.renderer.getTouchedResult(normalizedX, normalizedY, cubeCenters);
 
-            ObjectSelectHelper.TouchResult touchResult = GRFX.renderer.getTouchedResult(normalizedX, normalizedY, cubeCenters);
+        if(touchResult.cubeTouched){
 
+            builder.handleTouch(touchResult);
+            GRFX.rendererController.cubeTouched();
+            return;
 
-            if(touchResult.cubeTouched){
-                builder.handleTouch(touchResult);
-                GRFX.rendererController.cubeTouched();
-            }
+        }
+
+        // second check the touch result from grid
+
+        GridRenderBuilder gridBuilder = gridList.get(0);
+
+        cubeCenters = gridBuilder.getTileCenters();
+
+        touchResult = GRFX.renderer.getTouchedResult(normalizedX, normalizedY, cubeCenters);
+
+        if(touchResult.cubeTouched){
+
+            builder.handleTouch(touchResult);
+            GRFX.rendererController.cubeTouched();
 
         }
 

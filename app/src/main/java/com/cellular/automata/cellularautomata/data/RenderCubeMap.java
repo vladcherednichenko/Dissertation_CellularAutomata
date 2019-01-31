@@ -45,6 +45,25 @@ public class RenderCubeMap {
 
     }
 
+    public ArrayList<CubeCenter> getLayer(int height){
+
+        // can rewrite to make it faster
+
+        ArrayList<CubeCenter> result = new ArrayList<>();
+
+        for (RenderCube renderCube : renderCubeList){
+            if((int)renderCube.center.y == height){
+
+                result.add(renderCube.center);
+
+            }
+
+        }
+
+        return result;
+
+    }
+
     public int size(){
         return renderCubeList.size();
     }

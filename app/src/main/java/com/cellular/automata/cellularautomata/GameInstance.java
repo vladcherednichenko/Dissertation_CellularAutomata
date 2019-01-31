@@ -4,6 +4,7 @@ package com.cellular.automata.cellularautomata;
 import com.cellular.automata.cellularautomata.core.RendererController;
 import com.cellular.automata.cellularautomata.core.LifeRule;
 import com.cellular.automata.cellularautomata.data.Automata;
+import com.cellular.automata.cellularautomata.data.Cube;
 import com.cellular.automata.cellularautomata.interfaces.ApplicationListener;
 import com.cellular.automata.cellularautomata.objects.GridRenderBuilder;
 import com.cellular.automata.cellularautomata.objects.Model;
@@ -106,10 +107,18 @@ public class GameInstance implements ApplicationListener{
                     String color = Integer.toHexString(rendererController.currentColor);
 
                     //Log.d(TAG, String.valueOf(rule.getNeighboursAmount(new RenderCube(modelRenderBuilder.getTouchResult().touchedCubeCenter, null, false), modelRenderBuilder.getRenderMap())));
-
                     if(actionWithCube == RendererController.ADD_CUBE){
 
-                        modelRenderBuilder.addNewCube(modelRenderBuilder.getTouchResult().newCubeCenter, new CellColor(color));
+                        //modelRenderBuilder.addNewCube(modelRenderBuilder.getTouchResult().newCubeCenter, new CellColor(color));
+
+                        Cube cube = new Cube(color, new int []{
+                                (int) modelRenderBuilder.getTouchResult().newCubeCenter.x,
+                                (int) modelRenderBuilder.getTouchResult().newCubeCenter.y,
+                                (int) modelRenderBuilder.getTouchResult().newCubeCenter.z});
+
+                        cube.setAlive(true);
+
+                        automata.addNewCube(cube);
 
                     }
                     if(actionWithCube == RendererController.REMOVE_CUBE){

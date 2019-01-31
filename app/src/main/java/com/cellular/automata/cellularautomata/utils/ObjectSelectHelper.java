@@ -24,6 +24,8 @@ public class ObjectSelectHelper {
 
     public static TouchResult getTouchResult(ArrayList<CubeCenter> cubeCenters, float normalizedX, float normalizedY, float[] invertedViewProjectionMatrix, float [] modelMatrix, float scaleFactor, float strideX, float strideY, float screenRatio){
 
+        if(cubeCenters == null) return null;
+
         float cubeSize = 1f;
         float sphereRadius = cubeSize / 2 * (float) Math.sqrt(2);
 

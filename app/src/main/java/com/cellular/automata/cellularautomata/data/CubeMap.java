@@ -140,6 +140,32 @@ public class CubeMap {
 
     }
 
+    public boolean remove(Cube cube){
+
+        if(cubeOutOfBounds(cube.getCoords())) return false;
+
+        int [] mapCoords = cubeCoordsToMapCoords(cube.getCoords());
+
+        map[mapCoords[0]][mapCoords[1]][mapCoords[2]] = new Cube(Settings.defaultCubeColor, cube.getCoords());
+
+        return true;
+
+    }
+
+    public boolean paint(Cube cube){
+
+        if(cubeOutOfBounds(cube.getCoords())) return false;
+
+        int [] mapCoords = cubeCoordsToMapCoords(cube.getCoords());
+
+        if(!map[mapCoords[0]][mapCoords[1]][mapCoords[2]].isAlive()) return false;
+
+        map[mapCoords[0]][mapCoords[1]][mapCoords[2]].setColor(cube.getColor());
+
+        return true;
+
+    }
+
     public void clear(){
 
         cubeList.clear();

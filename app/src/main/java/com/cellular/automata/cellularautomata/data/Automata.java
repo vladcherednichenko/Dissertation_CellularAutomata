@@ -95,6 +95,28 @@ public class Automata {
 
     }
 
+    public void addNewCube(Cube cube){
+
+        this.map.add(cube);
+        updateRender(map);
+
+    }
+
+    public void removeCube(Cube cube){
+
+        this.map.remove(cube);
+        updateRender(map);
+
+    }
+
+    public void paintCube(Cube cube){
+
+        this.map.paint(cube);
+        updateRender(map);
+
+    }
+
+
 
     // MAIN METHOD NEXT
     public void next(){
@@ -103,21 +125,7 @@ public class Automata {
         ArrayList<Cube> cubes = rule.nextIterations(map);
         this.map = CubeMap.fromList(cubes, automataRadius);
 
-        // Convert CubeMap to RenderMap
-        RenderCubeMap renderMap = RenderCubeMap.fromCubeList(cubes, automataRadius);
-
-        // Apply RenderMap
-        modelRenderBuilder.setRenderMap(renderMap);
-
-        // Build
-        modelRenderBuilder.build();
-        modelRenderBuilder.bindAttributesData();
-
-
-        // Log alive cubes
-        if(Settings.log_alive_number){
-            GRFX.activityListener.logTextTop("renderCubes: " + String.valueOf(map.numberAllAlive()));
-        }
+        updateRender(cubes);
 
     }
 
@@ -139,7 +147,33 @@ public class Automata {
     }
 
 
+    private void updateRender(CubeMap map){
 
+        ArrayList<Cube> cubes = map.getAlive();
+
+        updateRender(cubes);
+
+    }
+
+    private void updateRender(ArrayList<Cube> cubes){
+
+        // Convert CubeMap to RenderMap
+        RenderCubeMap renderMap = RenderCubeMap.fromCubeList(cubes, automataRadius);
+
+        // Apply RenderMap
+        modelRenderBuilder.setRenderMap(renderMap);
+
+        // Build
+        modelRenderBuilder.build();
+        modelRenderBuilder.bindAttributesData();
+
+
+        // Log alive cubes
+        if(Settings.log_alive_number){
+            GRFX.activityListener.logTextTop("renderCubes: " + String.valueOf(map.numberAllAlive()));
+        }
+
+    }
 
 
 

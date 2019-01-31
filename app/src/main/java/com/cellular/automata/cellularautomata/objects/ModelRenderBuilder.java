@@ -86,7 +86,15 @@ public class ModelRenderBuilder {
 
     public ArrayList<CubeCenter> getCellCentersList(){
 
-        return renderMap.getCubeCenters();
+        if(isSliced){
+
+            return renderMap.getLayer(currentLayerOpened);
+
+        }else{
+
+            return renderMap.getCubeCenters();
+
+        }
 
     }
 
