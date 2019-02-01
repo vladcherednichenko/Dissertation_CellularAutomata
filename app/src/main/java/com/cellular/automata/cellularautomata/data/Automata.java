@@ -23,7 +23,7 @@ public class Automata {
     private Random random = new Random();
     private long time;
     private long timePast;
-    private float delay = 100;
+    private float delay = 500;
 
     private ModelRenderBuilder modelRenderBuilder;
     private CubeMap map;
@@ -135,12 +135,7 @@ public class Automata {
         // if start is pressed
         if(generating){
 
-
-
-
-        }else{
-
-
+            generateWithCurrentRule();
 
         }
 
@@ -192,6 +187,19 @@ public class Automata {
             //Log.d("Timer", "half a second");
 
             GRFX.activityListener.logTextTop("cubes: " + String.valueOf(modelRenderBuilder.getRenderMap().size()));
+        }
+
+    }
+
+    private void generateWithCurrentRule(){
+
+        timePast = System.currentTimeMillis() - time;
+        if(timePast > delay){
+            time = System.currentTimeMillis();
+
+            next();
+
+            //GRFX.activityListener.logTextTop("cubes: " + String.valueOf(modelRenderBuilder.getRenderMap().size()));
         }
 
     }

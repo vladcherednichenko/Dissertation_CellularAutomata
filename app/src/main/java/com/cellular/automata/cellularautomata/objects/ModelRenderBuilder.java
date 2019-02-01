@@ -398,4 +398,10 @@ public class ModelRenderBuilder {
 
     }
 
+    public boolean cubeInCurrentOpenedLayer(CubeCenter center) {
+
+        return !isSliced || (int) center.y == currentLayerOpened;
+
+    }
+
 }

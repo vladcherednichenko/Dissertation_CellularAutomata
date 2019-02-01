@@ -77,13 +77,15 @@ public class Environment implements EnvironmentListener{
 
         // second check the touch result from grid
 
+        if(gridList == null || gridList.size() == 0) return;
+
         GridRenderBuilder gridBuilder = gridList.get(0);
 
         cubeCenters = gridBuilder.getTileCenters();
 
         touchResult = GRFX.renderer.getTouchedResult(normalizedX, normalizedY, cubeCenters);
 
-        if(touchResult.cubeTouched){
+        if(touchResult.cubeTouched ){
 
             builder.handleTouch(touchResult);
             GRFX.rendererController.cubeTouched();

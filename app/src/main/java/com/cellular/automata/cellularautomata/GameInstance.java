@@ -24,8 +24,8 @@ public class GameInstance implements ApplicationListener{
     private FPSCounter fps = new FPSCounter();
 
     private int actionWithCube = 0;
-
     private boolean gridIsVisible = false;
+    private boolean isViewMode = true;
 
     private Model testModel;
 
@@ -101,21 +101,21 @@ public class GameInstance implements ApplicationListener{
             //when the figure is touched
             case RendererController.FIGURE_TOUCHED:{
 
+                if(isViewMode) return;
+
                 //adding / painting / deleting a cube
                 if(modelRenderBuilder.isTouched()){
 
                     String color = Integer.toHexString(rendererController.currentColor);
 
+                    if(color.length()>=6){ color = "#" + color.substring(2); }
+
                     //Log.d(TAG, String.valueOf(rule.getNeighboursAmount(new RenderCube(modelRenderBuilder.getTouchResult().touchedCubeCenter, null, false), modelRenderBuilder.getRenderMap())));
                     if(actionWithCube == RendererController.ADD_CUBE){
 
-                        //modelRenderBuilder.addNewCube(modelRenderBuilder.getTouchResult().newCubeCenter, new CellColor(color));
+                        if(!modelRenderBuilder.cubeInCurrentOpenedLayer(modelRenderBuilder.getTouchResult().newCubeCenter)) break;
 
-                        Cube cube = new Cube(color, new int []{
-                                (int) modelRenderBuilder.getTouchResult().newCubeCenter.x,
-                                (int) modelRenderBuilder.getTouchResult().newCubeCenter.y,
-                                (int) modelRenderBuilder.getTouchResult().newCubeCenter.z});
-
+                        Cube cube = new Cube(color, modelRenderBuilder.getTouchResult().newCubeCenter);
                         cube.setAlive(true);
 
                         automata.addNewCube(cube);
@@ -123,17 +123,17 @@ public class GameInstance implements ApplicationListener{
                     }
                     if(actionWithCube == RendererController.REMOVE_CUBE){
 
-                        modelRenderBuilder.deleteCube(modelRenderBuilder.getTouchResult().touchedCubeCenter);
+                        if(!modelRenderBuilder.cubeInCurrentOpenedLayer(modelRenderBuilder.getTouchResult().touchedCubeCenter)) break;
+
+                        automata.removeCube(new Cube(modelRenderBuilder.getTouchResult().touchedCubeCenter));
 
                     }
                     if(actionWithCube == RendererController.PAINT_CUBE){
 
-                        if(color.length()>=6){
+                        if(!modelRenderBuilder.cubeInCurrentOpenedLayer(modelRenderBuilder.getTouchResult().touchedCubeCenter)) break;
 
-                            color = "#" + color.substring(2);
-                            modelRenderBuilder.paintCube(modelRenderBuilder.getTouchResult().touchedCubeCenter, new CellColor(color));
+                        automata.paintCube(new Cube(color, modelRenderBuilder.getTouchResult().touchedCubeCenter));
 
-                        }
                     }
 
                 }
@@ -160,6 +160,7 @@ public class GameInstance implements ApplicationListener{
                 // in the main Activity
                 modelRenderBuilder.squeeze();
                 modelRenderBuilder.setViewMode(false);
+                this.isViewMode = false;
 
                 if(gridRenderBuilder == null){
                     gridRenderBuilder = new GridRenderBuilder(automata.getAutomataRadius());
@@ -168,6 +169,7 @@ public class GameInstance implements ApplicationListener{
                 gridRenderBuilder.build();
                 gridRenderBuilder.bindAttributesData();
 
+                gridRenderBuilder.reset();
                 environment.addGrid(gridRenderBuilder);
 
                 break;
@@ -175,6 +177,7 @@ public class GameInstance implements ApplicationListener{
             }
             case RendererController.VIEW_MODE:{
 
+                this.isViewMode = true;
                 modelRenderBuilder.setViewMode(true);
                 gridIsVisible = false;
                 environment.removeGrids();
@@ -183,15 +186,18 @@ public class GameInstance implements ApplicationListener{
             }
             case RendererController.LAYER_UP:{
 
-                GRFX.renderer.translateFigureVertical(-Settings.renderCubeSize);
+                //GRFX.renderer.translateFigureVertical(-Settings.renderCubeSize);
                 modelRenderBuilder.layerUp();
+                gridRenderBuilder.translateGrid((int)Settings.renderCubeSize);
+
                 break;
             }
 
             case RendererController.LAYER_DOWN:{
 
-                GRFX.renderer.translateFigureVertical(Settings.renderCubeSize);
+                //GRFX.renderer.translateFigureVertical(Settings.renderCubeSize);
                 modelRenderBuilder.layerDown();
+                gridRenderBuilder.translateGrid(-(int)Settings.renderCubeSize);
 
                 break;
             }

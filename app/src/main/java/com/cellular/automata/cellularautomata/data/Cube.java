@@ -3,6 +3,7 @@ package com.cellular.automata.cellularautomata.data;
 import android.graphics.Color;
 
 import com.cellular.automata.cellularautomata.Settings;
+import com.cellular.automata.cellularautomata.utils.CubeCenter;
 
 public class Cube {
 
@@ -28,6 +29,28 @@ public class Cube {
 
         this.color = color;
         this.coords = coords;
+
+    }
+
+    public Cube (CubeCenter center){
+
+        this.coords = new int []{
+                (int) center.x,
+                (int) center.y,
+                (int) center.z};
+
+        this.color = defaultColor;
+
+    }
+
+    public Cube (String color, CubeCenter center){
+
+        this.coords = new int []{
+                (int) center.x,
+                (int) center.y,
+                (int) center.z};
+
+        this.color = color;
 
     }
 

@@ -55,7 +55,11 @@ public class GridRenderBuilder {
 
     // Getters
 
-    public ArrayList<CubeCenter> getTileCenters(){return tileCenters; }
+    public ArrayList<CubeCenter> getTileCenters(){
+
+        return new ArrayList<>(tileCenters);
+
+    }
 
 
 
@@ -77,9 +81,26 @@ public class GridRenderBuilder {
 
     }
 
+    public void translateGrid(int distance){
+
+        this.gridCenter.translateY(distance);
+        buildGrid(gridCenter, gridRadius);
+        buildTiles(gridCenter, gridRadius);
+        bindAttributesData();
+
+
+    }
+
+    public void reset(){
+
+        this.gridCenter = new CubeCenter(Settings.gridOffsetX, Settings.gridHeight, Settings.gridOffsetZ);
+
+    }
+
     public void build(){
 
         buildGrid(gridCenter, gridRadius);
+        buildTiles(gridCenter, gridRadius);
         bindAttributesData();
 
     }
@@ -143,12 +164,13 @@ public class GridRenderBuilder {
         // in the corner
         CubeCenter defaultTilePosition = new CubeCenter( gridCenter.x - gridRadius - 1, gridCenter.y - Settings.renderCubeSize / 2, gridCenter.z - gridRadius - 1);
 
-        for (int i = 0; i < gridRadius * 2 - 1; i++){
+        for (int i = 0; i < gridRadius * 2 + 1; i++){
 
-            for (int j = 0; j < gridRadius * 2 - 1; j++){
+            for (int j = 0; j < gridRadius * 2 + 1; j++){
 
                 CubeCenter center = defaultTilePosition.clone();
                 center.translateX(cubeSize * j);
+                tileCenters.add(center);
 
             }
 
