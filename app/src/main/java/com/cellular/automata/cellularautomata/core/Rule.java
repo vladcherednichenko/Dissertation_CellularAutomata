@@ -8,6 +8,7 @@ import com.cellular.automata.cellularautomata.data.Cube;
 import com.cellular.automata.cellularautomata.data.CubeMap;
 import com.cellular.automata.cellularautomata.data.RenderCubeMap;
 import com.cellular.automata.cellularautomata.objects.RenderCube;
+import com.cellular.automata.cellularautomata.utils.CellColor;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -18,6 +19,7 @@ public class Rule {
 
     private int [] keepAliveNeighboursNumber = {1};
     private int [] reviveNeighboursNumber = {1};
+    private float darkerColorPercent = 0.5f ;
 
     //GETTERS
     public int getNeighboursAmount(Cube cube, CubeMap map){
@@ -32,55 +34,66 @@ public class Rule {
 
         ArrayList<Cube> nextIteration = map.toList();
 
-
-        int counter = 0;
         for(Iterator<Cube> iterator = nextIteration.iterator(); iterator.hasNext();){
 
             Cube cube = iterator.next();
+            ArrayList<Cube> neighbours = neighbours(cube, map);
 
-            counter++;
+            countStatus(cube, neighbours);
+            countColor(cube, neighbours);
 
-            //Log.d(Tag, String.valueOf(counter));
-
-            int neighboursAmount = getNeighboursAmount(cube, map);
-
-            if(neighboursAmount >= 1){
-
-                Log.d(Tag, "found a neighbour");
-
-            }
-            if(inKeepAlive(neighboursAmount) || inRevive(neighboursAmount)){
-                cube.setAlive(true);
-                cube.setColor(Settings.defaultCubeColor);
-            }else{
-                cube.setAlive(false);
-            }
 
         }
 
-
-//        for (Cube cube : nextIteration){
-//
-//            int neighboursAmount = getNeighboursAmount(cube, map);
-//            if(inKeepAlive(neighboursAmount) || inRevive(neighboursAmount)){
-//                cube.setAlive(true);
-//                cube.setColor(Settings.defaultCubeColor);
-//            }else{
-//                cube.setAlive(false);
-//            }
-//
-//        }
-
         return nextIteration;
+
+    }
+
+    private void countStatus(Cube cube, ArrayList<Cube> neighbours){
+
+        int neighboursAmount = neighbours.size();
+
+        if(inKeepAlive(neighboursAmount) || inRevive(neighboursAmount)){
+
+
+            if(cube.isAlive()){
+                cube.plusIteration();
+            }
+
+            cube.setAlive(true);
+
+        }else{
+
+            cube.setAlive(false);
+            cube.resetIterations();
+
+        }
+
+    }
+
+    private void countColor(Cube cube, ArrayList<Cube> neighbours){
+
+        if(!cube.isAlive()) return;
+
+        String newColor;
+
+        if(cube.getIterations() > 0){
+
+            newColor = darkerColor(cube.getColor(), darkerColorPercent);
+
+        }else{
+
+            newColor = Settings.defaultCubeColor;
+
+        }
+
+        cube.setColor(newColor);
 
     }
 
     public ArrayList<Cube> neighbours(Cube cube, CubeMap map){
 
         ArrayList<Cube> result = new ArrayList<>();
-
-//        if (map.numberAllAlive() == 0)
-//            return result;
 
         for (int x = cube.getCoords()[0]-1; x<= cube.getCoords()[0]+1; x++){
             for (int y = cube.getCoords()[1]-1; y<= cube.getCoords()[1]+1; y++){
@@ -124,6 +137,19 @@ public class Rule {
         }
 
         return false;
+
+    }
+
+    // percent : 0 - 1 where 0 is black, 1 - original color
+    private String darkerColor(String hexColor, float percent){
+
+        CellColor color = new CellColor(hexColor);
+
+        color.RED = color.RED * percent < 0? 0: color.RED * percent;
+        color.GREEN = color.GREEN * percent < 0? 0: color.GREEN * percent;
+        color.BLUE = color.BLUE * percent < 0? 0: color.BLUE * percent;
+
+        return String.format("#%02x%02x%02x", (int)(color.RED * 255), (int)(color.GREEN * 255), (int)(color.BLUE * 255));
 
     }
 

@@ -1,7 +1,5 @@
 package com.cellular.automata.cellularautomata.data;
 
-import android.graphics.Color;
-
 import com.cellular.automata.cellularautomata.Settings;
 import com.cellular.automata.cellularautomata.utils.CubeCenter;
 
@@ -10,6 +8,8 @@ public class Cube {
     // a simple cube to represent the automata CELL
 
     private boolean isAlive;
+
+    private int iterations = 0;
 
     private int [] coords;
 
@@ -22,8 +22,6 @@ public class Cube {
         color = defaultColor;
 
     }
-
-
 
     public Cube (String color, int[] coords){
 
@@ -66,8 +64,21 @@ public class Cube {
 
     public int[] getCoords() { return coords;}
 
+    public void setIterations(int iterations) {
+        this.iterations = iterations;
+    }
 
+    public int getIterations() {
+        return iterations;
+    }
 
+    public void plusIteration(){
+        iterations ++;
+    }
+
+    public void resetIterations(){
+        iterations = 0;
+    }
 
     public boolean samePosition(Cube cube){
 
