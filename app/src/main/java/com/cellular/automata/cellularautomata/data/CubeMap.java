@@ -26,6 +26,19 @@ public class CubeMap {
 
     }
 
+    // SETTERS
+
+    public void setRadius(int radius){
+
+        if (radius < Settings.minimumAutomataRadius) return;
+
+        this.automataRadius = radius;
+
+        adaptToNewRadius();
+
+
+    }
+
 
     // GETTERS
 
@@ -189,6 +202,14 @@ public class CubeMap {
                 }
             }
         }
+
+    }
+
+    private void adaptToNewRadius(){
+
+        ArrayList<Cube> oldCubeList = toList();
+        initializeMap();
+        addAll(oldCubeList);
 
     }
 

@@ -16,7 +16,7 @@ public class Automata {
 
     private String TAG = "AUTOMATA_BUILDER";
 
-    private int automataRadius = 10;
+    private int automataRadius = 30;
     private boolean generating = false;
 
     //temporary
@@ -52,6 +52,14 @@ public class Automata {
     public void setRule(Rule rule){
 
         this.rule = rule;
+
+    }
+
+    public void setRadius(int radius){
+
+        if(radius == automataRadius || radius < Settings.defaultAutomataRadius) return;
+        this.map.setRadius(radius);
+        updateRender(map);
 
     }
 

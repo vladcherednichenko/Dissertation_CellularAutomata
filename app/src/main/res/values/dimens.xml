@@ -2,7 +2,7 @@
 <resources>
 
     <dimen name="ui_width">100dp</dimen>
-    <dimen name="edit_toolbar_icons_size">43dp</dimen>
-    <dimen name="toolbar_icons_size">43dp</dimen>
+    <dimen name="edit_toolbar_icons_size">30dp</dimen>
+    <dimen name="toolbar_icons_size">30dp</dimen>
 
 </resources>

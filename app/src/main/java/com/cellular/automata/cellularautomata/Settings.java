@@ -13,10 +13,11 @@ public class Settings {
 
     // Automata
     public static int defaultAutomataRadius = 10;
+    public static int minimumAutomataRadius = 5;
     public static float sliceHeight = 5f;
 
     // Cube
-    public static String defaultCubeColor = "#ff0000";
+    public static String defaultCubeColor = "#ffffff";
     public static boolean generateCellsDataAfterCreation = true;
     public static float renderCubeSize = 1.0f;
 
