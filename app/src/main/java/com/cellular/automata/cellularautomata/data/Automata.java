@@ -63,14 +63,13 @@ public class Automata {
 
     }
 
-
     //sets the cellList
     public void setModel(Model modelToLoad){
 
         // crap method can do better
 
-        float [] rawCoords = modelToLoad.getAutomataCoords();
-        CellColor[] cellColors = modelToLoad.getAutomataColors();
+        float [] rawCoords = modelToLoad.getCoords();
+        CellColor[] cellColors = modelToLoad.getColors();
         RenderCubeMap renderMap = new RenderCubeMap(automataRadius);
 
         for(int i = 0; i< modelToLoad.getCellsNumber(); i++){

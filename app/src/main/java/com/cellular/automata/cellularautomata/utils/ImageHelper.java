@@ -12,7 +12,7 @@ public class ImageHelper {
 
     private static String imageDirectoryName = "images";
 
-    private static String tag = "Image helper";
+    private static String tag = "ImageHelper";
 
     public interface SaveImageCallback{
 

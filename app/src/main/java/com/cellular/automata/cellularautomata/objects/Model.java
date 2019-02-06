@@ -7,22 +7,22 @@ import com.cellular.automata.cellularautomata.utils.CellColor;
 
 public class Model {
 
-    private String TAG = "AUTOMATA";
+    private String TAG = "MODEL";
 
     private int cellsNumber;
-    private float[] automataCoords;
-    private CellColor[] automataColors;
+    private float[] coords;
+    private CellColor[] colors;
 
     public int getCellsNumber() {
         return cellsNumber;
     }
 
-    public float[] getAutomataCoords() {
-        return automataCoords;
+    public float[] getCoords() {
+        return coords;
     }
 
-    public CellColor[] getAutomataColors() {
-        return automataColors;
+    public CellColor[] getColors() {
+        return colors;
     }
 
 
@@ -46,9 +46,9 @@ public class Model {
 
         }
 
-        automataCoords = coords;
-        automataColors = colors;
-        cellsNumber = automataCoords.length / 3;
+        this.coords = coords;
+        this.colors = colors;
+        cellsNumber = this.coords.length / 3;
 
     }
 

@@ -230,4 +230,12 @@ public class CubeMap {
         };
 
     }
+
+    public String toString(){
+
+        String result = "";
+
+        return result;
+
+    }
 }
