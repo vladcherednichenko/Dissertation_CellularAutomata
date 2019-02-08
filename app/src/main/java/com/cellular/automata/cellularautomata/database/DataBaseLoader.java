@@ -9,23 +9,18 @@ import java.util.ArrayList;
 
 public class DataBaseLoader {
 
-    private static DataBaseLoader instance;
+    private final static DataBaseLoader instance = new DataBaseLoader();
 
     private AutomataDatabase dataBase;
 
-    private DataBaseLoader(){};
+    private DataBaseLoader(){
+
+    }
 
     public DataBaseLoader getInstance(Context context){
 
-        if(instance == null) {
-
-            instance = new DataBaseLoader();
-
-            instance.dataBase = Room.databaseBuilder(context, AutomataDatabase.class, Settings.mainDataBaseName)
-                    .build();
-
-        }
-
+        instance.dataBase = Room.databaseBuilder(context, AutomataDatabase.class, Settings.mainDataBaseName)
+                .build();
 
         return instance;
 
