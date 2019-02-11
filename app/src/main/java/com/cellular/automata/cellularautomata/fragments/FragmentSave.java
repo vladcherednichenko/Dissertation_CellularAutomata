@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,6 +22,7 @@ public class FragmentSave extends Fragment {
     private View view;
     private ImageView imgReturn, imgScreenshot;
     private TextView txtSave;
+    private EditText inputSaveName;
 
     private Bitmap screenshot;
 
@@ -48,10 +50,16 @@ public class FragmentSave extends Fragment {
         @Override
         public void onClick(View v) {
 
-            presenter.save
+            presenter.saveFragmentSavePressed();
 
         }
     };
+
+    public String getSaveName(){
+
+        return  inputSaveName.getText().toString();
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -63,11 +71,11 @@ public class FragmentSave extends Fragment {
         imgScreenshot = view.findViewById(R.id.img_screenshot);
         txtSave = view.findViewById(R.id.txt_save);
 
+        txtSave.setOnClickListener(onTxtSaveClickListener);
+
         if(screenshot != null){
             imgScreenshot.setImageBitmap(screenshot);
         }
-
-
 
 
         return view;

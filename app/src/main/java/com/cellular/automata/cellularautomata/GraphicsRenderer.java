@@ -225,8 +225,6 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
         if ( applicationListener == null) return;
 
-        applicationListener.resize();
-
     }
 
     @Override

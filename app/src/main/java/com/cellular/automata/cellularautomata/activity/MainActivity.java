@@ -17,15 +17,16 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.cellular.automata.cellularautomata.LINKER;
+import com.cellular.automata.cellularautomata.data.Storage;
 import com.cellular.automata.cellularautomata.presenters.Presenter;
 import com.cellular.automata.cellularautomata.Settings;
 import com.cellular.automata.cellularautomata.fragments.FragmentLoad;
 import com.cellular.automata.cellularautomata.fragments.FragmentSave;
 import com.cellular.automata.cellularautomata.interfaces.MainView;
-import com.cellular.automata.cellularautomata.GRFX;
 import com.cellular.automata.cellularautomata.R;
 import com.cellular.automata.cellularautomata.SurfaceViewForAutomata;
-import com.cellular.automata.cellularautomata.objects.Model;
+import com.cellular.automata.cellularautomata.objects.AutomataModel;
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorChangedListener;
 import com.flask.colorpicker.OnColorSelectedListener;
@@ -264,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         surfaceView.setActivityListener(this);
         surfaceView.setOnTouchListener(surfaceViewListener);
 
-        GRFX.activityListener = this;
+        LINKER.activityListener = this;
 
         // FIND VIEWS
         toolBar = findViewById(R.id.tool_bar);
@@ -413,6 +414,13 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     // View for presenter
 
+    public String getSaveName(){
+
+        if(saveFragment == null) return null;
+        return saveFragment.getSaveName();
+
+    }
+
     public void switchToolbarToEditMode(boolean isEditMode){
 
         toolBar.removeAllViews();
@@ -555,7 +563,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
     }
 
     @Override
-    public void openSaveFragment(final Model model, final Bitmap screenshot) {
+    public void openSaveFragment(final Storage storage) {
 
         runOnUiThread(new Runnable() {
             @Override
@@ -563,7 +571,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
                 saveFragment = new FragmentSave();
                 saveFragment.setPresenter(presenter);
-                saveFragment.setScreenshot(screenshot);
+                saveFragment.setScreenshot(storage.currentModel.getScreenshot());
 
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.setCustomAnimations(R.anim.fragment_slide_left, R.anim.fragment_slide_left);

@@ -1,6 +1,7 @@
 package com.cellular.automata.cellularautomata.data;
 
 import com.cellular.automata.cellularautomata.Settings;
+import com.cellular.automata.cellularautomata.objects.AutomataModel;
 import com.cellular.automata.cellularautomata.objects.RenderCube;
 
 import java.util.ArrayList;
@@ -9,7 +10,8 @@ public class CubeMap {
 
     private String tag = "CUBE_MAP";
 
-    private int automataRadius = 0;
+    private int automataRadius;
+    private int aliveNumber;
 
     // Main cube storage
     // The main array - represents the 3-D models
@@ -26,6 +28,13 @@ public class CubeMap {
 
     }
 
+    public CubeMap(){
+
+        this.automataRadius = Settings.defaultAutomataRadius;
+        initializeMap();
+
+    }
+
     // SETTERS
 
     public void setRadius(int radius){
@@ -36,6 +45,11 @@ public class CubeMap {
 
         adaptToNewRadius();
 
+    }
+
+    public void setAlive(int number){
+
+        this.aliveNumber = number;
 
     }
 
@@ -50,9 +64,15 @@ public class CubeMap {
 
     }
 
-    public int automataRadius(){
+    public int getAutomataRadius(){
 
         return automataRadius;
+
+    }
+
+    public int getAliveNumber(){
+
+        return aliveNumber;
 
     }
 
@@ -93,12 +113,13 @@ public class CubeMap {
 
     public int numberAllAlive(){
 
-        toList();
         int size = 0;
-        for (Cube cube: cubeList){
-
-            if(cube.isAlive()) size++;
-
+        for(int i = 0; i< map.length; i++){
+            for (int j = 0; j<map[0].length; j++){
+                for(int k = 0; k< map[0][0].length; k++){
+                    if(map[i][j][k].isAlive()) size++;
+                }
+            }
         }
 
         return size;
@@ -136,6 +157,8 @@ public class CubeMap {
 
         map[mapCoords[0]][mapCoords[1]][mapCoords[2]] = cube;
 
+        if(cube.isAlive()) aliveNumber ++;
+
         return true;
 
     }
@@ -159,7 +182,10 @@ public class CubeMap {
 
         int [] mapCoords = cubeCoordsToMapCoords(cube.getCoords());
 
+        if(map[mapCoords[0]][mapCoords[1]][mapCoords[2]].isAlive()) aliveNumber --;
+
         map[mapCoords[0]][mapCoords[1]][mapCoords[2]] = new Cube(Settings.defaultCubeColor, cube.getCoords());
+
 
         return true;
 
@@ -181,6 +207,7 @@ public class CubeMap {
 
     public void clear(){
 
+        aliveNumber = 0;
         cubeList.clear();
         initializeMap();
 

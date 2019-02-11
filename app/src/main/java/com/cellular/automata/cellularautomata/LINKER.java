@@ -3,7 +3,7 @@ package com.cellular.automata.cellularautomata;
 import com.cellular.automata.cellularautomata.core.RendererController;
 import com.cellular.automata.cellularautomata.interfaces.MainView;
 
-public class GRFX {
+public class LINKER {
 
     public static GraphicsRenderer renderer;
     public static GameInstance gameInstance;

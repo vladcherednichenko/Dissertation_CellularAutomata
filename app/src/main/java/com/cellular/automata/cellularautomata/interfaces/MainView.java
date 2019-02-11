@@ -3,8 +3,8 @@ package com.cellular.automata.cellularautomata.interfaces;
 import android.content.Context;
 import android.graphics.Bitmap;
 
-import com.cellular.automata.cellularautomata.core.RendererController;
-import com.cellular.automata.cellularautomata.objects.Model;
+import com.cellular.automata.cellularautomata.data.Storage;
+import com.cellular.automata.cellularautomata.objects.AutomataModel;
 
 public interface MainView {
 
@@ -22,12 +22,15 @@ public interface MainView {
 
     // fragment view
 
-    void openSaveFragment(Model model, Bitmap screenShot);
+    void openSaveFragment(Storage storage);
 
     void openLoadFragment();
 
     void removeFragments();
 
+
+    // Fragment save
+    String getSaveName();
 
 
     // Animation view
@@ -59,6 +62,8 @@ public interface MainView {
     //getters
 
     Context getContext();
+
+
 
 
 }

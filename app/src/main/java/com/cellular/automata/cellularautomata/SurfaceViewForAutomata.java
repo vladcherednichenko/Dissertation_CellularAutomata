@@ -102,9 +102,9 @@ public class SurfaceViewForAutomata extends GLSurfaceView{
         //setEGLConfigChooser(new MyConfigChooser());
 
 
-        GRFX.gameInstance = new GameInstance();
-        this.renderer = new GraphicsRenderer(GRFX.gameInstance);
-        GRFX.renderer = renderer;
+        LINKER.gameInstance = new GameInstance();
+        this.renderer = new GraphicsRenderer(LINKER.gameInstance);
+        LINKER.renderer = renderer;
 
         setRenderer(this.renderer);
 
@@ -117,9 +117,9 @@ public class SurfaceViewForAutomata extends GLSurfaceView{
         setEGLContextClientVersion(2);
         loadDefaultModel();
 
-        GRFX.gameInstance = new GameInstance();
-        this.renderer = new GraphicsRenderer(GRFX.gameInstance);
-        GRFX.renderer = renderer;
+        LINKER.gameInstance = new GameInstance();
+        this.renderer = new GraphicsRenderer(LINKER.gameInstance);
+        LINKER.renderer = renderer;
 
 
         mScaleDetector = new ScaleGestureDetector(getContext(), new PinchListener());

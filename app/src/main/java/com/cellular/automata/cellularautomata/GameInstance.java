@@ -7,9 +7,8 @@ import com.cellular.automata.cellularautomata.data.Automata;
 import com.cellular.automata.cellularautomata.data.Cube;
 import com.cellular.automata.cellularautomata.interfaces.ApplicationListener;
 import com.cellular.automata.cellularautomata.objects.GridRenderBuilder;
-import com.cellular.automata.cellularautomata.objects.Model;
+import com.cellular.automata.cellularautomata.objects.AutomataModel;
 import com.cellular.automata.cellularautomata.objects.ModelRenderBuilder;
-import com.cellular.automata.cellularautomata.utils.CellColor;
 import com.cellular.automata.cellularautomata.utils.FPSCounter;
 
 public class GameInstance implements ApplicationListener{
@@ -27,16 +26,16 @@ public class GameInstance implements ApplicationListener{
     private boolean gridIsVisible = false;
     private boolean isViewMode = true;
 
-    private Model testModel;
+    private AutomataModel testModel;
 
     @Override
     public void create() {
 
-        rendererController = GRFX.rendererController;
+        rendererController = LINKER.rendererController;
         environment = new Environment();
         automata = new Automata();
 
-        testModel = Model.fromCoordsArray(Settings.testSimpleCube);
+        testModel = AutomataModel.fromCoordsArray(Settings.testSimpleCube, Settings.defaultAutomataRadius);
 
         automata.setModel(testModel);
         automata.setRule(new LifeRule());
@@ -48,8 +47,8 @@ public class GameInstance implements ApplicationListener{
             @Override
             public void onTouch() {
 
-                if(GRFX.activityListener!= null){
-                    //GRFX.activityListener.logText("nb: " + String.valueOf(rule.getNeighboursAmount(new RenderCube(modelRenderBuilder.getTouchResult().touchedCubeCenter, null, false), modelRenderBuilder.getRenderMap())));
+                if(LINKER.activityListener!= null){
+                    //LINKER.activityListener.logText("nb: " + String.valueOf(rule.getNeighboursAmount(new RenderCube(modelRenderBuilder.getTouchResult().touchedCubeCenter, null, false), modelRenderBuilder.getRenderMap())));
                 }
 
             }
@@ -86,8 +85,9 @@ public class GameInstance implements ApplicationListener{
             }
             case RendererController.RESET:{
 
+                testModel = AutomataModel.fromCoordsArray(Settings.testSimpleCube, Settings.defaultAutomataRadius);
                 automata.setModel(testModel);
-                GRFX.renderer.resetCam();
+                LINKER.renderer.resetCam();
 
                 break;
 
@@ -181,12 +181,11 @@ public class GameInstance implements ApplicationListener{
                 modelRenderBuilder.setViewMode(true);
                 gridIsVisible = false;
                 environment.removeGrids();
-                GRFX.renderer.resetAdditionalStride();
+                LINKER.renderer.resetAdditionalStride();
                 break;
             }
             case RendererController.LAYER_UP:{
 
-                //GRFX.renderer.translateFigureVertical(-Settings.renderCubeSize);
                 modelRenderBuilder.layerUp();
                 gridRenderBuilder.translateGrid((int)Settings.renderCubeSize);
 
@@ -195,7 +194,6 @@ public class GameInstance implements ApplicationListener{
 
             case RendererController.LAYER_DOWN:{
 
-                //GRFX.renderer.translateFigureVertical(Settings.renderCubeSize);
                 modelRenderBuilder.layerDown();
                 gridRenderBuilder.translateGrid(-(int)Settings.renderCubeSize);
 
@@ -236,29 +234,29 @@ public class GameInstance implements ApplicationListener{
 
         }
 
-        GRFX.renderer.setFigureUniforms();
-        GRFX.renderer.setFigureScaleFactor();
+        LINKER.renderer.setFigureUniforms();
+        LINKER.renderer.setFigureScaleFactor();
 
         automata.execute();
         modelRenderBuilder.draw();
 
         if(gridIsVisible){
 
-            GRFX.renderer.setGridUniforms();
-            GRFX.renderer.setGridScaleFactor();
+            LINKER.renderer.setGridUniforms();
+            LINKER.renderer.setGridScaleFactor();
 
             gridRenderBuilder.draw();
         }
 
-        GRFX.activityListener.logFps(fps.frames());
+        LINKER.activityListener.logFps(fps.frames());
 
     }
 
+    public AutomataModel getCurrentModel(){
 
-    @Override
-    public void resize() {
+        if(automata == null) return null;
 
-        //not needed
+        return automata.getModel();
 
     }
 

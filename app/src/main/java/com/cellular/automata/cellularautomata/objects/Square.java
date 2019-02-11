@@ -2,7 +2,7 @@ package com.cellular.automata.cellularautomata.objects;
 
 import android.opengl.GLES20;
 
-import com.cellular.automata.cellularautomata.GRFX;
+import com.cellular.automata.cellularautomata.LINKER;
 import com.cellular.automata.cellularautomata.GraphicsRenderer;
 import com.cellular.automata.cellularautomata.Settings;
 import com.cellular.automata.cellularautomata.data.VertexArray;
@@ -130,7 +130,7 @@ public class Square {
 
     public void draw(){
 
-        GraphicsRenderer renderer = GRFX.renderer;
+        GraphicsRenderer renderer = LINKER.renderer;
 
         glBindBuffer(GL_ARRAY_BUFFER, vertexBufferPositionIdx);
         glEnableVertexAttribArray(renderer.getGridShader().getPositionAttributeLocation());

@@ -30,7 +30,7 @@ public class Rule {
 
     //calculate the next iteration of the automata
     //and return the list of cubes to render on screen
-    public ArrayList<Cube> nextIterations(CubeMap map){
+    public CubeMap nextIterations(CubeMap map){
 
         ArrayList<Cube> nextIteration = map.toList();
 
@@ -45,7 +45,10 @@ public class Rule {
 
         }
 
-        return nextIteration;
+        map.clear();
+        map.addAll(nextIteration);
+
+        return map;
 
     }
 

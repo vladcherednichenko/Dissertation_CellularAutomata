@@ -3,12 +3,12 @@ package com.cellular.automata.cellularautomata.presenters;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import com.cellular.automata.cellularautomata.GRFX;
+import com.cellular.automata.cellularautomata.LINKER;
 import com.cellular.automata.cellularautomata.Settings;
 import com.cellular.automata.cellularautomata.core.RendererController;
+import com.cellular.automata.cellularautomata.data.Storage;
 import com.cellular.automata.cellularautomata.interfaces.MainView;
 import com.cellular.automata.cellularautomata.interfaces.ScreenshotListener;
-import com.cellular.automata.cellularautomata.objects.Model;
 import com.cellular.automata.cellularautomata.utils.ImageHelper;
 
 public class Presenter {
@@ -18,34 +18,19 @@ public class Presenter {
     private MainView view;
     private boolean isEditState = false;
     private boolean isGridVisible = false;
+    private Storage storage = new Storage();
 
     private RendererController rendererController = new RendererController();
 
     public Presenter(){
 
-        GRFX.rendererController = this.rendererController;
+        LINKER.rendererController = this.rendererController;
 
     }
 
     public void attachView (MainView view){
 
         this.view = view;
-
-    }
-
-    public void loadFragmentReturnPressed(){
-
-        view.removeFragments();
-        view.showControlsBar();
-        view.showToolbar();
-
-    }
-
-    public void saveFragmentReturnPressed(){
-
-        view.removeFragments();
-        view.showControlsBar();
-        view.showToolbar();
 
     }
 
@@ -117,23 +102,17 @@ public class Presenter {
 
         view.logTextTop("Save pressed");
 
-        GRFX.renderer.screenshot(new ScreenshotListener() {
+        LINKER.renderer.screenshot(new ScreenshotListener() {
             @Override
-            public void onScreenShot(Bitmap bitmap) {
+            public void onScreenShot(Bitmap screenshot) {
+
+                storage.currentModel = LINKER.gameInstance.getCurrentModel();
+                storage.currentModel.setScreenshot(screenshot);
 
 
-                Model model = new Model();
-                view.openSaveFragment(model, bitmap);
+                view.openSaveFragment(storage);
                 view.hideProgressBar();
 
-            }
-        });
-
-
-        ImageHelper.saveImage(image, "screen1", GRFX.activityListener.getContext(), new ImageHelper.SaveImageCallback() {
-            @Override
-            public void onImageSaved() {
-                Log.d(TAG, "image saved");
             }
         });
 
@@ -205,7 +184,44 @@ public class Presenter {
 
 
     // Fragments
+    // Fragment Save
+    public void saveFragmentSavePressed(){
 
+        String name = view.getSaveName();
+
+        if(name.equals("") || storage == null) return;
+
+        storage.currentModel.setName(name);
+
+        ImageHelper.saveImage(storage.currentModel.getScreenshot(), "screen1", LINKER.activityListener.getContext(), new ImageHelper.SaveImageCallback() {
+            @Override
+            public void onImageSaved() {
+
+                Log.d(TAG, "image saved");
+
+            }
+        });
+
+        
+
+    }
+
+    public void saveFragmentReturnPressed(){
+
+        view.removeFragments();
+        view.showControlsBar();
+        view.showToolbar();
+
+    }
+
+    // Fragment Load
+    public void loadFragmentReturnPressed(){
+
+        view.removeFragments();
+        view.showControlsBar();
+        view.showToolbar();
+
+    }
     
 
 }

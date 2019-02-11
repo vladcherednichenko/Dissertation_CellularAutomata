@@ -3,9 +3,8 @@ package com.cellular.automata.cellularautomata.objects;
 import android.opengl.GLES20;
 import android.util.Log;
 
-import com.cellular.automata.cellularautomata.GRFX;
+import com.cellular.automata.cellularautomata.LINKER;
 import com.cellular.automata.cellularautomata.GraphicsRenderer;
-import com.cellular.automata.cellularautomata.Settings;
 import com.cellular.automata.cellularautomata.animation.Animator;
 import com.cellular.automata.cellularautomata.data.CubeDataHolder;
 import com.cellular.automata.cellularautomata.data.RenderCubeMap;
@@ -325,7 +324,7 @@ public class ModelRenderBuilder {
 
     public void draw(){
 
-        GraphicsRenderer renderer = GRFX.renderer;
+        GraphicsRenderer renderer = LINKER.renderer;
 
         if(howManyCells() <= 0){
             Log.d(TAG, "No cells to draw");

@@ -3,7 +3,6 @@ package com.cellular.automata.cellularautomata;
 import com.cellular.automata.cellularautomata.interfaces.EnvironmentListener;
 import com.cellular.automata.cellularautomata.objects.GridRenderBuilder;
 import com.cellular.automata.cellularautomata.objects.ModelRenderBuilder;
-import com.cellular.automata.cellularautomata.utils.CellColor;
 import com.cellular.automata.cellularautomata.utils.CubeCenter;
 import com.cellular.automata.cellularautomata.utils.ObjectSelectHelper;
 
@@ -19,7 +18,7 @@ public class Environment implements EnvironmentListener{
 
     public Environment(){
 
-        GRFX.renderer.setEnvironmentListener(this);
+        LINKER.renderer.setEnvironmentListener(this);
 
         buildersList = new ArrayList<>();
         gridList = new ArrayList<>();
@@ -65,12 +64,12 @@ public class Environment implements EnvironmentListener{
 
         ArrayList<CubeCenter> cubeCenters = builder.getCellCentersList();
 
-        ObjectSelectHelper.TouchResult touchResult = GRFX.renderer.getTouchedResult(normalizedX, normalizedY, cubeCenters);
+        ObjectSelectHelper.TouchResult touchResult = LINKER.renderer.getTouchedResult(normalizedX, normalizedY, cubeCenters);
 
         if(touchResult.cubeTouched){
 
             builder.handleTouch(touchResult);
-            GRFX.rendererController.cubeTouched();
+            LINKER.rendererController.cubeTouched();
             return;
 
         }
@@ -83,12 +82,12 @@ public class Environment implements EnvironmentListener{
 
         cubeCenters = gridBuilder.getTileCenters();
 
-        touchResult = GRFX.renderer.getTouchedResult(normalizedX, normalizedY, cubeCenters);
+        touchResult = LINKER.renderer.getTouchedResult(normalizedX, normalizedY, cubeCenters);
 
         if(touchResult.cubeTouched ){
 
             builder.handleTouch(touchResult);
-            GRFX.rendererController.cubeTouched();
+            LINKER.rendererController.cubeTouched();
 
         }
 

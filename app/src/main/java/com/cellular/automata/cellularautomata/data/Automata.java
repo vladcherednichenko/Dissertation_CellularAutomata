@@ -1,11 +1,10 @@
 package com.cellular.automata.cellularautomata.data;
 
-import com.cellular.automata.cellularautomata.GRFX;
+import com.cellular.automata.cellularautomata.LINKER;
 import com.cellular.automata.cellularautomata.Settings;
 import com.cellular.automata.cellularautomata.core.Rule;
-import com.cellular.automata.cellularautomata.objects.Model;
+import com.cellular.automata.cellularautomata.objects.AutomataModel;
 import com.cellular.automata.cellularautomata.objects.ModelRenderBuilder;
-import com.cellular.automata.cellularautomata.objects.RenderCube;
 import com.cellular.automata.cellularautomata.utils.CellColor;
 import com.cellular.automata.cellularautomata.utils.CubeCenter;
 
@@ -16,7 +15,6 @@ public class Automata {
 
     private String TAG = "AUTOMATA_BUILDER";
 
-    private int automataRadius = 30;
     private boolean generating = false;
 
     //temporary
@@ -26,14 +24,14 @@ public class Automata {
     private float delay = 500;
 
     private ModelRenderBuilder modelRenderBuilder;
-    private CubeMap map;
+    private AutomataModel model;
 
     private Rule rule;
 
     public Automata(){
 
-        map = new CubeMap(automataRadius);
-        modelRenderBuilder = new ModelRenderBuilder(automataRadius);
+        model = new AutomataModel();
+        modelRenderBuilder = new ModelRenderBuilder(Settings.defaultAutomataRadius);
 
     }
 
@@ -44,7 +42,13 @@ public class Automata {
     }
 
     public int getAutomataRadius(){
-        return automataRadius;
+        return model.getRadius();
+    }
+
+    public AutomataModel getModel(){
+
+        return model;
+
     }
 
     // SETTERS
@@ -57,33 +61,18 @@ public class Automata {
 
     public void setRadius(int radius){
 
-        if(radius == automataRadius || radius < Settings.defaultAutomataRadius) return;
-        this.map.setRadius(radius);
-        updateRender(map);
+        if(radius == model.getRadius() || radius < Settings.defaultAutomataRadius) return;
+        model.setRadius(radius);
+        updateRender(model.getMap());
 
     }
 
     //sets the cellList
-    public void setModel(Model modelToLoad){
+    public void setModel(AutomataModel modelToLoad){
 
-        // crap method can do better
+        this.model = modelToLoad;
 
-        float [] rawCoords = modelToLoad.getCoords();
-        CellColor[] cellColors = modelToLoad.getColors();
-        RenderCubeMap renderMap = new RenderCubeMap(automataRadius);
-
-        for(int i = 0; i< modelToLoad.getCellsNumber(); i++){
-
-            CubeCenter cellCenter = new CubeCenter(rawCoords[i*3], rawCoords[i*3 + 1], rawCoords[i*3 + 2]);
-            renderMap.add(new RenderCube(cellCenter, cellColors[i]));
-
-        }
-
-        modelRenderBuilder.setRenderMap(renderMap);
-        map = renderMap.toCubeMap();
-
-        modelRenderBuilder.build();
-        modelRenderBuilder.bindAttributesData();
+        updateRender(model.getMap());
 
     }
 
@@ -102,24 +91,27 @@ public class Automata {
 
     }
 
+
+    // input from user
     public void addNewCube(Cube cube){
 
-        this.map.add(cube);
-        updateRender(map);
+        model.addCube(cube);
+        updateRender(model.getMap());
 
     }
 
+    //
     public void removeCube(Cube cube){
 
-        this.map.remove(cube);
-        updateRender(map);
+        model.removeCube(cube);
+        updateRender(model.getMap());
 
     }
 
     public void paintCube(Cube cube){
 
-        this.map.paint(cube);
-        updateRender(map);
+        model.paintCube(cube);
+        updateRender(model.getMap());
 
     }
 
@@ -129,10 +121,10 @@ public class Automata {
     public void next(){
 
         // Get the next iteration map
-        ArrayList<Cube> cubes = rule.nextIterations(map);
-        this.map = CubeMap.fromList(cubes, automataRadius);
+        model.setMap(rule.nextIterations(model.getMap()));
+        model.setIteration(model.getIteration() + 1);
 
-        updateRender(cubes);
+        updateRender(model.getMap());
 
     }
 
@@ -153,11 +145,12 @@ public class Automata {
 
         ArrayList<Cube> cubes = map.getAlive();
 
-        updateRender(cubes);
+        updateRender(cubes, map.getAutomataRadius());
+
 
     }
 
-    private void updateRender(ArrayList<Cube> cubes){
+    private void updateRender(ArrayList<Cube> cubes, int automataRadius){
 
         // Convert CubeMap to RenderMap
         RenderCubeMap renderMap = RenderCubeMap.fromCubeList(cubes, automataRadius);
@@ -172,7 +165,7 @@ public class Automata {
 
         // Log alive cubes
         if(Settings.log_alive_number){
-            GRFX.activityListener.logTextTop("renderCubes: " + String.valueOf(map.numberAllAlive()));
+            LINKER.activityListener.logTextTop("renderCubes: " + String.valueOf(model.getAliveNumber()));
         }
 
     }
@@ -181,7 +174,7 @@ public class Automata {
 
 
 
-    private void generateRandomCubes(){
+    private void generateRandomCubes(int automataRadius){
 
         if(modelRenderBuilder.getRenderMap().size() >= automataRadius*2 * automataRadius*2 * automataRadius*2 -1) return;
 
@@ -193,7 +186,7 @@ public class Automata {
             modelRenderBuilder.addNewCube(generateCellPoint(),  new CellColor(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
             //Log.d("Timer", "half a second");
 
-            GRFX.activityListener.logTextTop("cubes: " + String.valueOf(modelRenderBuilder.getRenderMap().size()));
+            LINKER.activityListener.logTextTop("cubes: " + String.valueOf(modelRenderBuilder.getRenderMap().size()));
         }
 
     }
@@ -206,7 +199,7 @@ public class Automata {
 
             next();
 
-            //GRFX.activityListener.logTextTop("cubes: " + String.valueOf(modelRenderBuilder.getRenderMap().size()));
+            //LINKER.activityListener.logTextTop("cubes: " + String.valueOf(modelRenderBuilder.getRenderMap().size()));
         }
 
     }

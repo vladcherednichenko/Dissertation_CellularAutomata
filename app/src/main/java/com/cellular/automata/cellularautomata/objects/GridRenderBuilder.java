@@ -2,7 +2,7 @@ package com.cellular.automata.cellularautomata.objects;
 
 import android.opengl.GLES20;
 
-import com.cellular.automata.cellularautomata.GRFX;
+import com.cellular.automata.cellularautomata.LINKER;
 import com.cellular.automata.cellularautomata.GraphicsRenderer;
 import com.cellular.automata.cellularautomata.Settings;
 import com.cellular.automata.cellularautomata.data.VertexArray;
@@ -20,7 +20,6 @@ import static android.opengl.GLES20.glDrawArrays;
 import static android.opengl.GLES20.glEnable;
 import static android.opengl.GLES20.glEnableVertexAttribArray;
 import static android.opengl.GLES20.glGenBuffers;
-import static android.opengl.GLES20.glLineWidth;
 import static android.opengl.GLES20.glVertexAttribPointer;
 
 public class GridRenderBuilder {
@@ -207,7 +206,7 @@ public class GridRenderBuilder {
 
     public void draw(){
 
-        GraphicsRenderer renderer = GRFX.renderer;
+        GraphicsRenderer renderer = LINKER.renderer;
 
 
         glBindBuffer(GL_ARRAY_BUFFER, vertexBufferPositionIdx);

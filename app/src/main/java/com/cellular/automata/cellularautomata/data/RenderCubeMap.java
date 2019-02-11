@@ -1,6 +1,5 @@
 package com.cellular.automata.cellularautomata.data;
 
-import android.graphics.Color;
 import android.util.Log;
 
 import com.cellular.automata.cellularautomata.objects.RenderCube;
@@ -124,9 +123,10 @@ public class RenderCubeMap {
     }
 
     // Converts CubeMap to RenderCubeMap
-    public static RenderCubeMap fromCubeMap(CubeMap map){
+    public RenderCubeMap fromCubeMap(CubeMap map){
 
-        return fromCubeList(map.getAlive(), map.automataRadius());
+        return fromCubeList(map.toList(), map.getAutomataRadius());
+
 
     }
 
@@ -244,6 +244,7 @@ public class RenderCubeMap {
         };
 
     }
+
 
     public boolean cubeInBounds(RenderCube renderCube){
 
