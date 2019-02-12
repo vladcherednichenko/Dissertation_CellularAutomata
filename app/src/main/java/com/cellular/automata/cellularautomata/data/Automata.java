@@ -5,7 +5,6 @@ import com.cellular.automata.cellularautomata.Settings;
 import com.cellular.automata.cellularautomata.core.Rule;
 import com.cellular.automata.cellularautomata.objects.AutomataModel;
 import com.cellular.automata.cellularautomata.objects.ModelRenderBuilder;
-import com.cellular.automata.cellularautomata.utils.CellColor;
 import com.cellular.automata.cellularautomata.utils.CubeCenter;
 
 import java.util.ArrayList;

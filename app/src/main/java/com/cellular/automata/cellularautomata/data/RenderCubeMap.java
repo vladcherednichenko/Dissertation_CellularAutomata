@@ -3,7 +3,6 @@ package com.cellular.automata.cellularautomata.data;
 import android.util.Log;
 
 import com.cellular.automata.cellularautomata.objects.RenderCube;
-import com.cellular.automata.cellularautomata.utils.CellColor;
 import com.cellular.automata.cellularautomata.utils.CubeCenter;
 
 import java.util.ArrayList;

@@ -10,7 +10,7 @@ import com.cellular.automata.cellularautomata.data.CubeDataHolder;
 import com.cellular.automata.cellularautomata.data.RenderCubeMap;
 import com.cellular.automata.cellularautomata.data.VertexArray;
 import com.cellular.automata.cellularautomata.interfaces.CellSelectListener;
-import com.cellular.automata.cellularautomata.utils.CellColor;
+import com.cellular.automata.cellularautomata.data.CellColor;
 import com.cellular.automata.cellularautomata.utils.CubeCenter;
 import com.cellular.automata.cellularautomata.utils.ObjectSelectHelper;
 

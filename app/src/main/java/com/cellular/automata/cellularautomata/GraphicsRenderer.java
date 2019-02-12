@@ -11,7 +11,7 @@ import com.cellular.automata.cellularautomata.interfaces.EnvironmentListener;
 import com.cellular.automata.cellularautomata.interfaces.ScreenshotListener;
 import com.cellular.automata.cellularautomata.shaders.FigureShader;
 import com.cellular.automata.cellularautomata.shaders.GridShader;
-import com.cellular.automata.cellularautomata.utils.CellColor;
+import com.cellular.automata.cellularautomata.data.CellColor;
 import com.cellular.automata.cellularautomata.utils.CubeCenter;
 import com.cellular.automata.cellularautomata.utils.ObjectSelectHelper;
 

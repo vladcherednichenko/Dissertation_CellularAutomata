@@ -19,6 +19,8 @@ import android.widget.TextView;
 
 import com.cellular.automata.cellularautomata.LINKER;
 import com.cellular.automata.cellularautomata.data.Storage;
+import com.cellular.automata.cellularautomata.database.AutomataDatabase;
+import com.cellular.automata.cellularautomata.database.DataBaseLoader;
 import com.cellular.automata.cellularautomata.presenters.Presenter;
 import com.cellular.automata.cellularautomata.Settings;
 import com.cellular.automata.cellularautomata.fragments.FragmentLoad;
@@ -333,6 +335,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         fragmentManager = getSupportFragmentManager();
         presenter = new Presenter();
+        presenter.attachModel(DataBaseLoader.getInstance(getApplicationContext()));
         presenter.attachView(this);
         switchToolbarToEditMode(false);
 

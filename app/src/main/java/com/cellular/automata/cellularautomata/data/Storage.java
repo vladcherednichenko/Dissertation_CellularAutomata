@@ -2,7 +2,10 @@ package com.cellular.automata.cellularautomata.data;
 
 import android.util.Log;
 
+import com.cellular.automata.cellularautomata.database.AutomataEntity;
+import com.cellular.automata.cellularautomata.database.DataBaseLoader;
 import com.cellular.automata.cellularautomata.objects.AutomataModel;
+import com.cellular.automata.cellularautomata.utils.ModelSaver;
 
 import java.util.ArrayList;
 
@@ -15,6 +18,21 @@ public class Storage {
     public ArrayList<AutomataModel> allModels;
 
 
+    // Callbacks
+    public interface ModelsCheckCallBack {
+
+        void onModelsChecked();
+
+    }
+
+    public interface ModelsUpdatedCallback{
+
+        void onModelsUpdated();
+
+    }
+
+
+    // Stuff
     public boolean automataNameExists(String name){
 
         if(allModels == null) {
@@ -35,5 +53,50 @@ public class Storage {
         return false;
 
     }
+
+    // if model list is not created - loads all automata models or creates an empty list
+    public void checkIfModelsLoaded(DataBaseLoader base, final ModelsCheckCallBack callback){
+
+        if(allModels!= null) return;
+
+        updateAllModels(base, new ModelsUpdatedCallback() {
+            @Override
+            public void onModelsUpdated() {
+
+                callback.onModelsChecked();
+
+            }
+        });
+
+    }
+
+    public void updateAllModels(DataBaseLoader base, final ModelsUpdatedCallback callback){
+
+        base.loadAllAutomata(new DataBaseLoader.AllDataLoadedCallback() {
+            @Override
+            public void onDataLoaded(ArrayList<AutomataEntity> dataList) {
+
+                if(dataList == null || dataList.size() == 0){
+
+                    allModels = new ArrayList<>();
+
+                }else{
+
+                    allModels = ModelSaver.automataEntityListToModel(dataList);
+
+                }
+
+                if(callback!= null){
+
+                    callback.onModelsUpdated();
+
+                }
+            }
+        });
+
+    }
+
+
+
 
 }

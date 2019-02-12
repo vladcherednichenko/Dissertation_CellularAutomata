@@ -1,14 +1,9 @@
 package com.cellular.automata.cellularautomata.core;
 
-import android.util.Log;
-import android.util.SparseArray;
-
 import com.cellular.automata.cellularautomata.Settings;
 import com.cellular.automata.cellularautomata.data.Cube;
 import com.cellular.automata.cellularautomata.data.CubeMap;
-import com.cellular.automata.cellularautomata.data.RenderCubeMap;
-import com.cellular.automata.cellularautomata.objects.RenderCube;
-import com.cellular.automata.cellularautomata.utils.CellColor;
+import com.cellular.automata.cellularautomata.data.CellColor;
 
 import java.util.ArrayList;
 import java.util.Iterator;

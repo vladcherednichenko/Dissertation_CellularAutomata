@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.cellular.automata.cellularautomata.Constants;
 import com.cellular.automata.cellularautomata.Settings;
 import com.cellular.automata.cellularautomata.data.CubeDataHolder;
-import com.cellular.automata.cellularautomata.utils.CellColor;
+import com.cellular.automata.cellularautomata.data.CellColor;
 import com.cellular.automata.cellularautomata.utils.CubeCenter;
 
 public class RenderCube implements Comparable<RenderCube> {

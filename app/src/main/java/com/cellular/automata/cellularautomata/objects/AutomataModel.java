@@ -6,7 +6,7 @@ import android.util.Log;
 import com.cellular.automata.cellularautomata.Settings;
 import com.cellular.automata.cellularautomata.data.Cube;
 import com.cellular.automata.cellularautomata.data.CubeMap;
-import com.cellular.automata.cellularautomata.utils.CellColor;
+import com.cellular.automata.cellularautomata.data.CellColor;
 import com.cellular.automata.cellularautomata.utils.CoordsHelper;
 
 import java.util.ArrayList;

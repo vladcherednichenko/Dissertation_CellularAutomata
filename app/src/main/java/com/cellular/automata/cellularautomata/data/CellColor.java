@@ -1,4 +1,4 @@
-package com.cellular.automata.cellularautomata.utils;
+package com.cellular.automata.cellularautomata.data;
 
 public class CellColor {
 

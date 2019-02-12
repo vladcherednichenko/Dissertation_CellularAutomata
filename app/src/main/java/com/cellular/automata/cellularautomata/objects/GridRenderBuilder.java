@@ -6,7 +6,7 @@ import com.cellular.automata.cellularautomata.LINKER;
 import com.cellular.automata.cellularautomata.GraphicsRenderer;
 import com.cellular.automata.cellularautomata.Settings;
 import com.cellular.automata.cellularautomata.data.VertexArray;
-import com.cellular.automata.cellularautomata.utils.CellColor;
+import com.cellular.automata.cellularautomata.data.CellColor;
 import com.cellular.automata.cellularautomata.utils.CubeCenter;
 
 import java.util.ArrayList;

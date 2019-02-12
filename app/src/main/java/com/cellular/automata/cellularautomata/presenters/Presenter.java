@@ -1,21 +1,23 @@
 package com.cellular.automata.cellularautomata.presenters;
 
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import com.cellular.automata.cellularautomata.LINKER;
 import com.cellular.automata.cellularautomata.Settings;
 import com.cellular.automata.cellularautomata.core.RendererController;
 import com.cellular.automata.cellularautomata.data.Storage;
+import com.cellular.automata.cellularautomata.database.DataBaseLoader;
 import com.cellular.automata.cellularautomata.interfaces.MainView;
 import com.cellular.automata.cellularautomata.interfaces.ScreenshotListener;
-import com.cellular.automata.cellularautomata.utils.ImageHelper;
+import com.cellular.automata.cellularautomata.utils.ModelSaver;
 
 public class Presenter {
 
     private String TAG = "Presenter";
 
     private MainView view;
+    private DataBaseLoader DBmodel;
+
     private boolean isEditState = false;
     private boolean isGridVisible = false;
     private Storage storage = new Storage();
@@ -25,6 +27,12 @@ public class Presenter {
     public Presenter(){
 
         LINKER.rendererController = this.rendererController;
+
+    }
+
+    public void attachModel(DataBaseLoader model){
+
+        this.DBmodel = model;
 
     }
 
@@ -187,22 +195,26 @@ public class Presenter {
     // Fragment Save
     public void saveFragmentSavePressed(){
 
+        view.showProgressBar();
+
         String name = view.getSaveName();
 
         if(name.equals("") || storage == null) return;
 
         storage.currentModel.setName(name);
 
-        ImageHelper.saveImage(storage.currentModel.getScreenshot(), "screen1", LINKER.activityListener.getContext(), new ImageHelper.SaveImageCallback() {
-            @Override
-            public void onImageSaved() {
 
-                Log.d(TAG, "image saved");
+        ModelSaver.saveModel(storage.currentModel, storage, DBmodel, new ModelSaver.ModelSavedCallback() {
+            @Override
+            public void onModelSaved() {
+
+                view.removeFragments();
+                view.showControlsBar();
+                view.showToolbar();
+                view.hideProgressBar();
 
             }
         });
-
-        
 
     }
 
@@ -222,6 +234,9 @@ public class Presenter {
         view.showToolbar();
 
     }
-    
+
+
 
 }
+
+

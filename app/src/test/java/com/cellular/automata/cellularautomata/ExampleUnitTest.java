@@ -2,7 +2,7 @@ package com.cellular.automata.cellularautomata;
 
 import com.cellular.automata.cellularautomata.data.RenderCubeMap;
 import com.cellular.automata.cellularautomata.objects.RenderCube;
-import com.cellular.automata.cellularautomata.utils.CellColor;
+import com.cellular.automata.cellularautomata.data.CellColor;
 import com.cellular.automata.cellularautomata.utils.CubeCenter;
 
 import org.junit.Test;
