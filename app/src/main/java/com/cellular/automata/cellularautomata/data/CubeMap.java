@@ -9,6 +9,9 @@ import java.util.ArrayList;
 public class CubeMap {
 
     private String tag = "CUBE_MAP";
+    private int coordsNumber = 3;
+    private char cubeDeviderSymbol = '|';
+    private char coordsDeviderSymbol = ':';
 
     private int automataRadius;
     private int aliveNumber;
@@ -260,9 +263,36 @@ public class CubeMap {
 
     public String toString(){
 
-        String result = "";
+        ArrayList<Cube> aliveCubes = getAlive();
 
-        return result;
+        StringBuilder result = new StringBuilder();
+
+        for(Cube cube: aliveCubes){
+
+            result.append(cube.getCoords()[0]).append(coordsDeviderSymbol);
+            result.append(cube.getCoords()[1]).append(coordsDeviderSymbol);
+            result.append(cube.getCoords()[2]).append(cubeDeviderSymbol);
+
+        }
+
+        for(Cube cube: aliveCubes){
+
+            result.append(cube.getColor());
+            result.append(cubeDeviderSymbol);
+
+        }
+
+        return result.substring(0, result.length()-1);
+
+
+    }
+
+    public static CubeMap fromString(String stringAutomataForm, int automataRadius){
+
+
+        CubeMap map = new CubeMap(automataRadius);
+
+        return map;
 
     }
 }

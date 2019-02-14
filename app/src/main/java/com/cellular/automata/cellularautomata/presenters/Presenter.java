@@ -1,14 +1,17 @@
 package com.cellular.automata.cellularautomata.presenters;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 
 import com.cellular.automata.cellularautomata.LINKER;
 import com.cellular.automata.cellularautomata.Settings;
+import com.cellular.automata.cellularautomata.adapters.LoadScreenAdapter;
 import com.cellular.automata.cellularautomata.core.RendererController;
 import com.cellular.automata.cellularautomata.data.Storage;
 import com.cellular.automata.cellularautomata.database.DataBaseLoader;
 import com.cellular.automata.cellularautomata.interfaces.MainView;
 import com.cellular.automata.cellularautomata.interfaces.ScreenshotListener;
+import com.cellular.automata.cellularautomata.objects.AutomataModel;
 import com.cellular.automata.cellularautomata.utils.ModelSaver;
 
 public class Presenter {
@@ -134,9 +137,36 @@ public class Presenter {
         view.hideControlsBar();
         view.hideToolbar();
         view.showProgressBar();
-        view.openLoadFragment();
-        view.hideProgressBar();
 
+        storage.checkIfModelsLoaded(DBmodel, new Storage.ModelsCheckCallBack() {
+            @Override
+            public void onModelsChecked() {
+
+                view.openLoadFragment();
+
+                view.attachAdapter(storage.getLoadScreenAdapter(new LoadScreenAdapter.RecyclerListener() {
+                    @Override
+                    public void modelSelected(AutomataModel model) {
+
+                    }
+
+                    @Override
+                    public void contextMenuCalled(AutomataModel model) {
+
+                    }
+
+                    @Override
+                    public Context getContext() {
+
+                        return view.getContext();
+
+                    }
+                }));
+
+                view.hideProgressBar();
+
+            }
+        });
 
     }
 
@@ -195,14 +225,14 @@ public class Presenter {
     // Fragment Save
     public void saveFragmentSavePressed(){
 
-        view.showProgressBar();
-
         String name = view.getSaveName();
 
         if(name.equals("") || storage == null) return;
 
-        storage.currentModel.setName(name);
+        view.showProgressBar();
 
+        storage.currentModel.setName(name);
+        storage.currentModel.setScreenshotName(Settings.imagePrefix + name);
 
         ModelSaver.saveModel(storage.currentModel, storage, DBmodel, new ModelSaver.ModelSavedCallback() {
             @Override

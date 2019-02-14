@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.cellular.automata.cellularautomata.LINKER;
+import com.cellular.automata.cellularautomata.adapters.LoadScreenAdapter;
 import com.cellular.automata.cellularautomata.data.Storage;
 import com.cellular.automata.cellularautomata.database.AutomataDatabase;
 import com.cellular.automata.cellularautomata.database.DataBaseLoader;
@@ -421,6 +422,15 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         if(saveFragment == null) return null;
         return saveFragment.getSaveName();
+
+    }
+
+    @Override
+    public void attachAdapter(final LoadScreenAdapter adapter) {
+
+        if(loadFragment != null){
+            loadFragment.attachAdapter(adapter);
+        }
 
     }
 

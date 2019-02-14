@@ -3,6 +3,7 @@ package com.cellular.automata.cellularautomata.utils;
 import android.util.Log;
 
 import com.cellular.automata.cellularautomata.LINKER;
+import com.cellular.automata.cellularautomata.data.CubeMap;
 import com.cellular.automata.cellularautomata.data.Storage;
 import com.cellular.automata.cellularautomata.database.AutomataEntity;
 import com.cellular.automata.cellularautomata.database.DataBaseLoader;
@@ -14,8 +15,13 @@ import static android.support.constraint.Constraints.TAG;
 
 public class ModelSaver{
 
-    private static boolean baseSaved = false;
+    private static String TAG = "ModelServer";
+
     private static boolean imageSaved = false;
+    private static boolean baseSaved = false;
+
+    private static int PROCESS_IMAGE_SAVE = 0;
+    private static int PROCESS_BASE_SAVE = 1;
 
     public interface ModelSavedCallback{
 
@@ -23,26 +29,38 @@ public class ModelSaver{
 
     }
 
-    public static void saveModel(final AutomataModel automataModel, Storage storage, final DataBaseLoader base, final ModelSavedCallback callback){
+    public static void saveModel(final AutomataModel automataModel, final Storage storage, final DataBaseLoader base, final ModelSavedCallback callback){
 
         // Check if database is loaded
-
         storage.checkIfModelsLoaded(base, new Storage.ModelsCheckCallBack() {
             @Override
             public void onModelsChecked() {
 
-                fdfdfbase.insert(modelToEntity(automataModel));
-                processFinished(baseSaved, callback);
+                base.insert(modelToEntity(automataModel), new DataBaseLoader.RowInserterCallback() {
+                    @Override
+                    public void onRowsInserted() {
+
+                        storage.updateAllModels(base, new Storage.ModelsUpdatedCallback() {
+                            @Override
+                            public void onModelsUpdated() {
+
+                                processFinished(PROCESS_BASE_SAVE, callback);
+
+                            }
+                        });
+
+                    }
+                });
 
             }
         });
 
-        ImageHelper.saveImage(storage.currentModel.getScreenshot(), "screen1", LINKER.activityListener.getContext(), new ImageHelper.SaveImageCallback() {
+        ImageHelper.saveImage(storage.currentModel.getScreenshot(), automataModel.getScreenshotName(), LINKER.activityListener.getContext(), new ImageHelper.SaveImageCallback() {
             @Override
             public void onImageSaved() {
 
                 Log.d(TAG, "image saved");
-                processFinished(imageSaved, callback);
+                processFinished(PROCESS_IMAGE_SAVE, callback);
 
             }
         });
@@ -51,10 +69,17 @@ public class ModelSaver{
 
     }
 
-    private static void processFinished(boolean process, ModelSavedCallback callback){
+    private static void processFinished(int process, ModelSavedCallback callback){
 
-        if(baseSaved && imageSaved && callback!=null){
+        if(process == PROCESS_BASE_SAVE) baseSaved = true;
+        if(process == PROCESS_IMAGE_SAVE) imageSaved = true;
+
+        if(imageSaved && baseSaved && callback!=null){
+
+            imageSaved = false;
+            baseSaved = false;
             callback.onModelSaved();
+
         }
 
     }
@@ -93,6 +118,14 @@ public class ModelSaver{
 
         AutomataModel model = new AutomataModel();
 
+        model.setName(entity.getName());
+        model.setScreenshotName(entity.getScreenshotName());
+        model.setIteration(entity.getIterationNumber());
+        model.setAliveNumber(entity.getAliveCellNumber());
+        model.setMap(CubeMap.fromString(entity.getCubeMap(), entity.getRadius()));
+        model.setRule(entity.getRule());
+
+
         return model;
 
     }
@@ -101,7 +134,16 @@ public class ModelSaver{
 
         AutomataEntity entity = new AutomataEntity();
 
+        entity.setName(model.getName());
+        entity.setAliveCellNumber(model.getAliveNumber());
+        entity.setIterationNumber(model.getIteration());
+        entity.setRadius(model.getRadius());
+        entity.setScreenshotName(model.getScreenshotName());
+        entity.setRule(model.getRule());
+        entity.setCubeMap(model.toString());
+
         return entity;
 
     }
+
 }

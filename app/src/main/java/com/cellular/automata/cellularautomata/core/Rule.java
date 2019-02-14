@@ -93,9 +93,9 @@ public class Rule {
 
         ArrayList<Cube> result = new ArrayList<>();
 
-        for (int x = cube.getCoords()[0]-1; x<= cube.getCoords()[0]+1; x++){
-            for (int y = cube.getCoords()[1]-1; y<= cube.getCoords()[1]+1; y++){
-                for (int z = cube.getCoords()[2]-1; z<= cube.getCoords()[2]+1; z++){
+        for (int x = cube.getCoords()[0] - 1; x <= cube.getCoords()[0]+1; x++){
+            for (int y = cube.getCoords()[1] - 1; y <= cube.getCoords()[1]+1; y++){
+                for (int z = cube.getCoords()[2] - 1; z <= cube.getCoords()[2]+1; z++){
 
                     Cube returnCube = map.getCubeAt(new int []{x, y, z});
 
@@ -115,8 +115,10 @@ public class Rule {
 
     private boolean inKeepAlive(int amount){
 
-        for(int i = 0; i< keepAliveNeighboursNumber.length; i++){
-            if(keepAliveNeighboursNumber[i] == amount){
+        for(int i = 0; i< keepAliveNeighboursNumber.length; i++) {
+
+            if(keepAliveNeighboursNumber[i] == amount)
+            {
                 return true;
             }
         }
@@ -128,8 +130,8 @@ public class Rule {
 
     private boolean inRevive(int amount){
 
-        for(int i = 0; i< reviveNeighboursNumber.length; i++){
-            if(reviveNeighboursNumber[i] == amount){
+        for(int i = 0; i< reviveNeighboursNumber.length; i++) {
+            if(reviveNeighboursNumber[i] == amount) {
                 return true;
             }
         }

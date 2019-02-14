@@ -70,6 +70,7 @@ public class FragmentSave extends Fragment {
         imgReturn.setOnClickListener(onReturnClickListener);
         imgScreenshot = view.findViewById(R.id.img_screenshot);
         txtSave = view.findViewById(R.id.txt_save);
+        inputSaveName = view.findViewById(R.id.inputName);
 
         txtSave.setOnClickListener(onTxtSaveClickListener);
 

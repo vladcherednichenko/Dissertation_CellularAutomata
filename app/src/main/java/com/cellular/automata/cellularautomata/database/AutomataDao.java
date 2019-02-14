@@ -11,17 +11,17 @@ import java.util.List;
 @Dao
 public interface AutomataDao {
 
-    @Query("SELECT * FROM AutomataEntity")
+    @Query("SELECT * FROM automatas")
     List<AutomataEntity> getAll();
 
-    @Query("SELECT * FROM AutomataEntity WHERE id = :id")
+    @Query("SELECT * FROM automatas WHERE id = :id")
     AutomataEntity getById(int id);
 
     @Insert
     void insert(AutomataEntity automata);
 
 
-    @Query("DELETE FROM AutomataEntity WHERE id = :automataId")
+    @Query("DELETE FROM automatas WHERE id = :automataId")
     void deleteByUserId(long automataId);
 
     @Delete

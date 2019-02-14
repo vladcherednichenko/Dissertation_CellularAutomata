@@ -1,91 +1,115 @@
 package com.cellular.automata.cellularautomata.database;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.Nullable;
 
-@Entity
+@Entity(tableName = "automatas")
 public class AutomataEntity {
 
 
-    @PrimaryKey
-    public int id;
+    @PrimaryKey(autoGenerate = true)
+    @Nullable
+    @ColumnInfo(name = "id")
+    private Integer id;
 
-    public String name;
+    @Nullable
+    @ColumnInfo(name = "name")
+    private String name;
 
-    public int radius;
+    @Nullable
+    @ColumnInfo(name = "radius")
+    private Integer radius;
 
-    public int iterationNumber;
+    @Nullable
+    @ColumnInfo(name = "iterationNumber")
+    private Integer iterationNumber;
 
-    public int aliveCellNumber;
+    @Nullable
+    @ColumnInfo(name = "aliveCellNumber")
+    private Integer aliveCellNumber;
 
-    public String rule;
+    @Nullable
+    @ColumnInfo(name = "rule")
+    private String rule;
 
-    public String cubeMap;
+    @Nullable
+    @ColumnInfo(name = "cubeMap")
+    private String cubeMap;
 
-    public String screenshotName;
+    @Nullable
+    @ColumnInfo(name = "screenshotName")
+    private String screenshotName;
 
-    public int getId() {
-        return id;
-    }
+    @Nullable
+    public Integer getId() { return id; }
 
+    @Nullable
     public String getName() {
         return name;
     }
 
-    public int getRadius() {
+    @Nullable
+    public Integer getRadius() {
         return radius;
     }
 
-    public int getIterationNumber() {
+    @Nullable
+    public Integer getIterationNumber() {
         return iterationNumber;
     }
 
-    public int getAliveCellNumber() {
+    @Nullable
+    public Integer getAliveCellNumber() {
         return aliveCellNumber;
     }
 
+    @Nullable
     public String getRule() {
         return rule;
     }
 
+    @Nullable
     public String getCubeMap() {
         return cubeMap;
     }
 
+    @Nullable
     public String getScreenshotName() {
         return screenshotName;
     }
 
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
-    public void setName(String name) {
+
+    public void setId(@Nullable Integer id) { this.id = id; }
+
+    public void setName(@Nullable String name) {
         this.name = name;
     }
 
-    public void setRadius(int radius) {
+    public void setRadius(@Nullable Integer radius) {
         this.radius = radius;
     }
 
-    public void setIterationNumber(int iterationNumber) {
+    public void setIterationNumber(@Nullable Integer iterationNumber) {
         this.iterationNumber = iterationNumber;
     }
 
-    public void setAliveCellNumber(int aliveCellNumber) {
+    public void setAliveCellNumber(@Nullable Integer aliveCellNumber) {
         this.aliveCellNumber = aliveCellNumber;
     }
 
-    public void setRule(String rule) {
+    public void setRule(@Nullable String rule) {
         this.rule = rule;
     }
 
-    public void setCubeMap(String cubeMap) {
+    public void setCubeMap(@Nullable String cubeMap) {
         this.cubeMap = cubeMap;
     }
 
-    public void setScreenshotName(String screenshotName) {
+    public void setScreenshotName(@Nullable String screenshotName) {
         this.screenshotName = screenshotName;
     }
 }

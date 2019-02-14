@@ -14,11 +14,10 @@ import java.util.ArrayList;
 public class AutomataModel {
 
     private String TAG = "MODEL";
-    private int coordsNumber = 3;
-    private char cubeDeviderSymbol = '|';
-    private char coordsDeviderSymbol = ':';
 
-    private String name;
+    private String screenshotName = "";
+    private String name = "";
+    private String rule = "";
     private int iteration;
 
     private CubeMap map;
@@ -30,9 +29,9 @@ public class AutomataModel {
     // Setters
 
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setName(String name) { this.name = name; }
+
+    public void setScreenshotName(String screenshotName){this.screenshotName = screenshotName;}
 
     public void setIteration(int iteration) {
         this.iteration = iteration;
@@ -46,11 +45,9 @@ public class AutomataModel {
         this.screenshot = screenshot;
     }
 
-    public void setMap(CubeMap map) {
+    public void setRule(String rule){this.rule = rule;}
 
-        this.map = map;
-
-    }
+    public void setMap(CubeMap map) { this.map = map; }
 
     public void setRadius(int radius){
         this.map.setRadius(radius);
@@ -84,6 +81,10 @@ public class AutomataModel {
         return map.getAutomataRadius();
     }
 
+    public String getScreenshotName(){return screenshotName;}
+
+    public String getRule() {return rule; }
+
 
 
     // Main
@@ -92,7 +93,6 @@ public class AutomataModel {
         this.map = new CubeMap(Settings.defaultAutomataRadius);
 
     }
-
 
     public AutomataModel(int automataRadius){
 
@@ -177,28 +177,10 @@ public class AutomataModel {
 
         if(map == null) return "";
 
-        ArrayList<Cube> aliveCubes = map.getAlive();
-
-        StringBuilder result = new StringBuilder();
-
-        for(Cube cube: aliveCubes){
-
-            result.append(cube.getCoords()[0]).append(coordsDeviderSymbol);
-            result.append(cube.getCoords()[1]).append(coordsDeviderSymbol);
-            result.append(cube.getCoords()[2]).append(cubeDeviderSymbol);
-
-        }
-
-        for(Cube cube: aliveCubes){
-
-            result.append(cube.getColor());
-            result.append(cube.getCoords()[2]).append(cubeDeviderSymbol);
-
-        }
-
-        return result.substring(0, result.length()-1);
+        return map.toString();
 
     }
+
 
 
 

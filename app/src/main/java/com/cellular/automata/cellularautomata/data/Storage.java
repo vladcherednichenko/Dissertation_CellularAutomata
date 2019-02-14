@@ -2,6 +2,7 @@ package com.cellular.automata.cellularautomata.data;
 
 import android.util.Log;
 
+import com.cellular.automata.cellularautomata.adapters.LoadScreenAdapter;
 import com.cellular.automata.cellularautomata.database.AutomataEntity;
 import com.cellular.automata.cellularautomata.database.DataBaseLoader;
 import com.cellular.automata.cellularautomata.objects.AutomataModel;
@@ -16,6 +17,8 @@ public class Storage {
     public AutomataModel currentModel;
 
     public ArrayList<AutomataModel> allModels;
+
+    private LoadScreenAdapter loadScreenAdapter;
 
 
     // Callbacks
@@ -57,7 +60,12 @@ public class Storage {
     // if model list is not created - loads all automata models or creates an empty list
     public void checkIfModelsLoaded(DataBaseLoader base, final ModelsCheckCallBack callback){
 
-        if(allModels!= null) return;
+        if(allModels!= null) {
+
+            callback.onModelsChecked();
+            return;
+
+        }
 
         updateAllModels(base, new ModelsUpdatedCallback() {
             @Override
@@ -93,6 +101,25 @@ public class Storage {
                 }
             }
         });
+
+    }
+
+
+    public LoadScreenAdapter getLoadScreenAdapter(LoadScreenAdapter.RecyclerListener listener){
+
+        if(loadScreenAdapter == null){
+
+            loadScreenAdapter = new LoadScreenAdapter(allModels);
+
+        }else{
+
+            loadScreenAdapter.setModels(allModels);
+
+        }
+
+        loadScreenAdapter.setListener(listener);
+
+        return loadScreenAdapter;
 
     }
 

@@ -27,16 +27,13 @@ public class DataBaseLoader {
 
     }
 
+
+    // Main
+    // Ready-to use methods
+
     public void loadAllAutomata(AllDataLoadedCallback callBack){
 
         new AllDataLoader(callBack).execute(null, null, null);
-
-    }
-
-
-    public AutomataEntity getAutomataById(int id){
-
-        return dataBase.automataDao().getById(id);
 
     }
 
@@ -46,20 +43,30 @@ public class DataBaseLoader {
 
     }
 
+    public void delete(AutomataEntity entity, RowDeleteCallback callback){
+
+        new RowDeleteTask(callback).execute(entity);
+
+    }
+
+
+
+    // rewrite
+    public AutomataEntity getAutomataById(int id){
+
+        return dataBase.automataDao().getById(id);
+
+    }
+
     public void delete(int id){
 
         dataBase.automataDao().deleteByUserId(id);
 
     }
 
-    public void delete(AutomataEntity entity){
-
-        dataBase.automataDao().delete(entity);
-
-    }
 
 
-    // Interfaces
+    // INTERFACES
 
     public interface AllDataLoadedCallback {
 
@@ -97,7 +104,8 @@ public class DataBaseLoader {
 
             for(AutomataEntity entity: automataEntities){
 
-                dataBase.automataDao().insert(entity);
+                if(entity!= null)
+                    dataBase.automataDao().insert(entity);
 
             }
 
@@ -116,19 +124,20 @@ public class DataBaseLoader {
         }
     }
 
-    private static class RowDeleteTask extends AsyncTask<Void, Void, Void>{
+    private static class RowDeleteTask extends AsyncTask<AutomataEntity, Void, Void>{
 
         private RowDeleteCallback callback;
 
-        public RowDeleteTask(RowDeleteTask callback){
+        public RowDeleteTask(RowDeleteCallback callback){
             this.callback = callback;
         }
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected Void doInBackground(AutomataEntity... automatas) {
 
-            for (UserModel model: modelList){
-                mainDatabase.daoAccess().deleteUserModel(model.getId());
+            for (AutomataEntity entity: automatas){
+
+                dataBase.automataDao().delete(entity);
 
             }
 
@@ -138,7 +147,7 @@ public class DataBaseLoader {
         @Override
         protected void onPostExecute(Void aVoid) {
             if (callback!= null){
-                callback.onUserModelsDeleted();
+                callback.onRowsDeleted();
             }
         }
     }

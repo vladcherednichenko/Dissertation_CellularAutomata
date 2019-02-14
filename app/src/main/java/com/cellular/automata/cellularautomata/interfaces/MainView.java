@@ -3,6 +3,7 @@ package com.cellular.automata.cellularautomata.interfaces;
 import android.content.Context;
 import android.graphics.Bitmap;
 
+import com.cellular.automata.cellularautomata.adapters.LoadScreenAdapter;
 import com.cellular.automata.cellularautomata.data.Storage;
 import com.cellular.automata.cellularautomata.objects.AutomataModel;
 
@@ -31,6 +32,9 @@ public interface MainView {
 
     // Fragment save
     String getSaveName();
+
+    // Fragment load
+    void attachAdapter(LoadScreenAdapter adapter);
 
 
     // Animation view

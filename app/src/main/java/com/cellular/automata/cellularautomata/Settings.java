@@ -11,6 +11,7 @@ public class Settings {
     public static boolean validateShaderProgram = true;
     public static boolean antialiasing = false;
     public static String mainDataBaseName = "automata.sqlite";
+    public static String imagePrefix = "screen_";
     public static boolean clearImageCache = true;
 
     // Automata
