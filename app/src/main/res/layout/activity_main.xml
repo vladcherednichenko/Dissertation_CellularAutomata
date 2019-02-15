@@ -95,39 +95,6 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/txt_log_bottom"
-        android:layout_width="435dp"
-        android:layout_height="33dp"
-        android:layout_margin="0dp"
-
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:gravity="center"
-        android:textColor="@android:color/background_light"
-        android:textSize="10sp"
-        android:textStyle="normal"
-        app:fontFamily="@font/roboto_light"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-
-    <TextView
-        android:id="@+id/txt_log_top"
-        android:layout_width="213dp"
-        android:layout_height="34dp"
-        android:layout_margin="0dp"
-
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:gravity="center"
-        android:padding="5dp"
-        android:textColor="@android:color/background_light"
-        android:textSize="20sp"
-        android:textStyle="normal"
-        app:fontFamily="@font/roboto_light"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/color_bar"
@@ -247,13 +214,7 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/txt_fps_counter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="10sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
 
     <LinearLayout
         android:id="@+id/layers_navigation_toolbar"
@@ -307,6 +268,32 @@
             android:layout_weight="1"
             app:srcCompat="@drawable/arrow_bold_down" />
     </LinearLayout>
+
+
+    <!--Logs TextViews-->
+    <TextView
+        android:id="@+id/txt_fps_counter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txt_log_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txt_log_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>

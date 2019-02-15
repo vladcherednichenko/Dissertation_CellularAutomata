@@ -9,6 +9,7 @@ import com.cellular.automata.cellularautomata.adapters.LoadScreenAdapter;
 import com.cellular.automata.cellularautomata.core.RendererController;
 import com.cellular.automata.cellularautomata.data.Storage;
 import com.cellular.automata.cellularautomata.database.DataBaseLoader;
+import com.cellular.automata.cellularautomata.dialogs.AutomataLoadContextDialog;
 import com.cellular.automata.cellularautomata.interfaces.MainView;
 import com.cellular.automata.cellularautomata.interfaces.ScreenshotListener;
 import com.cellular.automata.cellularautomata.objects.AutomataModel;
@@ -27,9 +28,68 @@ public class Presenter {
 
     private RendererController rendererController = new RendererController();
 
+    private final LoadScreenAdapter.RecyclerListener loadScreenRecyclerListener;
+
+    private final AutomataLoadContextDialog.AutomataContextDialogListener loadAutomataContextMenuListener;
+
     public Presenter(){
 
         LINKER.rendererController = this.rendererController;
+
+        loadScreenRecyclerListener = new LoadScreenAdapter.RecyclerListener() {
+            @Override
+            public void modelSelected(AutomataModel model) {
+
+                AutomataLoadContextDialog contextDialog = new AutomataLoadContextDialog(view.getContext(), model);
+
+                contextDialog.setListener(loadAutomataContextMenuListener);
+
+                contextDialog.show();
+
+            }
+
+            @Override
+            public void contextMenuCalled(AutomataModel model) {
+
+            }
+
+            @Override
+            public Context getContext() {
+
+                return view.getContext();
+
+            }
+        };
+
+        loadAutomataContextMenuListener = new AutomataLoadContextDialog.AutomataContextDialogListener() {
+
+            @Override
+            public void onOpen(AutomataModel model) {
+
+
+            }
+
+            @Override
+            public void onDelete(AutomataModel model) {
+
+                DBmodel.delete(ModelSaver.modelToEntity(model), new DataBaseLoader.RowDeleteCallback() {
+                    @Override
+                    public void onRowsDeleted() {
+
+                        storage.updateAllModels(DBmodel, new Storage.ModelsUpdatedCallback() {
+                            @Override
+                            public void onModelsUpdated() {
+
+                                view.attachAdapter(storage.getLoadScreenAdapter(loadScreenRecyclerListener));
+
+                            }
+                        });
+
+                    }
+                });
+
+            }
+        };
 
     }
 
@@ -144,24 +204,7 @@ public class Presenter {
 
                 view.openLoadFragment();
 
-                view.attachAdapter(storage.getLoadScreenAdapter(new LoadScreenAdapter.RecyclerListener() {
-                    @Override
-                    public void modelSelected(AutomataModel model) {
-
-                    }
-
-                    @Override
-                    public void contextMenuCalled(AutomataModel model) {
-
-                    }
-
-                    @Override
-                    public Context getContext() {
-
-                        return view.getContext();
-
-                    }
-                }));
+                view.attachAdapter(storage.getLoadScreenAdapter(loadScreenRecyclerListener));
 
                 view.hideProgressBar();
 
@@ -200,6 +243,15 @@ public class Presenter {
 
 
     }
+
+    public void settingsToolPressed(){
+
+
+
+    }
+
+
+    // Editor controls
 
     public void addCubePressed(){
 

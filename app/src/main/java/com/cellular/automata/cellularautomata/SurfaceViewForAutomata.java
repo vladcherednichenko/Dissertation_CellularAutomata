@@ -148,10 +148,7 @@ public class SurfaceViewForAutomata extends GLSurfaceView{
     @Override
     public boolean onTouchEvent(MotionEvent e) {
 
-
-
-        if (e.getPointerCount()>1){
-
+        if (e.getPointerCount() > 1) {
 
             int xPointer1 = (int) e.getX(firstPointerIndex);
             int yPointer1 = (int) e.getY(firstPointerIndex);

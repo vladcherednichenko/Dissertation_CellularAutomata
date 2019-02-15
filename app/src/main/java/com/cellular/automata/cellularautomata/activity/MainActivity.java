@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private LinearLayout toolBar, colorBar, controlsBar, layersToolbar;
     private ImageView
             goButton, resetButton, nextStepButton,  // Control bar
-            stretchButton, editButton, saveButton, loadButton, gridButton,  // Main toolbar
+            stretchButton, editButton, saveButton, loadButton, gridButton, settingsButton, // Main toolbar
             addCubeButton, removeCubeButton, paintButton,layerUpButton, layerDownButton, // Edit toolbar
             closeColorPickerButton;
     private TextView txtLogDown, txtLogTop, txtFpsCounter;
@@ -185,6 +185,15 @@ public class MainActivity extends AppCompatActivity implements MainView {
         }
     };
 
+    private View.OnClickListener settingsToolListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            presenter.settingsToolPressed();
+
+        }
+    };
+
 
     // Edit bar listeners
     private View.OnClickListener addCubeListener = new View.OnClickListener() {
@@ -295,6 +304,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         loadButton = findViewById(R.id.tool_load);
         saveButton= findViewById(R.id.tool_save);
         gridButton = findViewById(R.id.tool_grid);
+        settingsButton = findViewById(R.id.tool_settings);
         // Other
         progressBar = findViewById(R.id.progress_bar);
         closeColorPickerButton = findViewById(R.id.close_color_bar);
@@ -310,6 +320,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         loadButton.setOnClickListener(loadButtonListener);
         saveButton.setOnClickListener(saveButtonListener);
         gridButton.setOnClickListener(gridButtonListener);
+        settingsButton.setOnClickListener(settingsToolListener);
         // Edit bar
         addCubeButton.setOnClickListener(addCubeListener);
         removeCubeButton.setOnClickListener(removeCubeListener);
@@ -449,6 +460,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
             toolBar.addView(stretchButton);
             toolBar.addView(loadButton);
             toolBar.addView(saveButton);
+            toolBar.addView(settingsButton);
 
         }
 

@@ -289,7 +289,7 @@ public class CubeMap {
 
     public static CubeMap fromString(String stringAutomataForm, int automataRadius){
 
-
+        // create this
         CubeMap map = new CubeMap(automataRadius);
 
         return map;

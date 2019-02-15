@@ -14,13 +14,16 @@ public class DataBaseLoader {
 
     private static AutomataDatabase dataBase;
 
-    private DataBaseLoader(){
+    private DataBaseLoader() {
 
     }
 
     public static DataBaseLoader getInstance(Context context){
 
-        instance.dataBase = Room.databaseBuilder(context, AutomataDatabase.class, Settings.mainDataBaseName)
+        instance.dataBase = Room.databaseBuilder(
+                context,
+                AutomataDatabase.class,
+                Settings.mainDataBaseName)
                 .build();
 
         return instance;
@@ -174,11 +177,8 @@ public class DataBaseLoader {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-
-            if(callback!= null){
-
+            if(callback != null) {
                 callback.onDataLoaded(automataList);
-
             }
 
         }

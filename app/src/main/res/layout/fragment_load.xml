@@ -14,6 +14,7 @@
         android:id="@+id/load_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="@dimen/loadModelsRecyclerViewPadding"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

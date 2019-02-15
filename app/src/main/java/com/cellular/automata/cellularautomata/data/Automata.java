@@ -55,6 +55,7 @@ public class Automata {
     public void setRule(Rule rule){
 
         this.rule = rule;
+        this.model.setRule(rule.toString());
 
     }
 
@@ -70,6 +71,7 @@ public class Automata {
     public void setModel(AutomataModel modelToLoad){
 
         this.model = modelToLoad;
+        this.rule = Rule.fromString(modelToLoad.getRule());
 
         updateRender(model.getMap());
 

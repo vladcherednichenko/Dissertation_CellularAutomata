@@ -4,24 +4,47 @@ import com.cellular.automata.cellularautomata.Settings;
 import com.cellular.automata.cellularautomata.data.Cube;
 import com.cellular.automata.cellularautomata.data.CubeMap;
 import com.cellular.automata.cellularautomata.data.CellColor;
+import com.cellular.automata.cellularautomata.utils.ArrayHelper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 public class Rule {
 
-    private String Tag = "Rule";
+    public static final String TAG = "Rule";
+    public static final String ruleDelimeter = "|";
+    public static final String numbersDelimeter = ",";
 
     private int [] keepAliveNeighboursNumber = {1};
     private int [] reviveNeighboursNumber = {1};
     private float darkerColorPercent = 0.5f ;
 
-    //GETTERS
+    // Getters
     public int getNeighboursAmount(Cube cube, CubeMap map){
         return neighbours(cube, map).size();
     }
 
-    //MAIN METHODS
+    // Setters
+    public void setKeepAliveNeighboursNumber (int [] i){
+
+        this.keepAliveNeighboursNumber = i;
+
+    }
+
+    public void setReviveNeighboursNumber (int [] i){
+
+        this.reviveNeighboursNumber = i;
+
+    }
+
+    public void setDarkerColorPercent (float percent){
+
+        this.darkerColorPercent = percent;
+
+    }
+
+    // Main methods
 
     //calculate the next iteration of the automata
     //and return the list of cubes to render on screen
@@ -115,7 +138,7 @@ public class Rule {
 
     private boolean inKeepAlive(int amount){
 
-        for(int i = 0; i< keepAliveNeighboursNumber.length; i++) {
+        for(int i = 0; i < keepAliveNeighboursNumber.length; i++) {
 
             if(keepAliveNeighboursNumber[i] == amount)
             {
@@ -130,7 +153,7 @@ public class Rule {
 
     private boolean inRevive(int amount){
 
-        for(int i = 0; i< reviveNeighboursNumber.length; i++) {
+        for(int i = 0; i < reviveNeighboursNumber.length; i++) {
             if(reviveNeighboursNumber[i] == amount) {
                 return true;
             }
@@ -141,7 +164,7 @@ public class Rule {
     }
 
     // percent : 0 - 1 where 0 is black, 1 - original color
-    private String darkerColor(String hexColor, float percent){
+    private String darkerColor(String hexColor, float percent) {
 
         CellColor color = new CellColor(hexColor);
 
@@ -150,6 +173,30 @@ public class Rule {
         color.BLUE = color.BLUE * percent < 0? 0: color.BLUE * percent;
 
         return String.format("#%02x%02x%02x", (int)(color.RED * 255), (int)(color.GREEN * 255), (int)(color.BLUE * 255));
+
+    }
+
+    public static Rule fromString(String stringRule){
+
+        if(!stringRule.contains(ruleDelimeter)) return null;
+
+        Rule rule = new Rule();
+
+        int [] intKeepAliveNumber = ArrayHelper.stringToIntArray(stringRule.split(ruleDelimeter)[0], numbersDelimeter);
+        int [] intReviveAliveNumber = ArrayHelper.stringToIntArray(stringRule.split(ruleDelimeter)[0], numbersDelimeter);
+
+        rule.setKeepAliveNeighboursNumber(intKeepAliveNumber);
+        rule.setReviveNeighboursNumber(intReviveAliveNumber);
+
+        return rule;
+
+    }
+
+    public String toString(){
+
+        return ArrayHelper.intArrayToString(keepAliveNeighboursNumber, numbersDelimeter) +
+                ruleDelimeter +
+                ArrayHelper.intArrayToString(reviveNeighboursNumber, numbersDelimeter);
 
     }
 

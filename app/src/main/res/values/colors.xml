@@ -6,5 +6,5 @@
     <color name="tools_back_color">#9fffffff</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorBorder">#2b80ff</color>
-    <color name="colorSetText">#919191</color>
+    <color name="color_small_text">#919191</color>
 </resources>

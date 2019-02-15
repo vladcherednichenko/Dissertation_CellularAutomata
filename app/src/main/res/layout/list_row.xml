@@ -28,7 +28,8 @@
                 android:id="@+id/img_model_left"
                 android:layout_width="match_parent"
                 android:layout_height="160sp"
-                android:layout_margin="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
                 android:layout_gravity="center"
                 android:scaleType="centerCrop"
                 app:srcCompat="@mipmap/ic_launcher"
@@ -44,7 +45,7 @@
                 android:gravity="center_vertical"
                 android:textAlignment="center"
                 android:text="name"
-                android:textColor="@color/colorSetText"
+                android:textColor="@color/color_small_text"
                 android:textSize="@dimen/model_name_text_size" />
 
 
@@ -61,7 +62,8 @@
                 android:id="@+id/img_model_right"
                 android:layout_width="match_parent"
                 android:layout_height="160sp"
-                android:layout_margin="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
                 android:layout_gravity="center"
                 android:scaleType="centerCrop"
                 app:srcCompat="@mipmap/ic_launcher"
@@ -77,7 +79,7 @@
                 android:gravity="center_vertical"
                 android:textAlignment="center"
                 android:text="name"
-                android:textColor="@color/colorSetText"
+                android:textColor="@color/color_small_text"
                 android:textSize="@dimen/model_name_text_size" />
 
         </android.support.v7.widget.LinearLayoutCompat>
