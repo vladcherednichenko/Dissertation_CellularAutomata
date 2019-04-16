@@ -52,6 +52,19 @@ public class Cube {
 
     }
 
+    public Cube (String color, CubeCenter center, boolean isAlive){
+
+        this.coords = new int []{
+                (int) center.x,
+                (int) center.y,
+                (int) center.z};
+
+        this.color = color;
+
+        this.isAlive = isAlive;
+
+    }
+
     public boolean isAlive(){return isAlive;}
 
     public void setAlive(boolean b){this.isAlive = b;}

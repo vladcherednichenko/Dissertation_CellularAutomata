@@ -20,17 +20,16 @@ public class Automata {
     private Random random = new Random();
     private long time;
     private long timePast;
-    private float delay = 500;
 
     private ModelRenderBuilder modelRenderBuilder;
     private AutomataModel model;
 
-    private Rule rule;
+    private Rule rule = new Rule();
 
     public Automata(){
 
         model = new AutomataModel();
-        modelRenderBuilder = new ModelRenderBuilder(Settings.defaultAutomataRadius);
+        modelRenderBuilder = new ModelRenderBuilder(Settings.automataRadius);
 
     }
 
@@ -50,6 +49,12 @@ public class Automata {
 
     }
 
+    public Rule getRule(){
+
+        return rule;
+
+    }
+
     // SETTERS
 
     public void setRule(Rule rule){
@@ -61,7 +66,7 @@ public class Automata {
 
     public void setRadius(int radius){
 
-        if(radius == model.getRadius() || radius < Settings.defaultAutomataRadius) return;
+        if(radius == model.getRadius() || radius < Settings.automataRadius) return;
         model.setRadius(radius);
         updateRender(model.getMap());
 
@@ -71,13 +76,12 @@ public class Automata {
     public void setModel(AutomataModel modelToLoad){
 
         this.model = modelToLoad;
-        this.rule = Rule.fromString(modelToLoad.getRule());
-
+        Rule rule = Rule.fromString(modelToLoad.getRule());
+        if(rule == null) rule = new Rule();
+        setRule(rule);
         updateRender(model.getMap());
 
     }
-
-
 
     // CONTROLS
     public void start(){
@@ -181,7 +185,7 @@ public class Automata {
 
         //generating random stuff
         timePast = System.currentTimeMillis() - time;
-        if(timePast > delay){
+        if(timePast > Settings.delay){
             time = System.currentTimeMillis();
 
             modelRenderBuilder.addNewCube(generateCellPoint(),  new CellColor(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
@@ -195,12 +199,11 @@ public class Automata {
     private void generateWithCurrentRule(){
 
         timePast = System.currentTimeMillis() - time;
-        if(timePast > delay){
+        if(timePast > Settings.delay){
             time = System.currentTimeMillis();
 
             next();
 
-            //LINKER.activityListener.logTextTop("cubes: " + String.valueOf(modelRenderBuilder.getRenderMap().size()));
         }
 
     }

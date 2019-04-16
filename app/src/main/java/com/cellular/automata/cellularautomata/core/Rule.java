@@ -7,17 +7,16 @@ import com.cellular.automata.cellularautomata.data.CellColor;
 import com.cellular.automata.cellularautomata.utils.ArrayHelper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 
 public class Rule {
 
     public static final String TAG = "Rule";
-    public static final String ruleDelimeter = "|";
+    public static final String ruleDelimeter = "/";
     public static final String numbersDelimeter = ",";
 
-    private int [] keepAliveNeighboursNumber = {1};
-    private int [] reviveNeighboursNumber = {1};
+    public int [] keepAliveNeighboursNumber = {1};
+    public int [] reviveNeighboursNumber = {1};
     private float darkerColorPercent = 0.5f ;
 
     // Getters
@@ -41,6 +40,22 @@ public class Rule {
     public void setDarkerColorPercent (float percent){
 
         this.darkerColorPercent = percent;
+
+    }
+
+    public Rule(){}
+    public Rule(int [] keepAliveNeighboursNumber, int [] reviveNeighboursNumber){
+
+        if(
+                keepAliveNeighboursNumber != null &&
+                keepAliveNeighboursNumber.length != 0 &&
+                reviveNeighboursNumber!= null &&
+                reviveNeighboursNumber.length != 0){
+
+            this.reviveNeighboursNumber = reviveNeighboursNumber;
+            this.keepAliveNeighboursNumber = keepAliveNeighboursNumber;
+
+        }
 
     }
 
@@ -96,17 +111,24 @@ public class Rule {
 
         if(!cube.isAlive()) return;
 
-        String newColor;
+        String newColor = Settings.defaultCubeColor;
 
-        if(cube.getIterations() > 0){
+        if(Settings.enableColorDarkening){
 
-            newColor = darkerColor(cube.getColor(), darkerColorPercent);
+            if(cube.getIterations() > 0){
 
-        }else{
+                newColor = darkerColor(cube.getColor(), darkerColorPercent);
 
-            newColor = Settings.defaultCubeColor;
+            }
 
         }
+
+        if(Settings.enableColorInheritance){
+
+            // TODO
+
+        }
+
 
         cube.setColor(newColor);
 
@@ -183,7 +205,7 @@ public class Rule {
         Rule rule = new Rule();
 
         int [] intKeepAliveNumber = ArrayHelper.stringToIntArray(stringRule.split(ruleDelimeter)[0], numbersDelimeter);
-        int [] intReviveAliveNumber = ArrayHelper.stringToIntArray(stringRule.split(ruleDelimeter)[0], numbersDelimeter);
+        int [] intReviveAliveNumber = ArrayHelper.stringToIntArray(stringRule.split(ruleDelimeter)[1], numbersDelimeter);
 
         rule.setKeepAliveNeighboursNumber(intKeepAliveNumber);
         rule.setReviveNeighboursNumber(intReviveAliveNumber);

@@ -40,8 +40,11 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
     private FigureShader figureShader;
     private GridShader gridShader;
 
-    private volatile float xAngle = 0f;
+    private volatile float xAngle = -45f;
     private volatile float yAngle = 10f;
+
+    private float lightXAngle = -90f;
+    private float lightYAngle = 10f;
 
     //moving figure left-right, up-down
     private float strideX = 0f;
@@ -246,8 +249,6 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
 
     }
 
-    float previousStrideX = 0f;
-    float dx =0f, dz = 0f;
 
     private void calculateModelMatrix(){
 
@@ -335,8 +336,10 @@ public class GraphicsRenderer implements GLSurfaceView.Renderer {
         //count all the light source position
         float lightDistance = Settings.lightDistance;
 
-//        rotateM(frontLightModelMatrix, 0, yAngle, 1f, 0f, 0f);
-//        rotateM(frontLightModelMatrix, 0, xAngle, 0f, 1f, 0f);
+        rotateM(frontLightModelMatrix, 0, yAngle, 1f, 0f, 0f);
+        rotateM(frontLightModelMatrix, 0, xAngle, 0f, 1f, 0f);
+//        rotateM(frontLightModelMatrix, 0, lightYAngle, 1f, 0f, 0f);
+//        rotateM(frontLightModelMatrix, 0, lightXAngle, 0f, 1f, 0f);
 
         System.arraycopy(frontLightModelMatrix ,0, backLightModelMatrix, 0, frontLightModelMatrix.length);
         System.arraycopy(frontLightModelMatrix ,0, rightLightModelMatrix, 0, frontLightModelMatrix.length);

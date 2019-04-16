@@ -22,6 +22,7 @@ import com.cellular.automata.cellularautomata.adapters.LoadScreenAdapter;
 import com.cellular.automata.cellularautomata.data.Storage;
 import com.cellular.automata.cellularautomata.database.AutomataDatabase;
 import com.cellular.automata.cellularautomata.database.DataBaseLoader;
+import com.cellular.automata.cellularautomata.fragments.FragmentSettings;
 import com.cellular.automata.cellularautomata.presenters.Presenter;
 import com.cellular.automata.cellularautomata.Settings;
 import com.cellular.automata.cellularautomata.fragments.FragmentLoad;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private FragmentSave saveFragment;
     private FragmentLoad loadFragment;
+    private FragmentSettings settingsFragment;
 
     private Presenter presenter;
 
@@ -620,6 +622,26 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.setCustomAnimations(R.anim.fragment_slide_left, R.anim.fragment_slide_left);
                 transaction.replace(R.id.fragment_frame, loadFragment, "SETS");
+                transaction.commit();
+
+            }
+        });
+
+    }
+
+    @Override
+    public void openSettingsFragment() {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                settingsFragment = new FragmentSettings();
+                settingsFragment.setPresenter(presenter);
+
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.setCustomAnimations(R.anim.fragment_slide_left, R.anim.fragment_slide_left);
+                transaction.replace(R.id.fragment_frame, settingsFragment, "SETS");
                 transaction.commit();
 
             }

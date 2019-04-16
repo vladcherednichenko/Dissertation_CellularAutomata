@@ -15,9 +15,15 @@ public class Settings {
     public static boolean clearImageCache = true;
 
     // Automata
-    public static int defaultAutomataRadius = 10;
+    public static int automataRadius = 10;   // customizable
     public static int minimumAutomataRadius = 5;
+    public static int maximumAutomataRadius = 100;
     public static float sliceHeight = 5f;
+    public static int delay = 500;                  // customizable
+    public static int minDelay = 0;
+    public static int maxDelay = 2000;
+    public static boolean enableColorInheritance = false; // customizable
+    public static boolean enableColorDarkening = false;
 
     // Cube
     public static String defaultCubeColor = "#ffffff";

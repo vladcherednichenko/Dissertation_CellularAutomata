@@ -52,15 +52,10 @@
 
     <LinearLayout
         android:id="@+id/controls_bar"
-        android:visibility="invisible"
-        android:layout_width="37dp"
-        android:layout_height="154dp"
-        android:layout_margin="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/ui_background_right"
+        android:visibility="visible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/icons_padding"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -69,27 +64,31 @@
 
         <ImageView
             android:id="@+id/reset_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/toolbar_icons_size"
+            android:layout_height="@dimen/toolbar_icons_size"
             android:layout_weight="1"
-            android:padding="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/editor_button_background"
+            android:padding="@dimen/icons_padding"
             android:src="@drawable/stop_icon" />
-
 
         <ImageView
             android:id="@+id/play_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/toolbar_icons_size"
+            android:layout_height="@dimen/toolbar_icons_size"
             android:layout_weight="1"
-            android:padding="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/editor_button_background"
+            android:padding="@dimen/icons_padding"
             android:src="@drawable/play_icon" />
 
         <ImageView
             android:id="@+id/next_step_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/toolbar_icons_size"
+            android:layout_height="@dimen/toolbar_icons_size"
             android:layout_weight="1"
-            android:padding="5dp"
+            android:background="@drawable/editor_button_background"
+            android:padding="@dimen/icons_padding"
             android:src="@drawable/speed_up_icon" />
 
 
@@ -156,7 +155,6 @@
         android:layout_margin="0dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/ui_background_left"
         android:orientation="vertical"
         android:padding="5dp"
         android:visibility="visible"
@@ -170,6 +168,8 @@
             android:layout_height="@dimen/toolbar_icons_size"
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
+            android:background="@drawable/editor_button_background"
+            android:padding="@dimen/icons_padding"
             app:srcCompat="@drawable/edit_icon" />
 
         <ImageView
@@ -178,6 +178,8 @@
             android:layout_height="@dimen/toolbar_icons_size"
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
+            android:background="@drawable/editor_button_background"
+            android:padding="@dimen/icons_padding"
             app:srcCompat="@drawable/open_layers" />
 
         <ImageView
@@ -186,6 +188,8 @@
             android:layout_height="@dimen/toolbar_icons_size"
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
+            android:background="@drawable/editor_button_background"
+            android:padding="@dimen/icons_padding"
             app:srcCompat="@drawable/load_medium" />
 
         <ImageView
@@ -194,6 +198,8 @@
             android:layout_height="@dimen/toolbar_icons_size"
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
+            android:background="@drawable/editor_button_background"
+            android:padding="@dimen/icons_padding"
             app:srcCompat="@drawable/save_medium" />
 
         <ImageView
@@ -202,6 +208,8 @@
             android:layout_height="@dimen/toolbar_icons_size"
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
+            android:background="@drawable/editor_button_background"
+            android:padding="@dimen/icons_padding"
             app:srcCompat="@drawable/grid_icon" />
         <ImageView
             android:id="@+id/tool_settings"
@@ -209,6 +217,8 @@
             android:layout_height="@dimen/toolbar_icons_size"
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
+            android:background="@drawable/editor_button_background"
+            android:padding="@dimen/icons_padding"
             app:srcCompat="@drawable/settings_icon" />
 
 
@@ -224,7 +234,6 @@
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:padding="5dp"
-        android:background="@drawable/ui_background_right"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/controls_bar"
@@ -236,6 +245,8 @@
             android:layout_height="@dimen/edit_toolbar_icons_size"
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
+            android:background="@drawable/editor_button_background"
+            android:padding="@dimen/icons_padding"
             app:srcCompat="@drawable/add_cube_icon" />
 
         <ImageView
@@ -244,6 +255,8 @@
             android:layout_height="@dimen/edit_toolbar_icons_size"
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
+            android:background="@drawable/editor_button_background"
+            android:padding="@dimen/icons_padding"
             app:srcCompat="@drawable/remove_cube_icon" />
 
         <ImageView
@@ -252,13 +265,18 @@
             android:layout_height="@dimen/edit_toolbar_icons_size"
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
+            android:background="@drawable/editor_button_background"
+            android:padding="@dimen/icons_padding"
             app:srcCompat="@drawable/paint_cube_icon" />
 
         <ImageView
             android:id="@+id/layers_up"
             android:layout_width="@dimen/edit_toolbar_icons_size"
             android:layout_height="@dimen/edit_toolbar_icons_size"
+            android:layout_marginBottom="5dp"
             android:layout_weight="1"
+            android:background="@drawable/editor_button_background"
+            android:padding="@dimen/icons_padding"
             app:srcCompat="@drawable/arrow_bold_up" />
 
         <ImageView
@@ -266,6 +284,8 @@
             android:layout_width="@dimen/edit_toolbar_icons_size"
             android:layout_height="@dimen/edit_toolbar_icons_size"
             android:layout_weight="1"
+            android:background="@drawable/editor_button_background"
+            android:padding="@dimen/icons_padding"
             app:srcCompat="@drawable/arrow_bold_down" />
     </LinearLayout>
 

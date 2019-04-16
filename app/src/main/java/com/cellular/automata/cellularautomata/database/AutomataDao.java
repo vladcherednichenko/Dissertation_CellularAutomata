@@ -24,6 +24,9 @@ public interface AutomataDao {
     @Query("DELETE FROM automatas WHERE id = :automataId")
     void deleteByUserId(long automataId);
 
+    @Query("DELETE FROM automatas WHERE name = :name")
+    void deleteByUserName(String name);
+
     @Delete
     void delete(AutomataEntity automata);
 

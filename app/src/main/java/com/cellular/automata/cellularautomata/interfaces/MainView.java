@@ -27,6 +27,8 @@ public interface MainView {
 
     void openLoadFragment();
 
+    void openSettingsFragment();
+
     void removeFragments();
 
 

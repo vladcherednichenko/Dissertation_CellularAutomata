@@ -90,7 +90,7 @@ public class AutomataModel {
     // Main
     public AutomataModel(){
 
-        this.map = new CubeMap(Settings.defaultAutomataRadius);
+        this.map = new CubeMap(Settings.automataRadius);
 
     }
 
@@ -137,7 +137,7 @@ public class AutomataModel {
 
     public void addCube(Cube cube){
 
-        if(map == null) map = new CubeMap(Settings.defaultAutomataRadius);
+        if(map == null) map = new CubeMap(Settings.automataRadius);
 
         map.add(cube);
 

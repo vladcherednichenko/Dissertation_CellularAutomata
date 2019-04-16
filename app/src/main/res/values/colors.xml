@@ -7,4 +7,5 @@
     <color name="colorWhite">#ffffff</color>
     <color name="colorBorder">#2b80ff</color>
     <color name="color_small_text">#919191</color>
+    <color name="ui_background_transparent">#00919191</color>
 </resources>

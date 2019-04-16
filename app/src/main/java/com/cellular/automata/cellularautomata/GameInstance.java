@@ -3,6 +3,7 @@ package com.cellular.automata.cellularautomata;
 
 import com.cellular.automata.cellularautomata.core.RendererController;
 import com.cellular.automata.cellularautomata.core.LifeRule;
+import com.cellular.automata.cellularautomata.core.Rule;
 import com.cellular.automata.cellularautomata.data.Automata;
 import com.cellular.automata.cellularautomata.data.Cube;
 import com.cellular.automata.cellularautomata.interfaces.ApplicationListener;
@@ -35,7 +36,7 @@ public class GameInstance implements ApplicationListener{
         environment = new Environment();
         automata = new Automata();
 
-        testModel = AutomataModel.fromCoordsArray(Settings.testSimpleCube, Settings.defaultAutomataRadius);
+        testModel = AutomataModel.fromCoordsArray(Settings.testSimpleCube, Settings.automataRadius);
 
         automata.setModel(testModel);
         automata.setRule(new LifeRule());
@@ -85,10 +86,9 @@ public class GameInstance implements ApplicationListener{
             }
             case RendererController.RESET:{
 
-                testModel = AutomataModel.fromCoordsArray(Settings.testSimpleCube, Settings.defaultAutomataRadius);
+                testModel = AutomataModel.fromCoordsArray(Settings.testSimpleCube, Settings.automataRadius);
                 automata.setModel(testModel);
                 LINKER.renderer.resetCam();
-
                 break;
 
             }
@@ -97,7 +97,29 @@ public class GameInstance implements ApplicationListener{
                 automata.next();
                 break;
 
+
             }
+
+            case RendererController.LOAD_MODEL: {
+
+                automata.setModel(rendererController.storage.currentModel);
+                LINKER.renderer.resetCam();
+                break;
+            }
+
+            case RendererController.LOAD_RULE:{
+
+                automata.setRule(rendererController.storage.rule);
+
+            }
+
+            case RendererController.UPDATE_RADIUS:{
+
+                automata.setRadius(Settings.automataRadius);
+                if(gridRenderBuilder!= null) gridRenderBuilder.updateGridRadius(Settings.automataRadius);
+
+            }
+
             //when the figure is touched
             case RendererController.FIGURE_TOUCHED:{
 
@@ -110,7 +132,6 @@ public class GameInstance implements ApplicationListener{
 
                     if(color.length()>=6){ color = "#" + color.substring(2); }
 
-                    //Log.d(TAG, String.valueOf(rule.getNeighboursAmount(new RenderCube(modelRenderBuilder.getTouchResult().touchedCubeCenter, null, false), modelRenderBuilder.getRenderMap())));
                     if(actionWithCube == RendererController.ADD_CUBE){
 
                         if(!modelRenderBuilder.cubeInCurrentOpenedLayer(modelRenderBuilder.getTouchResult().newCubeCenter)) break;
@@ -156,8 +177,6 @@ public class GameInstance implements ApplicationListener{
             }
             case RendererController.EDIT_MODE:{
 
-                // do sth with this
-                // in the main Activity
                 modelRenderBuilder.squeeze();
                 modelRenderBuilder.setViewMode(false);
                 this.isViewMode = false;
@@ -257,6 +276,14 @@ public class GameInstance implements ApplicationListener{
         if(automata == null) return null;
 
         return automata.getModel();
+
+    }
+
+    public Rule getCurrentRule(){
+
+        if(automata == null) return null;
+
+        return automata.getRule();
 
     }
 

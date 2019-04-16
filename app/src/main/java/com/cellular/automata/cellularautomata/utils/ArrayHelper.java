@@ -8,6 +8,8 @@ public class ArrayHelper {
 
         int [] intArray = new int [stringArray.length];
 
+        if(string.length() == 0) return intArray;
+
         for (int i = 0; i< stringArray.length; i++){
 
             intArray[i] = Integer.valueOf(stringArray[i]);

@@ -1,8 +1,7 @@
 package com.cellular.automata.cellularautomata.data;
 
 import com.cellular.automata.cellularautomata.Settings;
-import com.cellular.automata.cellularautomata.objects.AutomataModel;
-import com.cellular.automata.cellularautomata.objects.RenderCube;
+import com.cellular.automata.cellularautomata.utils.CubeCenter;
 
 import java.util.ArrayList;
 
@@ -10,8 +9,9 @@ public class CubeMap {
 
     private String tag = "CUBE_MAP";
     private int coordsNumber = 3;
-    private char cubeDeviderSymbol = '|';
-    private char coordsDeviderSymbol = ':';
+    private static char cubeDeviderSymbol = '/';
+    private static char crdsClrsDeviderSymbol = '&';
+    private static char coordsDeviderSymbol = ':';
 
     private int automataRadius;
     private int aliveNumber;
@@ -33,7 +33,7 @@ public class CubeMap {
 
     public CubeMap(){
 
-        this.automataRadius = Settings.defaultAutomataRadius;
+        this.automataRadius = Settings.automataRadius;
         initializeMap();
 
     }
@@ -156,6 +156,7 @@ public class CubeMap {
 
         if(cubeOutOfBounds(cube.getCoords())) return false;
 
+
         int [] mapCoords = cubeCoordsToMapCoords(cube.getCoords());
 
         map[mapCoords[0]][mapCoords[1]][mapCoords[2]] = cube;
@@ -265,6 +266,8 @@ public class CubeMap {
 
         ArrayList<Cube> aliveCubes = getAlive();
 
+        if(aliveCubes.size() == 0) return "";
+
         StringBuilder result = new StringBuilder();
 
         for(Cube cube: aliveCubes){
@@ -275,6 +278,10 @@ public class CubeMap {
 
         }
 
+        if(result.length() > 0) result.deleteCharAt(result.length()-1);
+
+        result.append(crdsClrsDeviderSymbol);
+
         for(Cube cube: aliveCubes){
 
             result.append(cube.getColor());
@@ -282,8 +289,7 @@ public class CubeMap {
 
         }
 
-        return result.substring(0, result.length()-1);
-
+        return result.length()> 0? result.substring(0, result.length()-1): result.toString();
 
     }
 
@@ -291,6 +297,33 @@ public class CubeMap {
 
         // create this
         CubeMap map = new CubeMap(automataRadius);
+
+        if(stringAutomataForm.length() == 0) return map;
+
+        String[] mainParts = stringAutomataForm.split(String.valueOf(crdsClrsDeviderSymbol));
+
+        if( mainParts.length != 2) return  map;
+
+        String[] stringCoords = mainParts[0].split(String.valueOf(cubeDeviderSymbol));
+        String[] stringColors = mainParts[1].split(String.valueOf(cubeDeviderSymbol));
+
+        if(stringColors.length != stringCoords.length || stringCoords[0].length() > 10) return map;
+        int cubeNumber = stringColors.length;
+        String [] coords;
+
+        for(int i = 0; i< cubeNumber; i++){
+
+            coords = stringCoords[i].split(String.valueOf(coordsDeviderSymbol));
+            map.add(new Cube(
+                    stringColors[i],
+                    new CubeCenter(
+                            Float.valueOf(coords[0]),
+                            Float.valueOf(coords[1]),
+                            Float.valueOf(coords[2])), true)
+
+            );
+
+        }
 
         return map;
 

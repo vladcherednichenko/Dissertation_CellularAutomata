@@ -140,7 +140,7 @@ public class DataBaseLoader {
 
             for (AutomataEntity entity: automatas){
 
-                dataBase.automataDao().delete(entity);
+                dataBase.automataDao().deleteByUserName(entity.getName());
 
             }
 

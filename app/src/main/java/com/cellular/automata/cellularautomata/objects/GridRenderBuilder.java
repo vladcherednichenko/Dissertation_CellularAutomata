@@ -70,7 +70,7 @@ public class GridRenderBuilder {
 
     }
 
-    public void updateGridSize(int size){
+    public void updateGridRadius(int size){
 
         gridRadius = size;
 

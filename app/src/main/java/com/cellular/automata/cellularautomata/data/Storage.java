@@ -3,6 +3,7 @@ package com.cellular.automata.cellularautomata.data;
 import android.util.Log;
 
 import com.cellular.automata.cellularautomata.adapters.LoadScreenAdapter;
+import com.cellular.automata.cellularautomata.core.Rule;
 import com.cellular.automata.cellularautomata.database.AutomataEntity;
 import com.cellular.automata.cellularautomata.database.DataBaseLoader;
 import com.cellular.automata.cellularautomata.objects.AutomataModel;
@@ -17,6 +18,8 @@ public class Storage {
     public AutomataModel currentModel;
 
     public ArrayList<AutomataModel> allModels;
+
+    public Rule rule;
 
     private LoadScreenAdapter loadScreenAdapter;
 
@@ -34,6 +37,12 @@ public class Storage {
 
     }
 
+    // Setters
+    public void setCurrentModel(AutomataModel model){
+
+        this.currentModel = model;
+
+    }
 
     // Stuff
     public boolean automataNameExists(String name){
@@ -56,6 +65,7 @@ public class Storage {
         return false;
 
     }
+
 
     // if model list is not created - loads all automata models or creates an empty list
     public void checkIfModelsLoaded(DataBaseLoader base, final ModelsCheckCallBack callback){

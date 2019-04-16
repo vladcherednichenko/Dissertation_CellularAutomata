@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:orientation="horizontal"
+    style="@style/SettingsStyle"
+    tools:context="com.cellular.automata.cellularautomata.fragments.FragmentSave">
+
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:text="Delay"
+        android:textColor="@android:color/background_dark"
+        app:layout_constraintStart_toStartOf="@+id/textView4"
+        app:layout_constraintTop_toTopOf="@+id/grid_size_textview" />
+
+    <TextView
+        android:id="@+id/delay_textview"
+        android:layout_width="57dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="72dp"
+        android:text="delay"
+        android:textColor="#000000"
+        app:layout_constraintStart_toEndOf="@+id/textView5"
+        app:layout_constraintTop_toTopOf="@+id/grid_size_plus" />
+
+    <Button
+        android:id="@+id/delay_plus"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="72dp"
+        android:text="+"
+        app:layout_constraintStart_toEndOf="@+id/grid_size_textview"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <Button
+        android:id="@+id/delay_minus"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="64dp"
+        android:text="-"
+        app:layout_constraintStart_toEndOf="@+id/grid_size_plus"
+        app:layout_constraintTop_toTopOf="@+id/grid_size_plus" />
+
+    <ImageView
+        android:id="@+id/ic_back"
+        android:layout_width="59dp"
+        android:layout_height="55dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:alpha="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_menu_left" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="300dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical"
+        android:text="Survive neighbours number"
+        android:textColor="@android:color/background_dark"
+        app:layout_constraintStart_toEndOf="@+id/ic_back"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="300dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical"
+        android:text="Revive neighbours number"
+        android:textColor="@android:color/background_dark"
+        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <EditText
+        android:id="@+id/survive_number_input"
+        android:layout_width="147dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:backgroundTint="#000"
+        android:ems="10"
+        android:inputType="text"
+        android:text="-0"
+        android:textColor="#000"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="@+id/textView" />
+
+    <EditText
+        android:id="@+id/revive_number_input"
+        android:layout_width="149dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:ems="10"
+        android:gravity="center_vertical"
+        android:inputType="text"
+        android:text="-0"
+        android:textColor="#000"
+        android:backgroundTint="#000"
+        app:layout_constraintEnd_toEndOf="@+id/survive_number_input"
+        app:layout_constraintStart_toEndOf="@+id/textView4"
+        app:layout_constraintTop_toTopOf="@+id/textView4" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Grid size"
+        android:textColor="@android:color/background_dark"
+        app:layout_constraintStart_toStartOf="@+id/textView4"
+        app:layout_constraintTop_toTopOf="@+id/grid_size_textview" />
+
+    <TextView
+        android:id="@+id/grid_size_textview"
+        android:layout_width="57dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="12dp"
+        android:textColor="#000000"
+        android:text="size"
+        app:layout_constraintStart_toEndOf="@+id/textView5"
+        app:layout_constraintTop_toTopOf="@+id/grid_size_plus" />
+
+    <Button
+        android:id="@+id/grid_size_plus"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="+"
+        app:layout_constraintStart_toEndOf="@+id/grid_size_textview"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <Button
+        android:id="@+id/grid_size_minus"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:text="-"
+        app:layout_constraintStart_toEndOf="@+id/grid_size_plus"
+        app:layout_constraintTop_toTopOf="@+id/grid_size_plus" />
+
+    <CheckBox
+        android:id="@+id/color_inheritance_checkbox"
+        android:layout_width="194dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="68dp"
+        android:layout_marginBottom="8dp"
+        android:text="Color inheritance"
+        android:textColor="#000"
+        app:buttonTint="#000"
+        app:layout_constraintBottom_toTopOf="@+id/color_darkening_checkbox"
+        app:layout_constraintStart_toStartOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/textView7"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <CheckBox
+        android:id="@+id/color_darkening_checkbox"
+        android:layout_width="194dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="44dp"
+        android:text="Color darkening"
+        android:textColor="#000"
+        app:buttonTint="#000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textView4" />
+
+    <Button
+        android:id="@+id/apply_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="96dp"
+        android:layout_marginRight="96dp"
+        android:layout_marginBottom="44dp"
+        android:text="Apply"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+</android.support.constraint.ConstraintLayout>

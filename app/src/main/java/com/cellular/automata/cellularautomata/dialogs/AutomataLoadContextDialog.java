@@ -75,12 +75,15 @@ public class AutomataLoadContextDialog extends Dialog implements
             if(v.getId() == R.id.load_context_open){
 
                 listener.onOpen(model);
+                dismiss();
 
             }else{
 
                 listener.onDelete(model);
+                dismiss();
 
             }
+
 
         }
 

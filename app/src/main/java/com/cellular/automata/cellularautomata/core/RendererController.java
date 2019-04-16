@@ -1,5 +1,7 @@
 package com.cellular.automata.cellularautomata.core;
 
+import com.cellular.automata.cellularautomata.data.Storage;
+
 public class RendererController {
 
     //holds all the commands for Automata
@@ -24,6 +26,9 @@ public class RendererController {
 
     public static final int SAVE = 11;
     public static final int LOAD = 12;
+    public static final int LOAD_MODEL = 17;
+    public static final int LOAD_RULE = 18;
+    public static final int UPDATE_RADIUS = 19;
 
     public static final int LAYER_UP = 13;
     public static final int LAYER_DOWN = 14;
@@ -36,9 +41,18 @@ public class RendererController {
     public static final int PAINT_CUBE = 22;
 
 
+
     public static final int NULL = -1;
 
     public int currentColor = -131587;
+
+    public final Storage storage;
+
+    public RendererController(Storage storage){
+
+        this.storage = storage;
+
+    }
 
     public int readCommand(){
 
@@ -108,6 +122,18 @@ public class RendererController {
 
     }
 
+    public void loadModel(){
+
+        currentCommand = LOAD_MODEL;
+
+    }
+
+    public void updateRule(){
+
+        currentCommand = LOAD_RULE;
+
+    }
+
     public void colorSelected(int color){
 
         this.currentColor = color;
@@ -168,6 +194,13 @@ public class RendererController {
         currentCommand = PAINT_CUBE;
 
     }
+
+    public void updateRadius(){
+
+        currentCommand = UPDATE_RADIUS;
+
+    }
+
 
 
 
